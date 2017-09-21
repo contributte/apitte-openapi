@@ -1,0 +1,56 @@
+# OpenApi
+
+Convert Apitte Schema to [OpenApi Schema](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md)
+
+-----
+
+[![Build Status](https://img.shields.io/travis/apitte/openapi.svg?style=flat-square)](https://travis-ci.org/apitte/openapi)
+[![Code coverage](https://img.shields.io/coveralls/apitte/openapi.svg?style=flat-square)](https://coveralls.io/r/apitte/openapi)
+[![Licence](https://img.shields.io/packagist/l/apitte/openapi.svg?style=flat-square)](https://packagist.org/packages/apitte/openapi)
+
+[![Downloads this Month](https://img.shields.io/packagist/dm/apitte/openapi.svg?style=flat-square)](https://packagist.org/packages/apitte/openapi)
+[![Downloads total](https://img.shields.io/packagist/dt/apitte/openapi.svg?style=flat-square)](https://packagist.org/packages/apitte/openapi)
+[![Latest stable](https://img.shields.io/packagist/v/apitte/openapi.svg?style=flat-square)](https://packagist.org/packages/apitte/openapi)
+
+## Discussion / Help
+
+[![Join the chat](https://img.shields.io/gitter/room/apitte/apitte.svg?style=flat-square)](https://gitter.im/apitte/apitte)
+
+## Install
+
+```sh
+composer require apitte/openapi
+```
+
+## Versions
+
+| State    | Version       | Branch   | PHP      |
+|----------|---------------|----------|----------|
+| dev      | `dev-master`  | `master` | `>= 5.6` |
+
+## Maintainers
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center">
+        <a href="https://github.com/f3l1x">
+            <img width="150" height="150" src="https://avatars2.githubusercontent.com/u/538058?v=3&s=150">
+        </a>
+        </br>
+        <a href="https://github.com/f3l1x">Milan Felix Šulc</a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/benijo">
+            <img width="150" height="150" src="https://avatars3.githubusercontent.com/u/6731626?v=3&s=150">
+        </a>
+        </br>
+        <a href="https://github.com/benijo">Josef Benjač</a>
+      </td>
+    </tr>
+  <tbody>
+</table>
+
+-----
+
+Thank you for testing, reporting and contributing.
