@@ -14,7 +14,7 @@ class OpenApiPlugin extends AbstractPlugin
 	const PLUGIN_NAME = 'debug';
 
 	/** @var mixed[] */
-	private $defaults = [
+	protected $defaults = [
 		'url' => NULL,
 	];
 
@@ -58,7 +58,7 @@ class OpenApiPlugin extends AbstractPlugin
 		$builder->addDefinition($this->prefix('swagger.panel'))
 			->setFactory(SwaggerUIPanel::class)
 			->addSetup('setUrl', [$config['url']])
-			->setAutowired(FALSE);
+			->setAutowired(TRUE);
 	}
 
 	/**

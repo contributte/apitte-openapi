@@ -40,7 +40,7 @@
 	</script>
 	<script>
 		window.ui = SwaggerUIBundle({
-			url: <?= $url ? $url : 'null' ?>,
+			url: <?= $url ? '"' . $url . '"' : 'null' ?>,
 			dom_id: '#swagger-ui-tracy',
 			deepLinking: true,
 			presets: [
