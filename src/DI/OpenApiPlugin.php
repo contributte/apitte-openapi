@@ -11,7 +11,7 @@ use Nette\PhpGenerator\ClassType;
 class OpenApiPlugin extends AbstractPlugin
 {
 
-	const PLUGIN_NAME = 'debug';
+	const PLUGIN_NAME = 'openapi';
 
 	/** @var mixed[] */
 	protected $defaults = [
@@ -58,7 +58,7 @@ class OpenApiPlugin extends AbstractPlugin
 		$builder->addDefinition($this->prefix('swagger.panel'))
 			->setFactory(SwaggerUIPanel::class)
 			->addSetup('setUrl', [$config['url']])
-			->setAutowired(TRUE);
+			->setAutowired(FALSE);
 	}
 
 	/**
@@ -73,8 +73,8 @@ class OpenApiPlugin extends AbstractPlugin
 
 		$initialize = $class->getMethod('initialize');
 		$initialize->addBody(
-			'$this->getService(?)->addPanel($this->getByType(?));',
-			['tracy.bar', SwaggerUIPanel::class]
+			'$this->getService(?)->addPanel($this->getService(?));',
+			['tracy.bar', $this->prefix('swagger.panel')]
 		);
 	}
 
