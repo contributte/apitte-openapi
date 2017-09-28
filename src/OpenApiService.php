@@ -3,9 +3,6 @@
 namespace Apitte\OpenApi;
 
 use Apitte\Core\Schema\ApiSchema;
-use Apitte\OpenApi\Schema\Components;
-use Apitte\OpenApi\Schema\Extended\ComponentReference;
-use Apitte\OpenApi\Schema\ExternalDocumentation;
 use Apitte\OpenApi\Schema\Info;
 use Apitte\OpenApi\Schema\MediaType;
 use Apitte\OpenApi\Schema\OpenApi;
@@ -17,8 +14,6 @@ use Apitte\OpenApi\Schema\RequestBody;
 use Apitte\OpenApi\Schema\Response;
 use Apitte\OpenApi\Schema\Responses;
 use Apitte\OpenApi\Schema\Schema;
-use Apitte\OpenApi\Schema\Server;
-use Apitte\OpenApi\Schema\Tag;
 
 class OpenApiService
 {
@@ -50,20 +45,9 @@ class OpenApiService
 			$pathItem = new PathItem();
 			foreach ($endpoint->getMethods() as $method) {
 
-				//Parameter
-				$param = new Parameter('id', Parameter::IN_QUERY);
-				$param->setDescription('Popis parametru');
-				$param->setRequired(TRUE);
-				$param->setAllowEmptyValue(FALSE);
-				$param->setDeprecated(FALSE);
-				$param->setSchema(new Schema([
-					'type' => 'integer',
-					'format' => 'int32',
-				]));
-
 				//Request MediaType
 				$mediaType = new MediaType();
-				$mediaType->setSchema(new Schema([
+				$body = new Schema([
 					'type' => 'object',
 					'required' => [
 						'name',
@@ -78,25 +62,26 @@ class OpenApiService
 							'minimum' => 0,
 						],
 					],
-				]));
+				]);
+				$mediaType->setSchema($body);
 
 				//Request body
 				$requestBody = new RequestBody(['application/json' => $mediaType]);
-				$requestBody->setDescription('Popis request body');
+				$requestBody->setDescription('Request body description');
 				$requestBody->setRequired(TRUE);
 
 				//Reference
-				$schemaReference = new ComponentReference(
-					ComponentReference::TYPE_SCHEMA,
-					'sample'
-				);
+				//$schemaReference = new ComponentReference(
+				//	ComponentReference::TYPE_SCHEMA,
+				//	'sample'
+				//);
 
 				//Response MediaType
 				$mediaType = new MediaType();
-				$mediaType->setSchema($schemaReference);
+				$mediaType->setSchema($body);
 
 				//Default response - required
-				$defaultResponse = new Response('Popis odpovědi');
+				$defaultResponse = new Response('Response description');
 				$defaultResponse->setContent('application/json', $mediaType);
 
 				//Responses
@@ -107,60 +92,39 @@ class OpenApiService
 
 				//Operation
 				$operation = new Operation($operationId, $responses);
-				$operation->setTags(['prvniTag', 'druhyTag']);
-				$operation->setDescription('Dlouhý popis operace');
-				$operation->setSummary('Krátky popis oberace');
-				$operation->setDeprecated(FALSE);
-				$operation->setParameter($param);
-				$operation->setRequestBody($requestBody);
 
+				$tags = $endpoint->getTags();
+				unset($tags['group']);
+				$tags = array_keys($tags);
+				$operation->setTags($tags);
+
+				$operation->setDescription('Long description');
+				$operation->setSummary('Short description');
+				$operation->setDeprecated(FALSE);
+
+				//Parameters
+				foreach ($endpoint->getParameters() as $endpointParam) {
+					$param = new Parameter($endpointParam->getName(), Parameter::IN_QUERY);
+					$param->setDescription($endpointParam->getDescription());
+					//$param->setRequired(TRUE); //TODO
+					//$param->setAllowEmptyValue(FALSE); //TODO
+					//$param->setDeprecated(FALSE); //TODO
+					$param->setSchema(new Schema([
+						'type' => 'integer',
+						'format' => 'int32',
+					]));
+					$operation->setParameter($param);
+				}
+				//$operation->setRequestBody($requestBody);
 				$pathItem->setOperation(strtolower($method), $operation);
 			}
 			$paths->setPathItem($endpoint->getMask(), $pathItem);
 		}
 
-		//Schema model
-		$schema = new Schema([
-			'type' => 'object',
-			'required' => [
-				'name',
-			],
-			'properties' => (object) [
-				'name' => (object) [
-					'type' => 'string',
-				],
-				'age' => (object) [
-					'type' => 'integer',
-					'format' => 'int32',
-					'minimum' => 0,
-				],
-			],
-		]);
-
 		//Components
-		$components = new Components();
-		$components->setSchema('sample', $schema);
-		$openApi->setComponents($components);
-
-		//Server
-		$server = new Server('http://localhost/ispa/applications/sample-project/www/apiv2');
-		$server->setDescription('Localhost');
-		$openApi->addServer($server);
-
-		//Tag description
-		$tag = new Tag('prvniTag');
-		$tag->setDescription('Jednoduchý popisek prvního tagu');
-		$openApi->addTag($tag);
-
-		//External docs
-		$docs = new ExternalDocumentation('http:\\www.google.com');
-		$docs->setDescription('Dokumentace druhého tagu');
-
-		//Tag description with external docs
-		$tag = new Tag('druhyTag');
-		$tag->setDescription('Popisek druhého tagu');
-		$tag->setExternalDocs($docs);
-		$openApi->addTag($tag);
+		//$components = new Components();
+		//$components->setSchema('sample', $schema);
+		//$openApi->setComponents($components);
 
 		return $openApi;
 	}
