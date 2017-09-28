@@ -15,7 +15,11 @@ class OpenApiPlugin extends AbstractPlugin
 
 	/** @var mixed[] */
 	protected $defaults = [
-		'url' => NULL,
+		'swaggerUi' => [
+			'url' => NULL,
+			'expansion' => SwaggerUIPanel::EXPANSION_LIST,
+			'filter' => TRUE,
+		],
 	];
 
 	/**
@@ -55,9 +59,12 @@ class OpenApiPlugin extends AbstractPlugin
 		if ($global['debug'] !== TRUE)
 			return;
 
+		$swaggerUiConfig = $config['swaggerUi'];
 		$builder->addDefinition($this->prefix('swagger.panel'))
 			->setFactory(SwaggerUIPanel::class)
-			->addSetup('setUrl', [$config['url']])
+			->addSetup('setUrl', [$swaggerUiConfig['url']])
+			->addSetup('setExpansion', [$swaggerUiConfig['expansion']])
+			->addSetup('setFilter', [$swaggerUiConfig['filter']])
 			->setAutowired(FALSE);
 	}
 

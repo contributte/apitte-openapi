@@ -1,5 +1,8 @@
 <?php
 /** @var string|NULL $url */
+/** @var string $expansion */
+/** @var string|bool $filter */
+/** @var mixed[] $spec */
 ?>
 <div class="tracy-inner">
 	<style>
@@ -40,9 +43,12 @@
 	</script>
 	<script>
 		window.ui = SwaggerUIBundle({
-			url: <?= $url ? '"' . $url . '"' : 'null' ?>,
+			url: <?= json_encode($url) ?>,
 			dom_id: '#swagger-ui-tracy',
 			deepLinking: true,
+			docExpansion: <?= json_encode($expansion) ?>,
+			filter: <?= json_encode($filter) ?>,
+			<?= !$url ? 'spec: ' . json_encode($spec) . ',' : '' ?>
 			presets: [
 				SwaggerUIBundle.presets.apis,
 				SwaggerUIStandalonePreset
