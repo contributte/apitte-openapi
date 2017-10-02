@@ -3,6 +3,7 @@
 namespace Apitte\OpenApi;
 
 use Apitte\Core\Schema\ApiSchema;
+use Apitte\Core\Schema\Endpoint;
 use Apitte\OpenApi\Schema\Info;
 use Apitte\OpenApi\Schema\MediaType;
 use Apitte\OpenApi\Schema\OpenApi;
@@ -39,7 +40,7 @@ class OpenApiService
 		$openApi = new OpenApi($info, $paths);
 
 		$endpointId = 0;
-		foreach ($this->schema->getEndpoints() as $endpoint) {
+		foreach ($this->getEndpoints() as $endpoint) {
 			$endpointId++;
 
 			$pathItem = new PathItem();
@@ -127,6 +128,14 @@ class OpenApiService
 		//$openApi->setComponents($components);
 
 		return $openApi;
+	}
+
+	/**
+	 * @return Endpoint[]
+	 */
+	protected function getEndpoints()
+	{
+		return $this->schema->getEndpoints();
 	}
 
 }
