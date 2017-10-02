@@ -1,6 +1,6 @@
-# OpenApi
+# Apitte\OpenApi
 
-Convert Apitte Schema to [OpenApi Schema](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md)
+Convert Apitte Schema to [OpenApi Schema](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) and add SwaggerUi Tracy panel
 
 -----
 
@@ -22,11 +22,17 @@ Convert Apitte Schema to [OpenApi Schema](https://github.com/OAI/OpenAPI-Specifi
 composer require apitte/openapi
 ```
 
-## Versions
+## Version
 
-| State    | Version       | Branch   | PHP      |
-|----------|---------------|----------|----------|
-| dev      | `dev-master`  | `master` | `>= 5.6` |
+| State       | Version      | Branch   | PHP      |
+|-------------|--------------|----------|----------|
+| development | `dev-master` | `master` | `>= 5.6` |
+
+## Overview
+
+- [Installation - how to register a plugin](https://github.com/apitte/openapi/tree/master/.docs#installation)
+- [Configuration - all options](https://github.com/apitte/openapi/tree/master/.docs#configuration)
+- [Usage - controller showtime](https://github.com/apitte/openapi/tree/master/.docs#usage)
 
 ## Maintainers
 
@@ -50,6 +56,10 @@ composer require apitte/openapi
     </tr>
   <tbody>
 </table>
+
+-----
+
+The development is sponsored by [Tlapnet](http://www.tlapnet.cz) and a lot of coffeees. Thank you guys! :+1:
 
 -----
 
