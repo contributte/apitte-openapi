@@ -30,6 +30,8 @@ composer require apitte/openapi
 
 ## Overview
 
+![](https://github.com/apitte/openapi/blob/master/.docs/assets/panel.png "Tracy Panel")
+
 - [Installation - how to register a plugin](https://github.com/apitte/openapi/tree/master/.docs#installation)
 - [Configuration - all options](https://github.com/apitte/openapi/tree/master/.docs#configuration)
 - [Usage - controller showtime](https://github.com/apitte/openapi/tree/master/.docs#usage)
