@@ -33,10 +33,11 @@ You can configure SwaggerUi panel with few optional parameters.
 api:
     plugins: 
         Apitte\OpenApi\DI\OpenApiPlugin:
-            swaggerUi:
+            swagger:
                 url: null # default url
                 expansion: list # list|full|none
                 filter: true # true|false|string
+                title: My API v2
 ```
 
 ## Usage

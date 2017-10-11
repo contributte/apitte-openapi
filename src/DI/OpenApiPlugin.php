@@ -15,7 +15,7 @@ class OpenApiPlugin extends AbstractPlugin
 
 	/** @var mixed[] */
 	protected $defaults = [
-		'swaggerUi' => [
+		'swagger' => [
 			'url' => NULL,
 			'expansion' => SwaggerUIPanel::EXPANSION_LIST,
 			'filter' => TRUE,
@@ -32,17 +32,6 @@ class OpenApiPlugin extends AbstractPlugin
 	}
 
 	/**
-	 * Process and validate config
-	 *
-	 * @param array $config
-	 * @return void
-	 */
-	public function setupPlugin(array $config = [])
-	{
-		$this->setupConfig($this->defaults, $config);
-	}
-
-	/**
 	 * Register services
 	 *
 	 * @return void
@@ -56,15 +45,13 @@ class OpenApiPlugin extends AbstractPlugin
 		$builder->addDefinition($this->prefix('openapi'))
 			->setFactory(OpenApiService::class);
 
-		if ($global['debug'] !== TRUE)
-			return;
+		if ($global['debug'] !== TRUE) return;
 
-		$swaggerUiConfig = $config['swaggerUi'];
 		$builder->addDefinition($this->prefix('swagger.panel'))
 			->setFactory(SwaggerUIPanel::class)
-			->addSetup('setUrl', [$swaggerUiConfig['url']])
-			->addSetup('setExpansion', [$swaggerUiConfig['expansion']])
-			->addSetup('setFilter', [$swaggerUiConfig['filter']])
+			->addSetup('setUrl', [$config['swagger']['url']])
+			->addSetup('setExpansion', [$config['swagger']['expansion']])
+			->addSetup('setFilter', [$config['swagger']['filter']])
 			->setAutowired(FALSE);
 	}
 
@@ -75,14 +62,10 @@ class OpenApiPlugin extends AbstractPlugin
 	public function afterPluginCompile(ClassType $class)
 	{
 		$config = $this->compiler->getExtension()->getConfig();
-		if ($config['debug'] !== TRUE)
-			return;
+		if ($config['debug'] !== TRUE) return;
 
 		$initialize = $class->getMethod('initialize');
-		$initialize->addBody(
-			'$this->getService(?)->addPanel($this->getService(?));',
-			['tracy.bar', $this->prefix('swagger.panel')]
-		);
+		$initialize->addBody('$this->getService(?)->addPanel($this->getService(?));', ['tracy.bar', $this->prefix('swagger.panel')]);
 	}
 
 }
