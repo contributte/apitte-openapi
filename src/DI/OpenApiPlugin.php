@@ -19,6 +19,7 @@ class OpenApiPlugin extends AbstractPlugin
 			'url' => NULL,
 			'expansion' => SwaggerUIPanel::EXPANSION_LIST,
 			'filter' => TRUE,
+			'title' => 'OpenAPI',
 		],
 	];
 
@@ -52,6 +53,7 @@ class OpenApiPlugin extends AbstractPlugin
 			->addSetup('setUrl', [$config['swagger']['url']])
 			->addSetup('setExpansion', [$config['swagger']['expansion']])
 			->addSetup('setFilter', [$config['swagger']['filter']])
+			->addSetup('setTitle', [$config['swagger']['title']])
 			->setAutowired(FALSE);
 	}
 
