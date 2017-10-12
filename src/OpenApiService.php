@@ -2,8 +2,8 @@
 
 namespace Apitte\OpenApi;
 
-use Apitte\Core\Schema\ApiSchema;
 use Apitte\Core\Schema\Endpoint;
+use Apitte\Core\Schema\Schema as ApiSchema;
 use Apitte\OpenApi\Schema\Info;
 use Apitte\OpenApi\Schema\MediaType;
 use Apitte\OpenApi\Schema\OpenApi;
