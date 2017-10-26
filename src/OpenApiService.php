@@ -15,12 +15,13 @@ use Apitte\OpenApi\Schema\RequestBody;
 use Apitte\OpenApi\Schema\Response;
 use Apitte\OpenApi\Schema\Responses;
 use Apitte\OpenApi\Schema\Schema;
+use Apitte\OpenApi\Schema\Tag;
 
 class OpenApiService
 {
 
 	/** @var ApiSchema */
-	private $schema;
+	protected $schema;
 
 	/**
 	 * @param ApiSchema $schema
@@ -93,11 +94,7 @@ class OpenApiService
 
 				//Operation
 				$operation = new Operation($operationId, $responses);
-
-				$tags = $endpoint->getTags();
-				unset($tags['group']);
-				$tags = array_keys($tags);
-				$operation->setTags($tags);
+				$operation->setTags($this->getOperationTags($endpoint));
 
 				$operation->setDescription('Long description');
 				$operation->setSummary('Short description');
@@ -122,6 +119,11 @@ class OpenApiService
 			$paths->setPathItem($endpoint->getMask(), $pathItem);
 		}
 
+		//Global tags
+		foreach ($this->getTags() as $tag) {
+			$openApi->addTag($tag);
+		}
+
 		//Components
 		//$components = new Components();
 		//$components->setSchema('sample', $schema);
@@ -136,6 +138,27 @@ class OpenApiService
 	protected function getEndpoints()
 	{
 		return $this->schema->getEndpoints();
+	}
+
+	/**
+	 * @param Endpoint $endpoint
+	 * @return string[]
+	 */
+	protected function getOperationTags(Endpoint $endpoint)
+	{
+		$tags = $endpoint->getTags();
+		unset($tags['group.ids']);
+		unset($tags['group.paths']);
+		unset($tags['id']);
+		return array_keys($tags);
+	}
+
+	/**
+	 * @return Tag[]
+	 */
+	protected function getTags()
+	{
+		return [];
 	}
 
 }
