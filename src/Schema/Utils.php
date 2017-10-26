@@ -32,7 +32,7 @@ class Utils
 	}
 
 	/**
-	 * @param string[] $data
+	 * @param mixed[] $data
 	 * @return mixed[]
 	 */
 	public static function create(array $data)
