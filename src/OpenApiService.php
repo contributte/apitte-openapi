@@ -95,9 +95,12 @@ class OpenApiService
 				//Operation
 				$operation = new Operation($operationId, $responses);
 				$operation->setTags($this->getOperationTags($endpoint));
-
-				$operation->setDescription('Long description');
-				$operation->setSummary('Short description');
+				$description = $endpoint->getDescription();
+				$lines = explode("\n", $description);
+				$operation->setSummary(array_shift($lines));
+				if (count($lines) > 1) {
+					$operation->setDescription(implode('<br>', $lines));
+				}
 				$operation->setDeprecated(FALSE);
 
 				//Parameters
