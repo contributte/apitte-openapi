@@ -8,16 +8,16 @@
 
 ## Installation
 
-This plugin require [Apitte/Core](https://github.com/apitte/core) library.
+This plugin requires [Apitte/Core](https://github.com/apitte/core) library.
 
-Register core.
+At first you have to register the main extension.
 
 ```yaml
 extensions:
     api: Apitte\Core\DI\ApiExtension
 ```
 
-Add OpenApi plugin.
+Secondly, add the `OpenApiPlugin` plugin.
 
 ```yaml
 api:
@@ -27,7 +27,7 @@ api:
 
 ## Configuration
 
-You can configure SwaggerUi panel with few optional parameters.
+You can configure Swagger UI with a few optional parameters.
 
 ```yaml
 api:
@@ -42,13 +42,15 @@ api:
 
 ## Usage
 
-### OpenApiService
+Let say you would like to display application's OpenAPI in some swagger gui. At first you
+have to make a controller, secondly inject the `OpenApiService` and create a schema.
 
-Now you can use OpenApiService for creating OpenApiSchema.
+At least send the response with generated schema.
 
-### Controller
-
-If you need json endpoint, create controller.
+```yaml
+services:
+    - App\Controllers\OpenApiController
+```
 
 ```php
 namespace App\Controllers;
@@ -79,17 +81,13 @@ final class OpenApiController implements IController
     public function index(ApiRequest $request, ApiResponse $response)
     {
         $schema = $this->openApiService->createSchema();
+
         return $response
             ->writeJsonBody($schema->toArray())
             ->withAddedHeader('Access-Control-Allow-Origin', '*');
     }
 
 }
-```
-
-```yaml
-services:
-    - App\Controllers\OpenApiController
 ```
 
 At the end, open your browser and locate to `localhost/<api-project>/openapi/schema`.
