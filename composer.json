@@ -46,11 +46,9 @@
       "temp/phpstan/vendor/bin/phpstan analyse -l 7 -c phpstan.neon src"
     ]
   },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
   "extra": {
     "branch-alias": {
-      "dev-master": "0.1.x-dev"
+      "dev-master": "0.2.x-dev"
     }
   }
 }
