@@ -51,19 +51,19 @@ class OpenApiService
 				$mediaType = new MediaType();
 				$body = new Schema([
 					'type' => 'object',
-					'required' => [
-						'name',
-					],
-					'properties' => (object) [
-						'name' => (object) [
-							'type' => 'string',
-						],
-						'age' => (object) [
-							'type' => 'integer',
-							'format' => 'int32',
-							'minimum' => 0,
-						],
-					],
+					//					'required' => [
+					//						'name',
+					//					],
+					//					'properties' => (object) [
+					//						'name' => (object) [
+					//							'type' => 'string',
+					//						],
+					//						'age' => (object) [
+					//							'type' => 'integer',
+					//							'format' => 'int32',
+					//							'minimum' => 0,
+					//						],
+					//					],
 				]);
 				$mediaType->setSchema($body);
 
@@ -105,19 +105,22 @@ class OpenApiService
 
 				//Parameters
 				foreach ($endpoint->getParameters() as $endpointParam) {
-					$param = new Parameter($endpointParam->getName(), Parameter::IN_QUERY);
+					$param = new Parameter($endpointParam->getName(), $endpointParam->getIn());
 					$param->setDescription($endpointParam->getDescription());
-					//$param->setRequired(TRUE); //TODO
-					//$param->setAllowEmptyValue(FALSE); //TODO
-					//$param->setDeprecated(FALSE); //TODO
+					$param->setRequired($endpointParam->isRequired());
+					$param->setAllowEmptyValue($endpointParam->isAllowEmpty());
+					$param->setDeprecated($endpointParam->isDeprecated());
 					$param->setSchema(new Schema([
 						'type' => 'integer',
 						'format' => 'int32',
 					]));
 					$operation->setParameter($param);
 				}
-				//$operation->setRequestBody($requestBody);
-				$pathItem->setOperation(strtolower($method), $operation);
+				$method = strtolower($method);
+				if ($method === PathItem::OPERATION_PUT || $method === PathItem::OPERATION_POST || $method === PathItem::OPERATION_PATCH) {
+					$operation->setRequestBody($requestBody);
+				}
+				$pathItem->setOperation($method, $operation);
 			}
 			$paths->setPathItem($endpoint->getMask(), $pathItem);
 		}
