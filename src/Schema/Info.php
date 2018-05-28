@@ -25,11 +25,26 @@ class Info implements IOpenApiObject
 
 	/**
 	 * @param string $title
+	 * @param string|NULL $description
+	 * @param string|NULL $termsOfService
+	 * @param Contact|NULL $contact
+	 * @param License|NULL $license
 	 * @param string $version
 	 */
-	public function __construct($title, $version)
+	public function __construct(
+		$title,
+		$description = NULL,
+		$termsOfService = NULL,
+		Contact $contact = NULL,
+		License $license = NULL,
+		$version
+	)
 	{
 		$this->title = $title;
+		$this->description = $description;
+		$this->termsOfService = $termsOfService;
+		$this->contact = $contact;
+		$this->license = $license;
 		$this->version = $version;
 	}
 

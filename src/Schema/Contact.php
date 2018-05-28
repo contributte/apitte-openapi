@@ -15,6 +15,18 @@ class Contact implements IOpenApiObject
 	private $email;
 
 	/**
+	 * @param string|null $name
+	 * @param string|null $url
+	 * @param string|null $email
+	 */
+	public function __construct($name, $url, $email)
+	{
+		$this->name = $name;
+		$this->url = $url;
+		$this->email = $email;
+	}
+
+	/**
 	 * @return mixed[]
 	 */
 	public function toArray()

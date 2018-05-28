@@ -10,4 +10,16 @@
     <rule ref="Squiz.Commenting.VariableComment.WrongStyle">
         <exclude name="Squiz.Commenting.VariableComment.WrongStyle"/>
     </rule>
+
+    <rule ref="Squiz.Commenting.FunctionComment.Missing">
+        <exclude-pattern>*tests/cases/*</exclude-pattern>
+    </rule>
+
+    <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
+        <exclude-pattern>*tests/cases/*</exclude-pattern>
+    </rule>
+
+    <rule ref="Squiz.Classes.ClassFileName.NoMatch">
+        <exclude-pattern>*tests/cases/*</exclude-pattern>
+    </rule>
 </ruleset>

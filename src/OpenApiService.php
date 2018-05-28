@@ -16,6 +16,8 @@ use Apitte\OpenApi\Schema\Response;
 use Apitte\OpenApi\Schema\Responses;
 use Apitte\OpenApi\Schema\Schema;
 use Apitte\OpenApi\Schema\Tag;
+use Apitte\OpenApi\SchemaType\ISchemaType;
+use Nette\Utils\ArrayHash;
 
 class OpenApiService
 {
@@ -23,12 +25,26 @@ class OpenApiService
 	/** @var ApiSchema */
 	protected $schema;
 
+	/** @var Info */
+	protected $apiInfo;
+
+	/** @var ISchemaType */
+	private $schemaType;
+
 	/**
-	 * @param ApiSchema $schema
+	 * @param ApiSchema   $schema
+	 * @param Info        $apiInfo
+	 * @param ISchemaType $schemaType
 	 */
-	public function __construct(ApiSchema $schema)
+	public function __construct(
+		ApiSchema $schema,
+		Info $apiInfo,
+		ISchemaType $schemaType
+	)
 	{
 		$this->schema = $schema;
+		$this->apiInfo = $apiInfo;
+		$this->schemaType = $schemaType;
 	}
 
 	/**
@@ -36,9 +52,8 @@ class OpenApiService
 	 */
 	public function createSchema()
 	{
-		$info = new Info('Api Docs', '2.0.5-beta');
 		$paths = new Paths();
-		$openApi = new OpenApi($info, $paths);
+		$openApi = new OpenApi($this->apiInfo, $paths);
 
 		$endpointId = 0;
 		foreach ($this->getEndpoints() as $endpoint) {
@@ -100,9 +115,15 @@ class OpenApiService
 				$operation = new Operation($operationId, $responses);
 				$operation->setTags($this->getOperationTags($endpoint));
 				$description = $endpoint->getDescription();
-				$lines = explode("\n", $description);
+
+				if ($description instanceof ArrayHash) {
+					$lines = (array) $description;
+				} else {
+					$lines = explode("\n", $description);
+				}
+
 				$operation->setSummary(array_shift($lines));
-				if (count($lines) > 1) {
+				if (count($lines) > 0) {
 					$operation->setDescription(implode('<br>', $lines));
 				}
 				$operation->setDeprecated(FALSE);
@@ -114,10 +135,8 @@ class OpenApiService
 					$param->setRequired($endpointParam->isRequired());
 					$param->setAllowEmptyValue($endpointParam->isAllowEmpty());
 					$param->setDeprecated($endpointParam->isDeprecated());
-					$param->setSchema(new Schema([
-						'type' => 'integer',
-						'format' => 'int32',
-					]));
+					$param->setSchema($this->schemaType->createSchema($endpointParam));
+
 					$operation->setParameter($param);
 				}
 				$method = strtolower($method);
@@ -157,10 +176,10 @@ class OpenApiService
 	protected function getOperationTags(Endpoint $endpoint)
 	{
 		$tags = $endpoint->getTags();
-		unset($tags['group.ids']);
-		unset($tags['group.paths']);
-		unset($tags['id']);
-		return array_keys($tags);
+		unset($tags[Endpoint::TAG_ID]);
+		unset($tags[Endpoint::TAG_GROUP_IDS]);
+		unset($tags[Endpoint::TAG_GROUP_PATHS]);
+		return $tags;
 	}
 
 	/**
