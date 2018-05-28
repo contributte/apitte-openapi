@@ -44,7 +44,11 @@ class OpenApiService
 		foreach ($this->getEndpoints() as $endpoint) {
 			$endpointId++;
 
-			$pathItem = new PathItem();
+			$pathItem = $paths->getPath($endpoint->getMask());
+			if ($pathItem === NULL) {
+				$pathItem = new PathItem();
+			}
+
 			foreach ($endpoint->getMethods() as $method) {
 
 				//Request MediaType
