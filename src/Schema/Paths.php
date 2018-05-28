@@ -19,6 +19,16 @@ class Paths implements IOpenApiObject
 	}
 
 	/**
+	 * @param string $path
+	 *
+	 * @return PathItem|null
+	 */
+	public function getPath($path)
+	{
+		return array_key_exists($path, $this->paths) ? $this->paths[$path] : NULL;
+	}
+
+	/**
 	 * @return mixed[]
 	 */
 	public function toArray()
