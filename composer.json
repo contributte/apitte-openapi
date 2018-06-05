@@ -13,9 +13,9 @@
   ],
   "require": {
     "php": ">= 5.6",
-    "apitte/core": "^0.2.0",
-    "tracy/tracy": "~2.4.10",
-    "nette/di": "~2.4.10"
+    "apitte/core": "^0.2.0 || ^0.3.0",
+    "tracy/tracy": "~2.4.14 || ~2.5.0",
+    "nette/di": "~2.4.12"
   },
   "require-dev": {
     "ninjify/qa": "^0.4.0",
@@ -26,6 +26,8 @@
       "Apitte\\OpenApi\\": "src"
     }
   },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "scripts": {
     "qa": [
       "linter src tests",
@@ -46,11 +48,9 @@
       "temp/phpstan/vendor/bin/phpstan analyse -l 7 -c phpstan.neon src"
     ]
   },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
   "extra": {
     "branch-alias": {
-      "dev-develop": "0.2.x-dev"
+      "dev-master": "0.3.x-dev"
     }
   }
 }
