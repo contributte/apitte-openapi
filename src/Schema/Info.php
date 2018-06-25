@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\Schema;
 
@@ -8,36 +8,28 @@ class Info implements IOpenApiObject
 	/** @var string */
 	private $title;
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $description;
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $termsOfService;
 
-	/** @var Contact|NULL */
+	/** @var Contact|null */
 	private $contact;
 
-	/** @var License|NULL */
+	/** @var License|null */
 	private $license;
 
 	/** @var string */
 	private $version;
 
-	/**
-	 * @param string $title
-	 * @param string|NULL $description
-	 * @param string|NULL $termsOfService
-	 * @param Contact|NULL $contact
-	 * @param License|NULL $license
-	 * @param string $version
-	 */
 	public function __construct(
-		$title,
-		$description = NULL,
-		$termsOfService = NULL,
-		Contact $contact = NULL,
-		License $license = NULL,
-		$version
+		string $title,
+		?string $description = null,
+		?string $termsOfService = null,
+		?Contact $contact = null,
+		?License $license = null,
+		string $version
 	)
 	{
 		$this->title = $title;
@@ -51,7 +43,7 @@ class Info implements IOpenApiObject
 	/**
 	 * @return mixed[]
 	 */
-	public function toArray()
+	public function toArray(): array
 	{
 		return Utils::create([
 			'title' => $this->title,

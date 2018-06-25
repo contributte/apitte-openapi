@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\Schema;
 
@@ -33,11 +33,9 @@ class Components implements IOpenApiObject
 	private $callbacks = [];
 
 	/**
-	 * @param string $name
 	 * @param Schema|Reference $schema
-	 * @return void
 	 */
-	public function setSchema($name, $schema)
+	public function setSchema(string $name, $schema): void
 	{
 		$this->schemas[$name] = $schema;
 	}
@@ -45,7 +43,7 @@ class Components implements IOpenApiObject
 	/**
 	 * @return mixed[]
 	 */
-	public function toArray()
+	public function toArray(): array
 	{
 		return Utils::create([
 			'schemas' => Utils::fromArray($this->schemas),

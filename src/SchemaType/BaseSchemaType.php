@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\SchemaType;
 
@@ -8,12 +8,7 @@ use Apitte\OpenApi\Schema\Schema;
 final class BaseSchemaType implements ISchemaType
 {
 
-	/**
-	 * @param EndpointParameter $endpointParameter
-	 *
-	 * @return Schema
-	 */
-	public function createSchema(EndpointParameter $endpointParameter)
+	public function createSchema(EndpointParameter $endpointParameter): Schema
 	{
 		switch ($endpointParameter->getType()) {
 			case EndpointParameter::TYPE_SCALAR:

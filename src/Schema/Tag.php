@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\Schema;
 
@@ -8,42 +8,31 @@ class Tag implements IOpenApiObject
 	/** @var string */
 	private $name;
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $description;
 
-	/** @var ExternalDocumentation|NULL */
+	/** @var ExternalDocumentation|null */
 	private $externalDocs;
 
-	/**
-	 * @param string $name
-	 */
-	public function __construct($name)
+	public function __construct(string $name)
 	{
 		$this->name = $name;
 	}
 
-	/**
-	 * @param string|NULL $description
-	 * @return void
-	 */
-	public function setDescription($description)
+	public function setDescription(?string $description): void
 	{
 		$this->description = $description;
 	}
 
-	/**
-	 * @param ExternalDocumentation|NULL $externalDocs
-	 * @return void
-	 */
-	public function setExternalDocs($externalDocs)
+	public function setExternalDocs(?ExternalDocumentation $externalDocs): void
 	{
 		$this->externalDocs = $externalDocs;
 	}
 
 	/**
-	 * @return mixed
+	 * @return mixed[]
 	 */
-	public function toArray()
+	public function toArray(): array
 	{
 		return Utils::create([
 			'name' => $this->name,

@@ -1,25 +1,28 @@
 <?xml version="1.0"?>
 <ruleset name="Contributte">
-    <!-- Extending rulesets-->
-    <rule ref="vendor/ninjify/coding-standard/ruleset.xml"/>
+	<!-- Contributte Coding Standard -->
+	<rule ref="./vendor/ninjify/coding-standard/contributte.xml">
+		<exclude name="SlevomatCodingStandard.Operators.DisallowIncrementAndDecrementOperators.DisallowedPostIncrementOperator"/>
+		<exclude name="SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedProperty"/><!-- Schema is not implemented completely -->
+	</rule>
 
-    <!-- Exclude -->
-    <rule ref="SlevomatCodingStandard.Classes.UnusedPrivateElements.unusedProperty">
-        <exclude name="SlevomatCodingStandard.Classes.UnusedPrivateElements.unusedProperty"/>
-    </rule>
-    <rule ref="Squiz.Commenting.VariableComment.WrongStyle">
-        <exclude name="Squiz.Commenting.VariableComment.WrongStyle"/>
-    </rule>
-
-    <rule ref="Squiz.Commenting.FunctionComment.Missing">
-        <exclude-pattern>*tests/cases/*</exclude-pattern>
-    </rule>
+	<!-- Specific rules -->
+	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
+		<properties>
+			<property name="rootNamespaces" type="array" value="
+                src=>Apitte\OpenApi
+            "/>
+		</properties>
+	</rule>
 
     <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
         <exclude-pattern>*tests/cases/*</exclude-pattern>
     </rule>
 
-    <rule ref="Squiz.Classes.ClassFileName.NoMatch">
+	<rule ref="Squiz.Classes.ClassFileName.NoMatch">
         <exclude-pattern>*tests/cases/*</exclude-pattern>
     </rule>
+
+	<!-- Exclude folders -->
+	<exclude-pattern>/tests/tmp</exclude-pattern>
 </ruleset>

@@ -1,29 +1,22 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\Schema;
 
 class ExternalDocumentation implements IOpenApiObject
 {
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $description;
 
 	/** @var string */
 	private $url;
 
-	/**
-	 * @param string $url
-	 */
-	public function __construct($url)
+	public function __construct(string $url)
 	{
 		$this->url = $url;
 	}
 
-	/**
-	 * @param string|NULL $description
-	 * @return void
-	 */
-	public function setDescription($description)
+	public function setDescription(?string $description): void
 	{
 		$this->description = $description;
 	}
@@ -31,7 +24,7 @@ class ExternalDocumentation implements IOpenApiObject
 	/**
 	 * @return mixed[]
 	 */
-	public function toArray()
+	public function toArray(): array
 	{
 		return Utils::create([
 			'description' => $this->description,

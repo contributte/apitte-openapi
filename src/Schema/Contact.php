@@ -1,25 +1,20 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\Schema;
 
 class Contact implements IOpenApiObject
 {
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $name;
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $url;
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $email;
 
-	/**
-	 * @param string|null $name
-	 * @param string|null $url
-	 * @param string|null $email
-	 */
-	public function __construct($name, $url, $email)
+	public function __construct(?string $name, ?string $url, ?string $email)
 	{
 		$this->name = $name;
 		$this->url = $url;
@@ -29,7 +24,7 @@ class Contact implements IOpenApiObject
 	/**
 	 * @return mixed[]
 	 */
-	public function toArray()
+	public function toArray(): array
 	{
 		return Utils::create([
 			'name' => $this->name,

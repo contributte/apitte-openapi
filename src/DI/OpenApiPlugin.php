@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\DI;
 
@@ -16,30 +16,27 @@ use Nette\PhpGenerator\ClassType;
 class OpenApiPlugin extends AbstractPlugin
 {
 
-	const PLUGIN_NAME = 'openapi';
+	public const PLUGIN_NAME = 'openapi';
 
 	/** @var mixed[] */
 	protected $defaults = [
 		'swagger' => [
-			'url' => NULL,
+			'url' => null,
 			'expansion' => SwaggerUIPanel::EXPANSION_LIST,
-			'filter' => TRUE,
+			'filter' => true,
 			'title' => 'OpenAPI',
-			'panel' => TRUE,
+			'panel' => true,
 		],
 		'info' => [
 			'title' => 'Api Docs',
-			'description' => NULL,
-			'termsOfService' => NULL,
-			'contact' => NULL,
-			'license' => NULL,
+			'description' => null,
+			'termsOfService' => null,
+			'contact' => null,
+			'license' => null,
 			'version' => '2.0.5-beta',
 		],
 	];
 
-	/**
-	 * @param PluginCompiler $compiler
-	 */
 	public function __construct(PluginCompiler $compiler)
 	{
 		parent::__construct($compiler);
@@ -48,17 +45,15 @@ class OpenApiPlugin extends AbstractPlugin
 
 	/**
 	 * Register services
-	 *
-	 * @return void
 	 */
-	public function loadPluginConfiguration()
+	public function loadPluginConfiguration(): void
 	{
 		$builder = $this->getContainerBuilder();
 		$global = $this->compiler->getExtension()->getConfig();
 		$config = $this->getConfig();
 
-		$infoContact = NULL;
-		if ($config['info']['contact'] !== NULL) {
+		$infoContact = null;
+		if ($config['info']['contact'] !== null) {
 			$builder->addDefinition($this->prefix('openapi.info.contact'))
 				->setType(Contact::class)
 				->setFactory(Contact::class, [
@@ -66,19 +61,19 @@ class OpenApiPlugin extends AbstractPlugin
 						$config['info']['contact']['url'],
 						$config['info']['contact']['email'],
 					])
-				->setAutowired(FALSE);
+				->setAutowired(false);
 
 			$infoContact = '@' . $this->prefix('openapi.info.contact');
 		}
 
-		$infoLicense = NULL;
-		if ($config['info']['license'] !== NULL) {
+		$infoLicense = null;
+		if ($config['info']['license'] !== null) {
 			$builder->addDefinition($this->prefix('openapi.info.license'))
 				->setType(License::class)
 				->setFactory(License::class, [
 						$config['info']['license'],
 					])
-				->setAutowired(FALSE);
+				->setAutowired(false);
 
 			$infoLicense = '@' . $this->prefix('openapi.info.license');
 		}
@@ -93,18 +88,18 @@ class OpenApiPlugin extends AbstractPlugin
 				$infoLicense,
 				$config['info']['version'],
 			])
-			->setAutowired(FALSE);
+			->setAutowired(false);
 
 		$builder->addDefinition('openapi.schemaType')
-            ->setType(ISchemaType::class)
-            ->setFactory(BaseSchemaType::class);
+			->setType(ISchemaType::class)
+			->setFactory(BaseSchemaType::class);
 
 		$builder->addDefinition($this->prefix('openapi'))
 			->setFactory(OpenApiService::class, [
 				1 => '@' . $this->prefix('openapi.info'),
 			]);
 
-		if ($global['debug'] !== TRUE) return;
+		if ($global['debug'] !== true) return;
 
 		if ($config['swagger']['panel']) {
 			$builder->addDefinition($this->prefix('swagger.panel'))
@@ -113,19 +108,14 @@ class OpenApiPlugin extends AbstractPlugin
 				->addSetup('setExpansion', [$config['swagger']['expansion']])
 				->addSetup('setFilter', [$config['swagger']['filter']])
 				->addSetup('setTitle', [$config['swagger']['title']])
-				->setAutowired(FALSE);
+				->setAutowired(false);
 		}
 	}
 
-	/**
-	 * @param ClassType $class
-	 * @return void
-	 */
-	public function afterPluginCompile(ClassType $class)
+	public function afterPluginCompile(ClassType $class): void
 	{
 		$global = $this->compiler->getExtension()->getConfig();
-		if ($global['debug'] !== TRUE) return;
-
+		if ($global['debug'] !== true) return;
 		$config = $this->getConfig();
 
 		$initialize = $class->getMethod('initialize');

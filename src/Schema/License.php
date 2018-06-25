@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\Schema;
 
@@ -8,13 +8,10 @@ class License implements IOpenApiObject
 	/** @var string */
 	private $name;
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $url;
 
-	/**
-	 * @param string $name
-	 */
-	public function __construct($name)
+	public function __construct(string $name)
 	{
 		$this->name = $name;
 	}
@@ -22,7 +19,7 @@ class License implements IOpenApiObject
 	/**
 	 * @return mixed[]
 	 */
-	public function toArray()
+	public function toArray(): array
 	{
 		return Utils::create([
 			'name' => $this->name,

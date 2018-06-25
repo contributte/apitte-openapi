@@ -1,18 +1,17 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\Schema;
 
 class MediaType implements IOpenApiObject
 {
 
-	/** @var Schema|Reference|NULL */
+	/** @var Schema|Reference|null */
 	private $schema;
 
 	/**
-	 * @param Schema|Reference|NULL $schema
-	 * @return void
+	 * @param Schema|Reference|null $schema
 	 */
-	public function setSchema($schema)
+	public function setSchema($schema): void
 	{
 		$this->schema = $schema;
 	}
@@ -20,7 +19,7 @@ class MediaType implements IOpenApiObject
 	/**
 	 * @return mixed[]
 	 */
-	public function toArray()
+	public function toArray(): array
 	{
 		return Utils::create([
 			'schema' => Utils::fromNullable($this->schema),

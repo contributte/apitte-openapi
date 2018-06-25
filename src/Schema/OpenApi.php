@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\Schema;
 
 class OpenApi implements IOpenApiObject
 {
 
-	const VERSION = '3.0.0';
+	public const VERSION = '3.0.0';
 
 	/** @var string */
 	private $openapi = self::VERSION;
@@ -19,7 +19,7 @@ class OpenApi implements IOpenApiObject
 	/** @var Paths */
 	private $paths;
 
-	/** @var Components|NULL */
+	/** @var Components|null */
 	private $components;
 
 	/** @var SecurityRequirement[] */
@@ -28,44 +28,26 @@ class OpenApi implements IOpenApiObject
 	/** @var Tag[] */
 	private $tags = [];
 
-	/** @var ExternalDocumentation|NULL */
+	/** @var ExternalDocumentation|null */
 	private $externalDocs;
 
-	/**
-	 * @param Info $info
-	 * @param Paths $paths
-	 */
 	public function __construct(Info $info, Paths $paths)
 	{
 		$this->info = $info;
 		$this->paths = $paths;
 	}
 
-	//Setters
-
-	/**
-	 * @param Tag $tag
-	 * @return void
-	 */
-	public function addTag(Tag $tag)
+	public function addTag(Tag $tag): void
 	{
 		$this->tags[] = $tag;
 	}
 
-	/**
-	 * @param Server $server
-	 * @return void
-	 */
-	public function addServer(Server $server)
+	public function addServer(Server $server): void
 	{
 		$this->servers[] = $server;
 	}
 
-	/**
-	 * @param Components|NULL $components
-	 * @return void
-	 */
-	public function setComponents($components)
+	public function setComponents(?Components $components): void
 	{
 		$this->components = $components;
 	}
@@ -73,7 +55,7 @@ class OpenApi implements IOpenApiObject
 	/**
 	 * @return mixed[]
 	 */
-	public function toArray()
+	public function toArray(): array
 	{
 		return Utils::create([
 			'openapi' => $this->openapi,

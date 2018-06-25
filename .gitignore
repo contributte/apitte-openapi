@@ -4,3 +4,10 @@
 # Composer
 /vendor
 /composer.lock
+
+# Tests
+/temp/
+/tests/*.log
+/tests/tmp
+/tests/coverage.html
+/coverage.xml
