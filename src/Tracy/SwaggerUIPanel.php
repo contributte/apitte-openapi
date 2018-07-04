@@ -76,7 +76,7 @@ class SwaggerUIPanel implements IBarPanel
 		$filter = $this->filter;
 		require __DIR__ . '/templates/panel.phtml';
 
-		return ob_get_clean();
+		return (string) ob_get_clean();
 	}
 
 }

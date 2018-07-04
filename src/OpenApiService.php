@@ -108,11 +108,7 @@ class OpenApiService
 				$operation->setTags($this->getOperationTags($endpoint));
 				$description = $endpoint->getDescription();
 
-				if ($description instanceof ArrayHash) {
-					$lines = (array) $description;
-				} else {
-					$lines = explode("\n", $description);
-				}
+				$lines = explode("\n", $description);
 
 				$operation->setSummary(array_shift($lines));
 				if (count($lines) > 0) {
