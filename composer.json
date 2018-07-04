@@ -18,7 +18,7 @@
   ],
   "require": {
     "php": ">= 7.1",
-    "apitte/core": "dev-php7.1 as 0.4.0",
+    "apitte/core": "^0.4.0",
     "tracy/tracy": "~2.4.14 || ~2.5.0",
     "nette/di": "~2.4.12"
   },
