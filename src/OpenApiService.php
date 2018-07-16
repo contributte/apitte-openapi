@@ -164,8 +164,6 @@ class OpenApiService
 	{
 		$tags = $endpoint->getTags();
 		unset($tags[Endpoint::TAG_ID]);
-		unset($tags[Endpoint::TAG_GROUP_IDS]);
-		unset($tags[Endpoint::TAG_GROUP_PATHS]);
 		return $tags;
 	}
 
