@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\Schema;
 
@@ -17,20 +17,12 @@ class Response implements IOpenApiObject
 	/** @var Link[]|Reference[] */
 	private $links = [];
 
-	/**
-	 * @param string $description
-	 */
-	public function __construct($description)
+	public function __construct(string $description)
 	{
 		$this->description = $description;
 	}
 
-	/**
-	 * @param string $type
-	 * @param MediaType $content
-	 * @return void
-	 */
-	public function setContent($type, MediaType $content)
+	public function setContent(string $type, MediaType $content): void
 	{
 		$this->content[$type] = $content;
 	}
@@ -38,7 +30,7 @@ class Response implements IOpenApiObject
 	/**
 	 * @return mixed[]
 	 */
-	public function toArray()
+	public function toArray(): array
 	{
 		return Utils::create([
 			'description' => $this->description,

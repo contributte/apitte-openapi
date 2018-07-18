@@ -1,14 +1,15 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\Schema;
 
 class Parameter implements IOpenApiObject
 {
 
-	const IN_QUERY = 'query';
-	const IN_COOKIE = 'cookie';
-	const IN_HEADER = 'header';
-	const IN_PATH = 'path';
+	public const
+		IN_QUERY = 'query',
+		IN_COOKIE = 'cookie',
+		IN_HEADER = 'header',
+		IN_PATH = 'path';
 
 	/** @var string */
 	private $name;
@@ -16,72 +17,51 @@ class Parameter implements IOpenApiObject
 	/** @var string */
 	private $in;
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $description;
 
 	/** @var bool */
-	private $required = FALSE;
+	private $required = false;
 
 	/** @var bool */
-	private $deprecated = FALSE;
+	private $deprecated = false;
 
 	/** @var bool */
-	private $allowEmptyValue = FALSE;
+	private $allowEmptyValue = false;
 
-	/** @var Schema|Reference|NULL */
+	/** @var Schema|Reference|null */
 	private $schema;
 
-	/**
-	 * @param string $name
-	 * @param string $in
-	 */
-	public function __construct($name, $in)
+	public function __construct(string $name, string $in)
 	{
 		$this->name = $name;
 		$this->in = $in;
 	}
 
-	/**
-	 * @param string|NULL $description
-	 * @return void
-	 */
-	public function setDescription($description)
+	public function setDescription(?string $description): void
 	{
 		$this->description = $description;
 	}
 
-	/**
-	 * @param bool $required
-	 * @return void
-	 */
-	public function setRequired($required)
+	public function setRequired(bool $required): void
 	{
 		$this->required = $required;
 	}
 
-	/**
-	 * @param bool $deprecated
-	 * @return void
-	 */
-	public function setDeprecated($deprecated)
+	public function setDeprecated(bool $deprecated): void
 	{
 		$this->deprecated = $deprecated;
 	}
 
-	/**
-	 * @param bool $allowEmptyValue
-	 * @return void
-	 */
-	public function setAllowEmptyValue($allowEmptyValue)
+	public function setAllowEmptyValue(bool $allowEmptyValue): void
 	{
 		$this->allowEmptyValue = $allowEmptyValue;
 	}
 
 	/**
-	 * @param Schema|Reference|NULL $schema
-	 * @return void
+	 * @param Schema|Reference|null $schema
 	 */
-	public function setSchema($schema)
+	public function setSchema($schema): void
 	{
 		$this->schema = $schema;
 	}
@@ -89,7 +69,7 @@ class Parameter implements IOpenApiObject
 	/**
 	 * @return mixed[]
 	 */
-	public function toArray()
+	public function toArray(): array
 	{
 		return Utils::create([
 			'name' => $this->name,

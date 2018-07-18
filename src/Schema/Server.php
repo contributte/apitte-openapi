@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\Schema;
 
@@ -8,25 +8,18 @@ class Server implements IOpenApiObject
 	/** @var string */
 	private $url;
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $description;
 
-	/* Map[string, Server Variable Object]*/
+	/** @var ServerVariable[] */
 	private $variables;
 
-	/**
-	 * @param string $url
-	 */
-	public function __construct($url)
+	public function __construct(string $url)
 	{
 		$this->url = $url;
 	}
 
-	/**
-	 * @param string|NULL $description
-	 * @return void
-	 */
-	public function setDescription($description)
+	public function setDescription(?string $description): void
 	{
 		$this->description = $description;
 	}
@@ -34,7 +27,7 @@ class Server implements IOpenApiObject
 	/**
 	 * @return mixed[]
 	 */
-	public function toArray()
+	public function toArray(): array
 	{
 		return Utils::create([
 			'url' => $this->url,

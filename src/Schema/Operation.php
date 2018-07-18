@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\Schema;
 
@@ -8,13 +8,13 @@ class Operation implements IOpenApiObject
 	/** @var string[] */
 	private $tags = [];
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $summary;
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $description;
 
-	/** @var ExternalDocumentation|NULL */
+	/** @var ExternalDocumentation|null */
 	private $externalDocs;
 
 	/** @var string */
@@ -23,17 +23,17 @@ class Operation implements IOpenApiObject
 	/** @var Parameter[]|Reference[] */
 	private $parameters = [];
 
-	/** @var RequestBody|Reference|NULL */
+	/** @var RequestBody|Reference|null */
 	private $requestBody;
 
 	/** @var Responses */
 	private $responses;
 
-	//Map[string, Callback Object | Reference Object]
+	/** @var Callback[]|Reference[] */
 	private $callbacks;
 
 	/** @var bool */
-	private $deprecated = FALSE;
+	private $deprecated = false;
 
 	/** @var SecurityRequirement[] */
 	private $security = [];
@@ -41,78 +41,52 @@ class Operation implements IOpenApiObject
 	/** @var Server[] */
 	private $servers = [];
 
-	/**
-	 * @param string $operationId
-	 * @param Responses $responses
-	 */
-	public function __construct($operationId, Responses $responses)
+	public function __construct(string $operationId, Responses $responses)
 	{
 		$this->operationId = $operationId;
 		$this->responses = $responses;
 	}
 
-	//Setters
-
 	/**
 	 * @param string[] $tags
-	 * @return void
 	 */
-	public function setTags($tags)
+	public function setTags(array $tags): void
 	{
 		$this->tags = $tags;
 	}
 
-	/**
-	 * @param string|NULL $summary
-	 * @return void
-	 */
-	public function setSummary($summary)
+	public function setSummary(?string $summary): void
 	{
 		$this->summary = $summary;
 	}
 
-	/**
-	 * @param string|NULL $description
-	 * @return void
-	 */
-	public function setDescription($description)
+	public function setDescription(?string $description): void
 	{
 		$this->description = $description;
 	}
 
 	/**
 	 * @param Parameter|Reference $parameter
-	 * @return void
 	 */
-	public function setParameter($parameter)
+	public function setParameter($parameter): void
 	{
 		$this->parameters[] = $parameter;
 	}
 
-	/**
-	 * @param RequestBody|NULL $requestBody
-	 * @return void
-	 */
-	public function setRequestBody($requestBody)
+	public function setRequestBody(?RequestBody $requestBody): void
 	{
 		$this->requestBody = $requestBody;
 	}
 
-	/**
-	 * @param bool $deprecated
-	 * @return void
-	 */
-	public function setDeprecated($deprecated)
+	public function setDeprecated(bool $deprecated): void
 	{
 		$this->deprecated = $deprecated;
 	}
 
-	//Get
-
 	/**
 	 * @return mixed[]
 	 */
-	public function toArray()
+	public function toArray(): array
 	{
 		return Utils::create([
 			'tags' => $this->tags,

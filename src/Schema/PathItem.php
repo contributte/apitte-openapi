@@ -1,18 +1,19 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\Schema;
 
 class PathItem implements IOpenApiObject
 {
 
-	const OPERATION_GET = 'get';
-	const OPERATION_PUT = 'put';
-	const OPERATION_POST = 'post';
-	const OPERATION_DELETE = 'delete';
-	const OPERATION_OPTIONS = 'options';
-	const OPERATION_HEAD = 'head';
-	const OPERATION_PATCH = 'patch';
-	const OPERATION_TRACE = 'trace';
+	public const
+		OPERATION_GET = 'get',
+		OPERATION_PUT = 'put',
+		OPERATION_POST = 'post',
+		OPERATION_DELETE = 'delete',
+		OPERATION_OPTIONS = 'options',
+		OPERATION_HEAD = 'head',
+		OPERATION_PATCH = 'patch',
+		OPERATION_TRACE = 'trace';
 
 	/** @var string[] */
 	private static $allowedOperations = [
@@ -26,13 +27,13 @@ class PathItem implements IOpenApiObject
 		self::OPERATION_TRACE,
 	];
 
-	//ref string
+	/** @var string */
 	private $ref;
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $summary;
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $description;
 
 	/** @var Operation[] */
@@ -41,17 +42,12 @@ class PathItem implements IOpenApiObject
 	/** @var Server[] */
 	private $servers = [];
 
-	//[Parameter Object | Reference Object]
+	/** @var Parameter|Reference */
 	private $params;
 
-	/**
-	 * @param string $key
-	 * @param Operation $operation
-	 * @return void
-	 */
-	public function setOperation($key, Operation $operation)
+	public function setOperation(string $key, Operation $operation): void
 	{
-		if (!in_array($key, self::$allowedOperations)) {
+		if (!in_array($key, self::$allowedOperations, true)) {
 			return;
 		}
 
@@ -61,7 +57,7 @@ class PathItem implements IOpenApiObject
 	/**
 	 * @return mixed[]
 	 */
-	public function toArray()
+	public function toArray(): array
 	{
 		$data = [
 			'summary' => $this->summary,

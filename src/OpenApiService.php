@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi;
 
@@ -31,11 +31,6 @@ class OpenApiService
 	/** @var ISchemaType */
 	private $schemaType;
 
-	/**
-	 * @param ApiSchema   $schema
-	 * @param Info        $apiInfo
-	 * @param ISchemaType $schemaType
-	 */
 	public function __construct(
 		ApiSchema $schema,
 		Info $apiInfo,
@@ -47,10 +42,7 @@ class OpenApiService
 		$this->schemaType = $schemaType;
 	}
 
-	/**
-	 * @return OpenApi
-	 */
-	public function createSchema()
+	public function createSchema(): OpenApi
 	{
 		$paths = new Paths();
 		$openApi = new OpenApi($this->apiInfo, $paths);
@@ -60,7 +52,7 @@ class OpenApiService
 			$endpointId++;
 
 			$pathItem = $paths->getPath($endpoint->getMask());
-			if ($pathItem === NULL) {
+			if ($pathItem === null) {
 				$pathItem = new PathItem();
 			}
 
@@ -89,7 +81,7 @@ class OpenApiService
 				//Request body
 				$requestBody = new RequestBody(['application/json' => $mediaType]);
 				$requestBody->setDescription('Request body description');
-				$requestBody->setRequired(TRUE);
+				$requestBody->setRequired(true);
 
 				//Reference
 				//$schemaReference = new ComponentReference(
@@ -116,17 +108,13 @@ class OpenApiService
 				$operation->setTags($this->getOperationTags($endpoint));
 				$description = $endpoint->getDescription();
 
-				if ($description instanceof ArrayHash) {
-					$lines = (array) $description;
-				} else {
-					$lines = explode("\n", $description);
-				}
+				$lines = explode("\n", $description);
 
 				$operation->setSummary(array_shift($lines));
 				if (count($lines) > 0) {
 					$operation->setDescription(implode('<br>', $lines));
 				}
-				$operation->setDeprecated(FALSE);
+				$operation->setDeprecated(false);
 
 				//Parameters
 				foreach ($endpoint->getParameters() as $endpointParam) {
@@ -164,28 +152,25 @@ class OpenApiService
 	/**
 	 * @return Endpoint[]
 	 */
-	protected function getEndpoints()
+	protected function getEndpoints(): array
 	{
 		return $this->schema->getEndpoints();
 	}
 
 	/**
-	 * @param Endpoint $endpoint
 	 * @return string[]
 	 */
-	protected function getOperationTags(Endpoint $endpoint)
+	protected function getOperationTags(Endpoint $endpoint): array
 	{
 		$tags = $endpoint->getTags();
 		unset($tags[Endpoint::TAG_ID]);
-		unset($tags[Endpoint::TAG_GROUP_IDS]);
-		unset($tags[Endpoint::TAG_GROUP_PATHS]);
 		return $tags;
 	}
 
 	/**
 	 * @return Tag[]
 	 */
-	protected function getTags()
+	protected function getTags(): array
 	{
 		return [];
 	}

@@ -1,7 +1,12 @@
 {
   "name": "apitte/openapi",
   "description": "Apitte OpenApi library",
-  "keywords": ["api", "rest", "json", "openapi"],
+  "keywords": [
+    "api",
+    "rest",
+    "json",
+    "openapi"
+  ],
   "type": "library",
   "license": "MIT",
   "homepage": "https://github.com/apitte/openapi",
@@ -12,14 +17,17 @@
     }
   ],
   "require": {
-    "php": ">= 5.6",
-    "apitte/core": "^0.3.0 || ^0.4.0",
+    "php": ">= 7.1",
+    "apitte/core": "^0.4.0",
     "tracy/tracy": "~2.4.14 || ~2.5.0",
     "nette/di": "~2.4.12"
   },
   "require-dev": {
-    "ninjify/qa": "^0.4.0",
+    "ninjify/qa": "^0.8.0",
     "ninjify/nunjuck": "^0.2.0"
+  },
+  "conflict": {
+    "nette/utils": "<2.5.2"
   },
   "autoload": {
     "psr-4": {
@@ -41,8 +49,9 @@
     ],
     "phpstan-install": [
       "mkdir -p temp/phpstan",
-      "composer require -d temp/phpstan phpstan/phpstan:0.8.5",
-      "composer require -d temp/phpstan phpstan/phpstan-nette:0.8.3"
+      "composer require -d temp/phpstan phpstan/phpstan:0.10.1",
+      "composer require -d temp/phpstan phpstan/phpstan-nette:0.10",
+      "composer require -d temp/phpstan phpstan/phpstan-strict-rules:0.10"
     ],
     "phpstan": [
       "temp/phpstan/vendor/bin/phpstan analyse -l 7 -c phpstan.neon src"
@@ -50,7 +59,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "0.4.x-dev"
+      "dev-master": "0.5.x-dev"
     }
   }
 }

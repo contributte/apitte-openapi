@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\Schema;
 
@@ -6,19 +6,18 @@ class Utils
 {
 
 	/**
-	 * @param IOpenApiObject|NULL $object
-	 * @return mixed[]|NULL
+	 * @return mixed[]|null
 	 */
-	public static function fromNullable($object)
+	public static function fromNullable(?IOpenApiObject $object): ?array
 	{
-		return $object !== NULL ? $object->toArray() : NULL;
+		return $object !== null ? $object->toArray() : null;
 	}
 
 	/**
 	 * @param IOpenApiObject[]|mixed[] $objects
 	 * @return mixed[]
 	 */
-	public static function fromArray(array $objects)
+	public static function fromArray(array $objects): array
 	{
 		$data = [];
 		foreach ($objects as $key => $object) {
@@ -35,7 +34,7 @@ class Utils
 	 * @param mixed[] $data
 	 * @return mixed[]
 	 */
-	public static function create(array $data)
+	public static function create(array $data): array
 	{
 		return array_filter($data);
 	}

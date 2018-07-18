@@ -21,7 +21,7 @@ Secondly, add the `OpenApiPlugin` plugin.
 
 ```yaml
 api:
-    plugins: 
+    plugins:
         Apitte\OpenApi\DI\OpenApiPlugin:
 ```
 
@@ -31,7 +31,7 @@ You can configure Swagger UI with a few optional parameters.
 
 ```yaml
 api:
-    plugins: 
+    plugins:
         Apitte\OpenApi\DI\OpenApiPlugin:
             swagger:
                 url: null # default url
@@ -78,7 +78,7 @@ final class OpenApiController implements IController
      * @Path("/schema")
      * @Method("GET")
      */
-    public function index(ApiRequest $request, ApiResponse $response)
+    public function index(ApiRequest $request, ApiResponse $response): ApiResponse
     {
         $schema = $this->openApiService->createSchema();
 

@@ -1,5 +1,11 @@
 includes:
+	- temp/phpstan/vendor/phpstan/phpstan-strict-rules/rules.neon
 	- temp/phpstan/vendor/phpstan/phpstan-nette/extension.neon
 	- temp/phpstan/vendor/phpstan/phpstan-nette/rules.neon
 
 parameters:
+	ignoreErrors:
+		- '#^Parameter \#1 \$path of method Apitte\\OpenApi\\Schema\\Paths::getPath\(\) expects string, string\|null given.$#'
+		- '#^Parameter \#2 \$str of function explode expects string, string\|null given.$#'
+		- '#^Parameter \#1 \$name of class Apitte\\OpenApi\\Schema\\Parameter constructor expects string, string\|null given.$#'
+		- '#^Parameter \#1 \$path of method Apitte\\OpenApi\\Schema\\Paths::setPathItem\(\) expects string, string\|null given.$#'

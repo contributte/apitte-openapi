@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /**
  * Test: SchemaType\BaseSchemaType
@@ -17,19 +17,17 @@ use Tester\TestCase;
 final class TestBaseSchemaType extends TestCase
 {
 
-	/**
-	 * @var ISchemaType
-	 */
+	/** @var ISchemaType */
 	private $baseSchemaType;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
-		$this->baseSchemaType = new BaseSchemaType;
+		$this->baseSchemaType = new BaseSchemaType();
 	}
 
-	public function testScalar()
+	public function testScalar(): void
 	{
-		$endpointParameter = new EndpointParameter;
+		$endpointParameter = new EndpointParameter();
 		$endpointParameter->setType(EndpointParameter::TYPE_SCALAR);
 
 		$scalarSchema = $this->baseSchemaType->createSchema($endpointParameter);
@@ -43,9 +41,9 @@ final class TestBaseSchemaType extends TestCase
 		);
 	}
 
-	public function testString()
+	public function testString(): void
 	{
-		$endpointParameter = new EndpointParameter;
+		$endpointParameter = new EndpointParameter();
 		$endpointParameter->setType(EndpointParameter::TYPE_STRING);
 
 		$scalarSchema = $this->baseSchemaType->createSchema($endpointParameter);
@@ -59,9 +57,9 @@ final class TestBaseSchemaType extends TestCase
 		);
 	}
 
-	public function testInteger()
+	public function testInteger(): void
 	{
-		$endpointParameter = new EndpointParameter;
+		$endpointParameter = new EndpointParameter();
 		$endpointParameter->setType(EndpointParameter::TYPE_INTEGER);
 
 		$scalarSchema = $this->baseSchemaType->createSchema($endpointParameter);
@@ -76,9 +74,9 @@ final class TestBaseSchemaType extends TestCase
 		);
 	}
 
-	public function testFloat()
+	public function testFloat(): void
 	{
-		$endpointParameter = new EndpointParameter;
+		$endpointParameter = new EndpointParameter();
 		$endpointParameter->setType(EndpointParameter::TYPE_FLOAT);
 
 		$scalarSchema = $this->baseSchemaType->createSchema($endpointParameter);
@@ -93,9 +91,9 @@ final class TestBaseSchemaType extends TestCase
 		);
 	}
 
-	public function testBoolean()
+	public function testBoolean(): void
 	{
-		$endpointParameter = new EndpointParameter;
+		$endpointParameter = new EndpointParameter();
 		$endpointParameter->setType(EndpointParameter::TYPE_BOOLEAN);
 
 		$scalarSchema = $this->baseSchemaType->createSchema($endpointParameter);
@@ -109,9 +107,9 @@ final class TestBaseSchemaType extends TestCase
 		);
 	}
 
-	public function testDatetime()
+	public function testDatetime(): void
 	{
-		$endpointParameter = new EndpointParameter;
+		$endpointParameter = new EndpointParameter();
 		$endpointParameter->setType(EndpointParameter::TYPE_DATETIME);
 
 		$scalarSchema = $this->baseSchemaType->createSchema($endpointParameter);
@@ -126,9 +124,9 @@ final class TestBaseSchemaType extends TestCase
 		);
 	}
 
-	public function testObject()
+	public function testObject(): void
 	{
-		$endpointParameter = new EndpointParameter;
+		$endpointParameter = new EndpointParameter();
 		$endpointParameter->setType(EndpointParameter::TYPE_OBJECT);
 
 		$scalarSchema = $this->baseSchemaType->createSchema($endpointParameter);
@@ -142,16 +140,16 @@ final class TestBaseSchemaType extends TestCase
 		);
 	}
 
-	public function testUnknownType()
+	public function testUnknownType(): void
 	{
-		$endpointParameter = new EndpointParameter;
+		$endpointParameter = new EndpointParameter();
 		$endpointParameter->setType('barBaz');
 
-		Assert::throws(function () use ($endpointParameter) {
+		Assert::throws(function () use ($endpointParameter): void {
 			$this->baseSchemaType->createSchema($endpointParameter);
 		}, UnknownSchemaType::class, 'Unknown endpoint parameter type barBaz');
 	}
 
 }
 
-(new TestBaseSchemaType)->run();
+(new TestBaseSchemaType())->run();

@@ -1,18 +1,18 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Apitte\OpenApi\Schema;
 
 class RequestBody implements IOpenApiObject
 {
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $description;
 
 	/** @var MediaType[] */
 	private $content = [];
 
 	/** @var bool */
-	private $required = FALSE;
+	private $required = false;
 
 	/**
 	 * @param MediaType[] $content
@@ -22,20 +22,12 @@ class RequestBody implements IOpenApiObject
 		$this->content = $content;
 	}
 
-	/**
-	 * @param string|NULL $description
-	 * @return void
-	 */
-	public function setDescription($description)
+	public function setDescription(?string $description): void
 	{
 		$this->description = $description;
 	}
 
-	/**
-	 * @param bool $required
-	 * @return void
-	 */
-	public function setRequired($required)
+	public function setRequired(bool $required): void
 	{
 		$this->required = $required;
 	}
@@ -43,7 +35,7 @@ class RequestBody implements IOpenApiObject
 	/**
 	 * @return mixed[]
 	 */
-	public function toArray()
+	public function toArray(): array
 	{
 		return Utils::create([
 			'description' => $this->description,
