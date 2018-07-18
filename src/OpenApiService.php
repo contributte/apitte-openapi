@@ -17,7 +17,6 @@ use Apitte\OpenApi\Schema\Responses;
 use Apitte\OpenApi\Schema\Schema;
 use Apitte\OpenApi\Schema\Tag;
 use Apitte\OpenApi\SchemaType\ISchemaType;
-use Nette\Utils\ArrayHash;
 
 class OpenApiService
 {
