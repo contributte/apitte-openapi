@@ -50,7 +50,7 @@ class OpenApiService
 		foreach ($this->getEndpoints() as $endpoint) {
 			$endpointId++;
 
-			$pathItem = $paths->getPath($endpoint->getMask());
+			$pathItem = $paths->getPath((string) $endpoint->getMask());
 			if ($pathItem === null) {
 				$pathItem = new PathItem();
 			}
@@ -105,7 +105,7 @@ class OpenApiService
 				//Operation
 				$operation = new Operation($operationId, $responses);
 				$operation->setTags($this->getOperationTags($endpoint));
-				$description = $endpoint->getDescription();
+				$description = (string) $endpoint->getDescription();
 
 				$lines = explode("\n", $description);
 
@@ -132,7 +132,7 @@ class OpenApiService
 				}
 				$pathItem->setOperation($method, $operation);
 			}
-			$paths->setPathItem($endpoint->getMask(), $pathItem);
+			$paths->setPathItem((string) $endpoint->getMask(), $pathItem);
 		}
 
 		//Global tags
