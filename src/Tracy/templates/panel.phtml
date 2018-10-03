@@ -9,6 +9,10 @@
 		<?php echo file_get_contents(__DIR__ . '/assets/swagger-ui.css'); ?>
 	</style>
 	<style>
+		#tracy-debug .swagger-ui .information-container {
+			display: none;
+		}
+
 		#tracy-debug .swagger-ui a {
 			background-color: transparent;
 		}
@@ -60,6 +64,7 @@
 			</symbol>
 		</defs>
 	</svg>
+	<h1><?php echo $spec['info']['title']; ?></h1>
 	<div id="swagger-ui-tracy"></div>
 	<script>
 		<?php echo file_get_contents(__DIR__ . '/assets/swagger-ui-bundle.js') ?>
