@@ -11,12 +11,6 @@ final class BaseSchemaType implements ISchemaType
 	public function createSchema(EndpointParameter $endpointParameter): Schema
 	{
 		switch ($endpointParameter->getType()) {
-			case EndpointParameter::TYPE_SCALAR:
-				return new Schema(
-					[
-						'type' => 'scalar',
-					]
-				);
 
 			case EndpointParameter::TYPE_STRING:
 				return new Schema(
@@ -53,13 +47,6 @@ final class BaseSchemaType implements ISchemaType
 					[
 						'type'   => 'string',
 						'format' => 'date-time',
-					]
-				);
-
-			case EndpointParameter::TYPE_OBJECT:
-				return new Schema(
-					[
-						'type' => 'object',
 					]
 				);
 

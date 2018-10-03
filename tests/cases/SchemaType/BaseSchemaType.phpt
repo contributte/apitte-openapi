@@ -10,7 +10,6 @@ use Apitte\Core\Schema\EndpointParameter;
 use Apitte\OpenApi\Schema\Schema;
 use Apitte\OpenApi\SchemaType\BaseSchemaType;
 use Apitte\OpenApi\SchemaType\ISchemaType;
-use Apitte\OpenApi\SchemaType\UnknownSchemaType;
 use Tester\Assert;
 use Tester\TestCase;
 
@@ -25,26 +24,9 @@ final class TestBaseSchemaType extends TestCase
 		$this->baseSchemaType = new BaseSchemaType();
 	}
 
-	public function testScalar(): void
-	{
-		$endpointParameter = new EndpointParameter();
-		$endpointParameter->setType(EndpointParameter::TYPE_SCALAR);
-
-		$scalarSchema = $this->baseSchemaType->createSchema($endpointParameter);
-
-		Assert::type(Schema::class, $scalarSchema);
-		Assert::same(
-			[
-				'type' => 'scalar',
-			],
-			$scalarSchema->toArray()
-		);
-	}
-
 	public function testString(): void
 	{
-		$endpointParameter = new EndpointParameter();
-		$endpointParameter->setType(EndpointParameter::TYPE_STRING);
+		$endpointParameter = new EndpointParameter('foo', EndpointParameter::TYPE_STRING);
 
 		$scalarSchema = $this->baseSchemaType->createSchema($endpointParameter);
 
@@ -59,8 +41,7 @@ final class TestBaseSchemaType extends TestCase
 
 	public function testInteger(): void
 	{
-		$endpointParameter = new EndpointParameter();
-		$endpointParameter->setType(EndpointParameter::TYPE_INTEGER);
+		$endpointParameter = new EndpointParameter('foo', EndpointParameter::TYPE_INTEGER);
 
 		$scalarSchema = $this->baseSchemaType->createSchema($endpointParameter);
 
@@ -76,8 +57,7 @@ final class TestBaseSchemaType extends TestCase
 
 	public function testFloat(): void
 	{
-		$endpointParameter = new EndpointParameter();
-		$endpointParameter->setType(EndpointParameter::TYPE_FLOAT);
+		$endpointParameter = new EndpointParameter('foo', EndpointParameter::TYPE_FLOAT);
 
 		$scalarSchema = $this->baseSchemaType->createSchema($endpointParameter);
 
@@ -93,8 +73,7 @@ final class TestBaseSchemaType extends TestCase
 
 	public function testBoolean(): void
 	{
-		$endpointParameter = new EndpointParameter();
-		$endpointParameter->setType(EndpointParameter::TYPE_BOOLEAN);
+		$endpointParameter = new EndpointParameter('foo', EndpointParameter::TYPE_BOOLEAN);
 
 		$scalarSchema = $this->baseSchemaType->createSchema($endpointParameter);
 
@@ -109,8 +88,7 @@ final class TestBaseSchemaType extends TestCase
 
 	public function testDatetime(): void
 	{
-		$endpointParameter = new EndpointParameter();
-		$endpointParameter->setType(EndpointParameter::TYPE_DATETIME);
+		$endpointParameter = new EndpointParameter('foo', EndpointParameter::TYPE_DATETIME);
 
 		$scalarSchema = $this->baseSchemaType->createSchema($endpointParameter);
 
@@ -122,32 +100,6 @@ final class TestBaseSchemaType extends TestCase
 			],
 			$scalarSchema->toArray()
 		);
-	}
-
-	public function testObject(): void
-	{
-		$endpointParameter = new EndpointParameter();
-		$endpointParameter->setType(EndpointParameter::TYPE_OBJECT);
-
-		$scalarSchema = $this->baseSchemaType->createSchema($endpointParameter);
-
-		Assert::type(Schema::class, $scalarSchema);
-		Assert::same(
-			[
-				'type' => 'object',
-			],
-			$scalarSchema->toArray()
-		);
-	}
-
-	public function testUnknownType(): void
-	{
-		$endpointParameter = new EndpointParameter();
-		$endpointParameter->setType('barBaz');
-
-		Assert::throws(function () use ($endpointParameter): void {
-			$this->baseSchemaType->createSchema($endpointParameter);
-		}, UnknownSchemaType::class, 'Unknown endpoint parameter type barBaz');
 	}
 
 }
