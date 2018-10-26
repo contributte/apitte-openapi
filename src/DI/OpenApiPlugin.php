@@ -90,7 +90,7 @@ class OpenApiPlugin extends AbstractPlugin
 			])
 			->setAutowired(false);
 
-		$builder->addDefinition('openapi.schemaType')
+		$builder->addDefinition($this->prefix('openapi.schemaType'))
 			->setType(ISchemaType::class)
 			->setFactory(BaseSchemaType::class);
 
