@@ -35,6 +35,7 @@ class OpenApiPlugin extends AbstractPlugin
 			'license' => null,
 			'version' => '2.0.5-beta',
 		],
+		'servers' => [],
 	];
 
 	public function __construct(PluginCompiler $compiler)
@@ -97,7 +98,8 @@ class OpenApiPlugin extends AbstractPlugin
 		$builder->addDefinition($this->prefix('openapi'))
 			->setFactory(OpenApiService::class, [
 				1 => '@' . $this->prefix('openapi.info'),
-			]);
+			])
+			->addSetup('setServers', [$config['servers']]);
 
 		if ($global['debug'] !== true) return;
 

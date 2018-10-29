@@ -13,7 +13,7 @@ class OpenApi implements IOpenApiObject
 	/** @var Info */
 	private $info;
 
-	/** @var Server[] */
+	/** @var Servers */
 	private $servers = [];
 
 	/** @var Paths */
@@ -31,10 +31,11 @@ class OpenApi implements IOpenApiObject
 	/** @var ExternalDocumentation|null */
 	private $externalDocs;
 
-	public function __construct(Info $info, Paths $paths)
+	public function __construct(Info $info, Paths $paths, Servers $servers)
 	{
 		$this->info = $info;
 		$this->paths = $paths;
+		$this->servers = $servers;
 	}
 
 	public function addTag(Tag $tag): void
@@ -44,7 +45,7 @@ class OpenApi implements IOpenApiObject
 
 	public function addServer(Server $server): void
 	{
-		$this->servers[] = $server;
+		$this->servers->addServer($server);
 	}
 
 	public function setComponents(?Components $components): void
@@ -60,7 +61,7 @@ class OpenApi implements IOpenApiObject
 		return Utils::create([
 			'openapi' => $this->openapi,
 			'info' => $this->info->toArray(),
-			'servers' => Utils::fromArray($this->servers),
+			'servers' => $this->servers->toArray(),
 			'paths' => $this->paths->toArray(),
 			'components' => Utils::fromNullable($this->components),
 			'security' => Utils::fromArray($this->security),

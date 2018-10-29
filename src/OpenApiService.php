@@ -15,6 +15,8 @@ use Apitte\OpenApi\Schema\RequestBody;
 use Apitte\OpenApi\Schema\Response;
 use Apitte\OpenApi\Schema\Responses;
 use Apitte\OpenApi\Schema\Schema;
+use Apitte\OpenApi\Schema\Server;
+use Apitte\OpenApi\Schema\Servers;
 use Apitte\OpenApi\Schema\Tag;
 use Apitte\OpenApi\SchemaType\ISchemaType;
 
@@ -26,6 +28,9 @@ class OpenApiService
 
 	/** @var Info */
 	protected $apiInfo;
+
+	/** @var Servers */
+	protected $servers;
 
 	/** @var ISchemaType */
 	private $schemaType;
@@ -39,12 +44,14 @@ class OpenApiService
 		$this->schema = $schema;
 		$this->apiInfo = $apiInfo;
 		$this->schemaType = $schemaType;
+
+		$this->servers = new Servers();
 	}
 
 	public function createSchema(): OpenApi
 	{
 		$paths = new Paths();
-		$openApi = new OpenApi($this->apiInfo, $paths);
+		$openApi = new OpenApi($this->apiInfo, $paths, $this->servers);
 
 		$endpointId = 0;
 		foreach ($this->getEndpoints() as $endpoint) {
@@ -146,6 +153,17 @@ class OpenApiService
 		//$openApi->setComponents($components);
 
 		return $openApi;
+	}
+
+	public function setServers(array $servers): void
+	{
+		foreach ($servers AS $server) {
+			$apiServer = new Server(is_array($server) ? key($server) : $server);
+			if (is_array($server)) {
+				$apiServer->setDescription(current($server));
+			}
+			$this->servers->addServer($apiServer);
+		}
 	}
 
 	/**
