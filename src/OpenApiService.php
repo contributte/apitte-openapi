@@ -157,7 +157,7 @@ class OpenApiService
 
 	public function setServers(array $servers): void
 	{
-		foreach ($servers AS $server) {
+		foreach ($servers as $server) {
 			$apiServer = new Server(is_array($server) ? key($server) : $server);
 			if (is_array($server)) {
 				$apiServer->setDescription(current($server));
