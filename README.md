@@ -7,10 +7,10 @@ Convert Apitte Schema to [OpenApi Schema](https://github.com/OAI/OpenAPI-Specifi
 [![Build Status](https://img.shields.io/travis/apitte/openapi.svg?style=flat-square)](https://travis-ci.org/apitte/openapi)
 [![Code coverage](https://img.shields.io/coveralls/apitte/openapi.svg?style=flat-square)](https://coveralls.io/r/apitte/openapi)
 [![Licence](https://img.shields.io/packagist/l/apitte/openapi.svg?style=flat-square)](https://packagist.org/packages/apitte/openapi)
-
 [![Downloads this Month](https://img.shields.io/packagist/dm/apitte/openapi.svg?style=flat-square)](https://packagist.org/packages/apitte/openapi)
 [![Downloads total](https://img.shields.io/packagist/dt/apitte/openapi.svg?style=flat-square)](https://packagist.org/packages/apitte/openapi)
 [![Latest stable](https://img.shields.io/packagist/v/apitte/openapi.svg?style=flat-square)](https://packagist.org/packages/apitte/openapi)
+[![PHPStan](https://img.shields.io/badge/PHPStan-enabled-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
 
 ## Discussion / Help
 
@@ -59,20 +59,20 @@ composer require apitte/openapi
       </td>
       <td align="center">
         <a href="https://github.com/mabar">
-            <img width="150" height="150" src="https://avatars0.githubusercontent.com/u/20974277?s=400&v=4">
+            <img width="150" height="150" src="https://avatars0.githubusercontent.com/u/20974277?s=150&v=4">
         </a>
         </br>
         <a href="https://github.com/mabar">Marek Bartoš</a>
       </td>
     </tr>
-  <tbody>
+  </tbody>
 </table>
 
 -----
 
 <a href="https://github.com/tlapnet"><img  width="200" src="https://cdn.rawgit.com/f3l1x/xsource/2463efb7/assets/tlapdev.png"></a>
 
-The development is sponsored by [Tlapnet](http://www.tlapnet.cz) and a lot of coffeees. Thank you guys! :+1:
+The development is sponsored by [Tlapnet](http://www.tlapnet.cz) and a lot of coffees. Thank you guys! :+1:
 
 -----
 
