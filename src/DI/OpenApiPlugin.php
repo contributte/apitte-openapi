@@ -4,14 +4,20 @@ namespace Apitte\OpenApi\DI;
 
 use Apitte\Core\DI\Plugin\AbstractPlugin;
 use Apitte\Core\DI\Plugin\PluginCompiler;
-use Apitte\OpenApi\OpenApiService;
-use Apitte\OpenApi\Schema\Contact;
-use Apitte\OpenApi\Schema\Info;
-use Apitte\OpenApi\Schema\License;
-use Apitte\OpenApi\SchemaType\BaseSchemaType;
-use Apitte\OpenApi\SchemaType\ISchemaType;
+use Apitte\Core\Exception\Logical\InvalidArgumentException;
+use Apitte\OpenApi\SchemaBuilder;
+use Apitte\OpenApi\SchemaDefinition\AnnotationDefinition;
+use Apitte\OpenApi\SchemaDefinition\ArrayDefinition;
+use Apitte\OpenApi\SchemaDefinition\BaseDefinition;
+use Apitte\OpenApi\SchemaDefinition\CoreDefinition;
+use Apitte\OpenApi\SchemaDefinition\Entity\EntityAdapter;
+use Apitte\OpenApi\SchemaDefinition\Entity\EntityDefinition;
+use Apitte\OpenApi\SchemaDefinition\JsonDefinition;
+use Apitte\OpenApi\SchemaDefinition\NeonDefinition;
+use Apitte\OpenApi\SchemaDefinition\YamlDefinition;
 use Apitte\OpenApi\Tracy\SwaggerUIPanel;
 use Nette\PhpGenerator\ClassType;
+use Nette\Utils\Strings;
 
 class OpenApiPlugin extends AbstractPlugin
 {
@@ -20,20 +26,15 @@ class OpenApiPlugin extends AbstractPlugin
 
 	/** @var mixed[] */
 	protected $defaults = [
-		'swagger' => [
+		'definitions' => null,
+		'definition' => [],
+		'files' => [],
+		'swaggerUi' => [
 			'url' => null,
 			'expansion' => SwaggerUIPanel::EXPANSION_LIST,
 			'filter' => true,
-			'title' => 'OpenAPI',
+			'title' => 'SwaggerUi',
 			'panel' => true,
-		],
-		'info' => [
-			'title' => 'Api Docs',
-			'description' => null,
-			'termsOfService' => null,
-			'contact' => null,
-			'license' => null,
-			'version' => '2.0.5-beta',
 		],
 	];
 
@@ -52,62 +53,60 @@ class OpenApiPlugin extends AbstractPlugin
 		$global = $this->compiler->getExtension()->getConfig();
 		$config = $this->getConfig();
 
-		$infoContact = null;
-		if ($config['info']['contact'] !== null) {
-			$builder->addDefinition($this->prefix('openapi.info.contact'))
-				->setType(Contact::class)
-				->setFactory(Contact::class, [
-						$config['info']['contact']['name'],
-						$config['info']['contact']['url'],
-						$config['info']['contact']['email'],
-					])
-				->setAutowired(false);
+		$builder->addDefinition($this->prefix('entityAdapter'))
+			->setFactory(EntityAdapter::class);
 
-			$infoContact = '@' . $this->prefix('openapi.info.contact');
+		$entityDefinition = $builder->addDefinition($this->prefix('entityDefinition'))
+			->setFactory(EntityDefinition::class);
+
+		$annotationDefinition = $builder->addDefinition($this->prefix('annotationDefinition'))
+			->setFactory(AnnotationDefinition::class);
+
+		$coreDefinition = $builder->addDefinition($this->prefix('coreDefinition'))
+			->setFactory(CoreDefinition::class);
+
+		$schemaBuilder = $builder->addDefinition($this->prefix('schemaBuilder'))
+			->setFactory(SchemaBuilder::class);
+
+		if ($config['definitions'] === null) {
+			$schemaBuilder
+				->addSetup('addDefinition', [new BaseDefinition()])
+				->addSetup('addDefinition', [$entityDefinition])
+				->addSetup('addDefinition', [$coreDefinition])
+				->addSetup('addDefinition', [$annotationDefinition]);
+			foreach ($config['files'] as $file) {
+				if (Strings::endsWith($file, '.neon')) {
+					$schemaBuilder->addSetup('addDefinition', [new NeonDefinition($file)]);
+				} elseif (Strings::endsWith($file, '.yaml') || Strings::endsWith($file, '.yml')) {
+					$schemaBuilder->addSetup('addDefinition', [new YamlDefinition($file)]);
+				} elseif (Strings::endsWith($file, '.json')) {
+					$schemaBuilder->addSetup('addDefinition', [new JsonDefinition($file)]);
+				} else {
+					throw new InvalidArgumentException(sprintf(
+						'We cant parse file "%s" - unsupported file type',
+						$file
+					));
+				}
+			}
+
+			$schemaBuilder->addSetup('addDefinition', [new ArrayDefinition($config['definition'])]);
+		} else {
+			foreach ($config['definitions'] as $customDefinition) {
+				$schemaBuilder->addSetup('addDefinition', [$customDefinition]);
+			}
 		}
 
-		$infoLicense = null;
-		if ($config['info']['license'] !== null) {
-			$builder->addDefinition($this->prefix('openapi.info.license'))
-				->setType(License::class)
-				->setFactory(License::class, [
-						$config['info']['license'],
-					])
-				->setAutowired(false);
-
-			$infoLicense = '@' . $this->prefix('openapi.info.license');
+		if ($global['debug'] !== true) {
+			return;
 		}
 
-		$builder->addDefinition($this->prefix('openapi.info'))
-			->setType(Info::class)
-			->setFactory(Info::class, [
-				$config['info']['title'],
-				$config['info']['description'],
-				$config['info']['termsOfService'],
-				$infoContact,
-				$infoLicense,
-				$config['info']['version'],
-			])
-			->setAutowired(false);
-
-		$builder->addDefinition($this->prefix('openapi.schemaType'))
-			->setType(ISchemaType::class)
-			->setFactory(BaseSchemaType::class);
-
-		$builder->addDefinition($this->prefix('openapi'))
-			->setFactory(OpenApiService::class, [
-				1 => '@' . $this->prefix('openapi.info'),
-			]);
-
-		if ($global['debug'] !== true) return;
-
-		if ($config['swagger']['panel']) {
-			$builder->addDefinition($this->prefix('swagger.panel'))
+		if ($config['swaggerUi']['panel']) {
+			$builder->addDefinition($this->prefix('swaggerUi.panel'))
 				->setFactory(SwaggerUIPanel::class)
-				->addSetup('setUrl', [$config['swagger']['url']])
-				->addSetup('setExpansion', [$config['swagger']['expansion']])
-				->addSetup('setFilter', [$config['swagger']['filter']])
-				->addSetup('setTitle', [$config['swagger']['title']])
+				->addSetup('setUrl', [$config['swaggerUi']['url']])
+				->addSetup('setExpansion', [$config['swaggerUi']['expansion']])
+				->addSetup('setFilter', [$config['swaggerUi']['filter']])
+				->addSetup('setTitle', [$config['swaggerUi']['title']])
 				->setAutowired(false);
 		}
 	}
@@ -115,12 +114,17 @@ class OpenApiPlugin extends AbstractPlugin
 	public function afterPluginCompile(ClassType $class): void
 	{
 		$global = $this->compiler->getExtension()->getConfig();
-		if ($global['debug'] !== true) return;
+		if ($global['debug'] !== true) {
+			return;
+		}
 		$config = $this->getConfig();
 
 		$initialize = $class->getMethod('initialize');
-		if ($config['swagger']['panel']) {
-			$initialize->addBody('$this->getService(?)->addPanel($this->getService(?));', ['tracy.bar', $this->prefix('swagger.panel')]);
+		if ($config['swaggerUi']['panel']) {
+			$initialize->addBody('$this->getService(?)->addPanel($this->getService(?));', [
+				'tracy.bar',
+				$this->prefix('swaggerUi.panel'),
+			]);
 		}
 	}
 

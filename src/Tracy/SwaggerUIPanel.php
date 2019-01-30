@@ -2,7 +2,7 @@
 
 namespace Apitte\OpenApi\Tracy;
 
-use Apitte\OpenApi\OpenApiService;
+use Apitte\OpenApi\ISchemaBuilder;
 use Tracy\IBarPanel;
 
 class SwaggerUIPanel implements IBarPanel
@@ -25,12 +25,12 @@ class SwaggerUIPanel implements IBarPanel
 	/** @var string */
 	private $title = 'OpenAPI';
 
-	/** @var OpenApiService */
-	private $openApiService;
+	/** @var ISchemaBuilder */
+	private $schemaBuilder;
 
-	public function __construct(OpenApiService $openApiService)
+	public function __construct(ISchemaBuilder $schemaBuilder)
 	{
-		$this->openApiService = $openApiService;
+		$this->schemaBuilder = $schemaBuilder;
 	}
 
 	public function setUrl(?string $url): void
@@ -70,7 +70,7 @@ class SwaggerUIPanel implements IBarPanel
 	public function getPanel(): string
 	{
 		ob_start();
-		$spec = $this->openApiService->createSchema()->toArray();
+		$spec = $this->schemaBuilder->build()->toArray();
 		$url = $this->url;
 		$expansion = $this->expansion;
 		$filter = $this->filter;
