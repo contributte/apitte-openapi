@@ -14,17 +14,26 @@
     {
       "name": "Milan Felix Šulc",
       "homepage": "https://f3l1x.io"
+    },
+    {
+      "name": "Josef Benjač",
+      "homepage": "https://josefbenjac.com"
     }
   ],
   "require": {
     "php": ">= 7.1",
-    "apitte/core": "^0.4.0",
+    "apitte/core": "^0.5.0",
     "tracy/tracy": "~2.4.14 || ~2.5.0",
-    "nette/di": "~2.4.12"
+    "nette/di": "~2.4.12",
+    "nette/utils": "~2.5.3"
+  },
+  "suggest": {
+    "symfony/yaml": "Allows yaml definition"
   },
   "require-dev": {
     "ninjify/qa": "^0.8.0",
-    "ninjify/nunjuck": "^0.2.0"
+    "ninjify/nunjuck": "^0.2.0",
+    "symfony/yaml": "^4.2"
   },
   "conflict": {
     "nette/utils": "<2.5.2"
