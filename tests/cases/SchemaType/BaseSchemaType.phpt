@@ -48,7 +48,7 @@ final class TestBaseSchemaType extends TestCase
 		Assert::type(Schema::class, $scalarSchema);
 		Assert::same(
 			[
-				'type'   => 'integer',
+				'type' => 'integer',
 				'format' => 'int32',
 			],
 			$scalarSchema->toArray()
@@ -64,7 +64,7 @@ final class TestBaseSchemaType extends TestCase
 		Assert::type(Schema::class, $scalarSchema);
 		Assert::same(
 			[
-				'type'   => 'float',
+				'type' => 'float',
 				'format' => 'float64',
 			],
 			$scalarSchema->toArray()
@@ -95,7 +95,7 @@ final class TestBaseSchemaType extends TestCase
 		Assert::type(Schema::class, $scalarSchema);
 		Assert::same(
 			[
-				'type'   => 'string',
+				'type' => 'string',
 				'format' => 'date-time',
 			],
 			$scalarSchema->toArray()

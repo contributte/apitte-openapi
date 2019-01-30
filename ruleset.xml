@@ -2,7 +2,8 @@
 <ruleset name="Contributte">
 	<!-- Contributte Coding Standard -->
 	<rule ref="./vendor/ninjify/coding-standard/contributte.xml">
-		<exclude name="SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedProperty"/><!-- Schema is not implemented completely -->
+		<!-- Schema is not implemented completely -->
+		<exclude name="SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedProperty"/>
 	</rule>
 
 	<!-- Specific rules -->
@@ -14,13 +15,14 @@
 		</properties>
 	</rule>
 
-    <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
-        <exclude-pattern>*tests/cases/*</exclude-pattern>
-    </rule>
+	<rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
+		<exclude-pattern>*tests/cases/*</exclude-pattern>
+	</rule>
 
 	<rule ref="Squiz.Classes.ClassFileName.NoMatch">
-        <exclude-pattern>*tests/cases/*</exclude-pattern>
-    </rule>
+		<exclude-pattern>*tests/cases/*</exclude-pattern>
+	</rule>
+
 
 	<!-- Exclude folders -->
 	<exclude-pattern>/tests/tmp</exclude-pattern>

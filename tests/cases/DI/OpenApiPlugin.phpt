@@ -6,7 +6,8 @@
 
 use Apitte\Core\DI\ApiExtension;
 use Apitte\OpenApi\DI\OpenApiPlugin;
-use Apitte\OpenApi\OpenApiService;
+use Apitte\OpenApi\ISchemaBuilder;
+use Apitte\OpenApi\SchemaBuilder;
 use Nette\DI\Compiler;
 use Nette\DI\Container;
 use Nette\DI\ContainerLoader;
@@ -25,7 +26,16 @@ test(function (): void {
 			],
 			'api' => [
 				'plugins' => [
-					OpenApiPlugin::class => [],
+					OpenApiPlugin::class => [
+						'definition' => [
+							'openapi' => '3.0.2',
+							'info' => [
+								'title' => 'Swagger Petstore',
+								'version' => '1.0.0',
+							],
+							'paths' => [],
+						],
+					],
 				],
 			],
 		]);
@@ -34,5 +44,12 @@ test(function (): void {
 	/** @var Container $container */
 	$container = new $class();
 
-	Assert::type(OpenApiService::class, $container->getByType(OpenApiService::class));
+	/** @var SchemaBuilder $schemaBuilder */
+	$schemaBuilder = $container->getByType(ISchemaBuilder::class);
+	Assert::type(ISchemaBuilder::class, $schemaBuilder);
+	Assert::equal([
+		'openapi' => '3.0.2',
+		'info' => ['title' => 'Swagger Petstore', 'version' => '1.0.0'],
+		'paths' => [],
+	], $schemaBuilder->build()->toArray());
 });
