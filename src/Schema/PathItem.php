@@ -2,7 +2,7 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class PathItem implements IOpenApiObject
+class PathItem
 {
 
 	public const
@@ -27,7 +27,7 @@ class PathItem implements IOpenApiObject
 		self::OPERATION_TRACE,
 	];
 
-	/** @var string */
+	/** @var string|null */
 	private $ref;
 
 	/** @var string|null */
@@ -45,6 +45,22 @@ class PathItem implements IOpenApiObject
 	/** @var Parameter|Reference */
 	private $params;
 
+	/**
+	 * @param mixed[] $pathItemData
+	 */
+	public static function fromArray(array $pathItemData): PathItem
+	{
+		$pathItem = new PathItem();
+
+		foreach (self::$allowedOperations as $allowedOperation) {
+			if (isset($pathItemData[$allowedOperation])) {
+				$pathItem->setOperation($allowedOperation, Operation::fromArray($pathItemData[$allowedOperation]));
+			}
+		}
+
+		return $pathItem;
+	}
+
 	public function setOperation(string $key, Operation $operation): void
 	{
 		if (!in_array($key, self::$allowedOperations, true)) {
@@ -59,13 +75,11 @@ class PathItem implements IOpenApiObject
 	 */
 	public function toArray(): array
 	{
-		$data = [
-			'summary' => $this->summary,
-			'description' => $this->description,
-			'servers' => Utils::fromArray($this->servers),
-		];
-		$data = array_merge($data, Utils::fromArray($this->operations));
-		return Utils::create($data);
+		$data = [];
+		foreach ($this->operations as $key => $operation) {
+			$data[$key] = $operation->toArray();
+		}
+		return $data;
 	}
 
 }

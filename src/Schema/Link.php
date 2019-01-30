@@ -2,7 +2,7 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class Link implements IOpenApiObject
+class Link
 {
 
 	/**

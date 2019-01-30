@@ -2,7 +2,7 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class SecurityRequirement implements IOpenApiObject
+class SecurityRequirement
 {
 
 	/**

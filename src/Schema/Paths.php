@@ -2,11 +2,35 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class Paths implements IOpenApiObject
+class Paths
 {
 
 	/** @var PathItem[] */
 	private $paths = [];
+
+	/**
+	 * @return mixed[]
+	 */
+	public function toArray(): array
+	{
+		$data = [];
+		foreach ($this->paths as $key => $pathItem) {
+			$data[$key] = $pathItem->toArray();
+		}
+		return $data;
+	}
+
+	/**
+	 * @param mixed[] $data
+	 */
+	public static function fromArray(array $data): Paths
+	{
+		$paths = new Paths();
+		foreach ($data as $path => $pathItemData) {
+			$paths->setPathItem($path, PathItem::fromArray($pathItemData));
+		}
+		return $paths;
+	}
 
 	public function setPathItem(string $path, PathItem $pathItem): void
 	{
@@ -16,14 +40,6 @@ class Paths implements IOpenApiObject
 	public function getPath(string $path): ?PathItem
 	{
 		return array_key_exists($path, $this->paths) ? $this->paths[$path] : null;
-	}
-
-	/**
-	 * @return mixed[]
-	 */
-	public function toArray(): array
-	{
-		return Utils::fromArray($this->paths);
 	}
 
 }

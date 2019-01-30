@@ -2,7 +2,7 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class License implements IOpenApiObject
+class License
 {
 
 	/** @var string */
@@ -21,10 +21,40 @@ class License implements IOpenApiObject
 	 */
 	public function toArray(): array
 	{
-		return Utils::create([
-			'name' => $this->name,
-			'url' => $this->url,
-		]);
+		$data = [];
+		$data['name'] = $this->name;
+
+		// Optional url
+		if ($this->url !== null) {
+			$data['url'] = $this->url;
+		}
+
+		return $data;
+	}
+
+	/**
+	 * @param mixed[] $data
+	 */
+	public static function fromArray(array $data): License
+	{
+		$license = new License($data['name']);
+		$license->setUrl($data['url'] ?? null);
+		return $license;
+	}
+
+	public function setUrl(?string $url): void
+	{
+		$this->url = $url;
+	}
+
+	public function getName(): string
+	{
+		return $this->name;
+	}
+
+	public function getUrl(): ?string
+	{
+		return $this->url;
 	}
 
 }

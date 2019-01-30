@@ -2,7 +2,7 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class Callback implements IOpenApiObject
+class Callback
 {
 
 	/**
