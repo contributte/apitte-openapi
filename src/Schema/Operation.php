@@ -2,7 +2,7 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class Operation implements IOpenApiObject
+class Operation
 {
 
 	/** @var string[] */
@@ -17,7 +17,7 @@ class Operation implements IOpenApiObject
 	/** @var ExternalDocumentation|null */
 	private $externalDocs;
 
-	/** @var string */
+	/** @var string|null */
 	private $operationId;
 
 	/** @var Parameter[]|Reference[] */
@@ -41,10 +41,42 @@ class Operation implements IOpenApiObject
 	/** @var Server[] */
 	private $servers = [];
 
-	public function __construct(string $operationId, Responses $responses)
+	public function __construct(Responses $responses)
+	{
+		$this->responses = $responses;
+	}
+
+	/**
+	 * @param mixed[] $data
+	 */
+	public static function fromArray(array $data): Operation
+	{
+		$responses = Responses::fromArray($data['responses']);
+		$operation = new Operation($responses);
+		if (isset($data['requestBody'])) {
+			$operation->requestBody = RequestBody::fromArray($data['requestBody']);
+		}
+		$operation->setOperationId($data['operationId'] ?? null);
+		$operation->setTags($data['tags'] ?? []);
+		$operation->setSummary($data['summary'] ?? null);
+		$operation->setDescription($data['description'] ?? null);
+		if (isset($data['externalDocs'])) {
+			$operation->setExternalDocs(ExternalDocumentation::fromArray($data['externalDocs']));
+		}
+		if (isset($data['parameters'])) {
+			foreach ($data['parameters'] as $parameterData) {
+				$operation->setParameter(Parameter::fromArray($parameterData));
+			}
+		}
+		if (isset($data['requestBody'])) {
+			$operation->requestBody = RequestBody::fromArray($data['requestBody']);
+		}
+		return $operation;
+	}
+
+	public function setOperationId(?string $operationId): void
 	{
 		$this->operationId = $operationId;
-		$this->responses = $responses;
 	}
 
 	/**
@@ -63,6 +95,11 @@ class Operation implements IOpenApiObject
 	public function setDescription(?string $description): void
 	{
 		$this->description = $description;
+	}
+
+	public function setExternalDocs(?ExternalDocumentation $externalDocs): void
+	{
+		$this->externalDocs = $externalDocs;
 	}
 
 	/**
@@ -88,19 +125,112 @@ class Operation implements IOpenApiObject
 	 */
 	public function toArray(): array
 	{
-		return Utils::create([
-			'tags' => $this->tags,
-			'summary' => $this->summary,
-			'description' => $this->description,
-			'externalDocs' => Utils::fromNullable($this->externalDocs),
-			'operationId' => $this->operationId,
-			'parameters' => Utils::fromArray($this->parameters),
-			'requestBody' => Utils::fromNullable($this->requestBody),
-			'responses' => $this->responses->toArray(),
-			'deprecated' => $this->deprecated,
-			'security' => Utils::fromArray($this->security),
-			'servers' => Utils::fromArray($this->servers),
-		]);
+		$data = [];
+		if (count($this->tags) > 0) {
+			$data['tags'] = $this->tags;
+		}
+		if ($this->summary !== null) {
+			$data['summary'] = $this->summary;
+		}
+		if ($this->description !== null) {
+			$data['description'] = $this->description;
+		}
+		if ($this->externalDocs !== null) {
+			$data['externalDocs'] = $this->externalDocs->toArray();
+		}
+		if ($this->operationId !== null) {
+			$data['operationId'] = $this->operationId;
+		}
+		foreach ($this->parameters as $parameter) {
+			$data['parameters'][] = $parameter->toArray();
+		}
+		if ($this->requestBody !== null) {
+			$data['requestBody'] = $this->requestBody->toArray();
+		}
+		$data['responses'] = $this->responses->toArray();
+		//			'deprecated' => $this->deprecated,
+		//			'security' => Utils::fromArray($this->security),
+		//			'servers' => Utils::fromArray($this->servers),
+
+		return $data;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public function getTags(): array
+	{
+		return $this->tags;
+	}
+
+	public function getSummary(): ?string
+	{
+		return $this->summary;
+	}
+
+	public function getDescription(): ?string
+	{
+		return $this->description;
+	}
+
+	public function getExternalDocs(): ?ExternalDocumentation
+	{
+		return $this->externalDocs;
+	}
+
+	public function getOperationId(): ?string
+	{
+		return $this->operationId;
+	}
+
+	/**
+	 * @return Parameter[]|Reference[]
+	 */
+	public function getParameters()
+	{
+		return $this->parameters;
+	}
+
+	/**
+	 * @return Reference|RequestBody|null
+	 */
+	public function getRequestBody()
+	{
+		return $this->requestBody;
+	}
+
+	public function getResponses(): Responses
+	{
+		return $this->responses;
+	}
+
+	/**
+	 * @return Reference[]|Callback[]
+	 */
+	public function getCallbacks()
+	{
+		return $this->callbacks;
+	}
+
+	public function isDeprecated(): bool
+	{
+		return $this->deprecated;
+	}
+
+	/**
+	 * @return SecurityRequirement[]
+	 */
+	public function getSecurity(): array
+	{
+		return $this->security;
+	}
+
+	/**
+	 * @return Server[]
+	 */
+	public function getServers(): array
+	{
+		return $this->servers;
 	}
 
 }

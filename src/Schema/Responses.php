@@ -2,18 +2,27 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class Responses implements IOpenApiObject
+class Responses
 {
 
 	/** @var Response[]|Reference[] */
 	private $responses = [];
 
-	/**
-	 * @param Response|Reference $defaultResponse
-	 */
-	public function __construct($defaultResponse)
+	public function setResponse(string $key, Response $response): void
 	{
-		$this->responses['default'] = $defaultResponse;
+		$this->responses[$key] = $response;
+	}
+
+	/**
+	 * @param mixed[] $data
+	 */
+	public static function fromArray(array $data): Responses
+	{
+		$responses = new Responses();
+		foreach ($data as $key => $responseData) {
+			$responses->setResponse((string) $key, Response::fromArray($responseData));
+		}
+		return $responses;
 	}
 
 	/**
@@ -21,7 +30,19 @@ class Responses implements IOpenApiObject
 	 */
 	public function toArray(): array
 	{
-		return Utils::fromArray($this->responses);
+		$data = [];
+		foreach ($this->responses as $key => $response) {
+			if ($key !== 'default') {
+				$data[$key] = $response->toArray();
+			}
+		}
+
+		// Default response last
+		if (isset($this->responses['default'])) {
+			$data['default'] = $this->responses['default']->toArray();
+		}
+
+		return $data;
 	}
 
 }

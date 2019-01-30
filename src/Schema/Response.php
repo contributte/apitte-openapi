@@ -2,7 +2,7 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class Response implements IOpenApiObject
+class Response
 {
 
 	/** @var string */
@@ -22,9 +22,34 @@ class Response implements IOpenApiObject
 		$this->description = $description;
 	}
 
-	public function setContent(string $type, MediaType $content): void
+	/**
+	 * @param mixed[] $data
+	 */
+	public static function fromArray(array $data): Response
 	{
-		$this->content[$type] = $content;
+		$response = new Response($data['description']);
+		if (isset($data['headers'])) {
+			foreach ($data['headers'] as $key => $headerData) {
+				$response->setHeader($key, Header::fromArray($headerData));
+			}
+		}
+		if (isset($data['content'])) {
+			foreach ($data['content'] as $key => $contentData) {
+				$response->setContent($key, MediaType::fromArray($contentData));
+			}
+		}
+
+		return $response;
+	}
+
+	public function setContent(string $type, MediaType $mediaType): void
+	{
+		$this->content[$type] = $mediaType;
+	}
+
+	public function setHeader(string $key, Header $header): void
+	{
+		$this->headers[$key] = $header;
 	}
 
 	/**
@@ -32,10 +57,16 @@ class Response implements IOpenApiObject
 	 */
 	public function toArray(): array
 	{
-		return Utils::create([
-			'description' => $this->description,
-			'content' => Utils::fromArray($this->content),
-		]);
+		$data = [];
+		$data['description'] = $this->description;
+		foreach ($this->headers as $key => $header) {
+			$data['headers'][$key] = $header->toArray();
+		}
+		foreach ($this->content as $key => $mediaType) {
+			$data['content'][$key] = $mediaType->toArray();
+		}
+
+		return $data;
 	}
 
 }

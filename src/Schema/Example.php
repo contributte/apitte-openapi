@@ -2,7 +2,7 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class Example implements IOpenApiObject
+class Example
 {
 
 	/**

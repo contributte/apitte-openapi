@@ -2,7 +2,7 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class RequestBody implements IOpenApiObject
+class RequestBody
 {
 
 	/** @var string|null */
@@ -22,6 +22,33 @@ class RequestBody implements IOpenApiObject
 		$this->content = $content;
 	}
 
+	/**
+	 * @param mixed[] $data
+	 */
+	public static function fromArray(array $data): RequestBody
+	{
+		$requestBody = new RequestBody($data['content']);
+		$requestBody->setRequired($data['required'] ?? false);
+		$requestBody->setDescription($data['description'] ?? null);
+		return $requestBody;
+	}
+
+	/**
+	 * @return mixed[]
+	 */
+	public function toArray(): array
+	{
+		$data = [];
+		if ($this->description !== null) {
+			$data['description'] = $this->description;
+		}
+		$data['content'] = $this->content;
+		if ($this->required === true) {
+			$data['required'] = true;
+		}
+		return $data;
+	}
+
 	public function setDescription(?string $description): void
 	{
 		$this->description = $description;
@@ -32,16 +59,22 @@ class RequestBody implements IOpenApiObject
 		$this->required = $required;
 	}
 
-	/**
-	 * @return mixed[]
-	 */
-	public function toArray(): array
+	public function getDescription(): ?string
 	{
-		return Utils::create([
-			'description' => $this->description,
-			'content' => Utils::fromArray($this->content),
-			'required' => $this->required,
-		]);
+		return $this->description;
+	}
+
+	/**
+	 * @return MediaType[]
+	 */
+	public function getContent(): array
+	{
+		return $this->content;
+	}
+
+	public function isRequired(): bool
+	{
+		return $this->required;
 	}
 
 }

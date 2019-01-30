@@ -2,7 +2,7 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class Reference implements IOpenApiObject
+class Reference
 {
 
 	/** @var string */
@@ -13,14 +13,17 @@ class Reference implements IOpenApiObject
 		$this->ref = $ref;
 	}
 
+	public function getRef(): string
+	{
+		return $this->ref;
+	}
+
 	/**
 	 * @return mixed[]
 	 */
 	public function toArray(): array
 	{
-		return Utils::create([
-			'$ref' => $this->ref,
-		]);
+		return [];
 	}
 
 }

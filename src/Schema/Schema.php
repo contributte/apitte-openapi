@@ -2,7 +2,7 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class Schema implements IOpenApiObject
+class Schema
 {
 
 	/** @var mixed[] */
@@ -17,11 +17,19 @@ class Schema implements IOpenApiObject
 	}
 
 	/**
+	 * @param mixed[] $data
+	 */
+	public static function fromArray(array $data): Schema
+	{
+		return new Schema($data);
+	}
+
+	/**
 	 * @return mixed[]
 	 */
 	public function toArray(): array
 	{
-		return Utils::create($this->data);
+		return $this->data;
 	}
 
 }

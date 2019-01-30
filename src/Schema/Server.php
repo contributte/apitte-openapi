@@ -2,7 +2,7 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class Server implements IOpenApiObject
+class Server
 {
 
 	/** @var string */
@@ -12,16 +12,11 @@ class Server implements IOpenApiObject
 	private $description;
 
 	/** @var ServerVariable[] */
-	private $variables;
+	private $variables = [];
 
 	public function __construct(string $url)
 	{
 		$this->url = $url;
-	}
-
-	public function setDescription(?string $description): void
-	{
-		$this->description = $description;
 	}
 
 	/**
@@ -29,10 +24,70 @@ class Server implements IOpenApiObject
 	 */
 	public function toArray(): array
 	{
-		return Utils::create([
-			'url' => $this->url,
-			'description' => $this->description,
-		]);
+		$data = [];
+		$data['url'] = $this->url;
+
+		if ($this->description !== null) {
+			$data['description'] = $this->description;
+		}
+		foreach ($this->variables as $variableKey => $variable) {
+			$data['variables'][$variableKey] = $variable->toArray();
+		}
+
+		return $data;
+	}
+
+	/**
+	 * @param mixed[] $data
+	 */
+	public static function fromArray(array $data): Server
+	{
+		$server = new Server($data['url']);
+		$server->setDescription($data['description'] ?? null);
+		if (isset($data['variables'])) {
+			foreach ($data['variables'] as $key => $variable) {
+				$server->setVariable($key, ServerVariable::fromArray($variable));
+			}
+		}
+		return $server;
+	}
+
+	public function setDescription(?string $description): void
+	{
+		$this->description = $description;
+	}
+
+	public function setVariable(string $key, ServerVariable $variable): void
+	{
+		$this->variables[$key] = $variable;
+	}
+
+	public function unsetVariable(string $key): void
+	{
+		unset($this->variables[$key]);
+	}
+
+	public function getUrl(): string
+	{
+		return $this->url;
+	}
+
+	public function getDescription(): ?string
+	{
+		return $this->description;
+	}
+
+	/**
+	 * @return ServerVariable[]
+	 */
+	public function getVariables(): array
+	{
+		return $this->variables;
+	}
+
+	public function getServerVariable(string $key): ?ServerVariable
+	{
+		return $this->variables[$key] ?? null;
 	}
 
 }

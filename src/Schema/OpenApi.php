@@ -2,13 +2,11 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class OpenApi implements IOpenApiObject
+class OpenApi
 {
 
-	public const VERSION = '3.0.0';
-
 	/** @var string */
-	private $openapi = self::VERSION;
+	private $openapi;
 
 	/** @var Info */
 	private $info;
@@ -31,10 +29,74 @@ class OpenApi implements IOpenApiObject
 	/** @var ExternalDocumentation|null */
 	private $externalDocs;
 
-	public function __construct(Info $info, Paths $paths)
+	public function __construct(string $openapi, Info $info, Paths $paths)
 	{
+		$this->openapi = $openapi;
 		$this->info = $info;
 		$this->paths = $paths;
+	}
+
+	/**
+	 * @return mixed[]
+	 */
+	public function toArray(): array
+	{
+		$data = [];
+		$data['openapi'] = $this->openapi;
+		$data['info'] = $this->info->toArray();
+
+		foreach ($this->servers as $server) {
+			$data['servers'][] = $server->toArray();
+		}
+
+		$data['paths'] = $this->paths->toArray();
+
+		if ($this->components !== null) {
+			$data['components'] = $this->components->toArray();
+		}
+
+		foreach ($this->security as $requirement) {
+			$data['security'][] = $requirement->toArray();
+		}
+
+		foreach ($this->tags as $tag) {
+			$data['tags'][] = $tag->toArray();
+		}
+
+		if ($this->externalDocs !== null) {
+			$data['externalDocs'] = $this->externalDocs->toArray();
+		}
+
+		return $data;
+	}
+
+	/**
+	 * @param mixed[] $data
+	 */
+	public static function fromArray(array $data): OpenApi
+	{
+		$openApi = new OpenApi(
+			$data['openapi'],
+			Info::fromArray($data['info']),
+			Paths::fromArray($data['paths'])
+		);
+		if (isset($data['servers'])) {
+			foreach ($data['servers'] as $serverData) {
+				$openApi->addServer(Server::fromArray($serverData));
+			}
+		}
+		if (isset($data['components'])) {
+			$openApi->setComponents(Components::fromArray($data['components']));
+		}
+		if (isset($data['tags'])) {
+			foreach ($data['tags'] as $tagData) {
+				$openApi->addTag(Tag::fromArray($tagData));
+			}
+		}
+		if (isset($data['externalDocs'])) {
+			$openApi->externalDocs = ExternalDocumentation::fromArray($data['externalDocs']);
+		}
+		return $openApi;
 	}
 
 	public function addTag(Tag $tag): void
@@ -52,21 +114,9 @@ class OpenApi implements IOpenApiObject
 		$this->components = $components;
 	}
 
-	/**
-	 * @return mixed[]
-	 */
-	public function toArray(): array
+	public function setExternalDocs(?ExternalDocumentation $externalDocs): void
 	{
-		return Utils::create([
-			'openapi' => $this->openapi,
-			'info' => $this->info->toArray(),
-			'servers' => Utils::fromArray($this->servers),
-			'paths' => $this->paths->toArray(),
-			'components' => Utils::fromNullable($this->components),
-			'security' => Utils::fromArray($this->security),
-			'tags' => Utils::fromArray($this->tags),
-			'externalDocs' => Utils::fromNullable($this->externalDocs),
-		]);
+		$this->externalDocs = $externalDocs;
 	}
 
 }

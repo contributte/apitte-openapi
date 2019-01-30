@@ -2,7 +2,7 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class Info implements IOpenApiObject
+class Info
 {
 
 	/** @var string */
@@ -23,20 +23,9 @@ class Info implements IOpenApiObject
 	/** @var string */
 	private $version;
 
-	public function __construct(
-		string $title,
-		?string $description = null,
-		?string $termsOfService = null,
-		?Contact $contact = null,
-		?License $license = null,
-		string $version
-	)
+	public function __construct(string $title, string $version)
 	{
 		$this->title = $title;
-		$this->description = $description;
-		$this->termsOfService = $termsOfService;
-		$this->contact = $contact;
-		$this->license = $license;
 		$this->version = $version;
 	}
 
@@ -45,14 +34,88 @@ class Info implements IOpenApiObject
 	 */
 	public function toArray(): array
 	{
-		return Utils::create([
-			'title' => $this->title,
-			'description' => $this->description,
-			'termsOfService' => $this->termsOfService,
-			'contact' => Utils::fromNullable($this->contact),
-			'license' => Utils::fromNullable($this->license),
-			'version' => $this->version,
-		]);
+		$data = [];
+		$data['title'] = $this->title;
+
+		if ($this->description !== null) {
+			$data['description'] = $this->description;
+		}
+		if ($this->termsOfService !== null) {
+			$data['termsOfService'] = $this->termsOfService;
+		}
+		if ($this->contact !== null) {
+			$data['contact'] = $this->contact->toArray();
+		}
+		if ($this->license !== null) {
+			$data['license'] = $this->license->toArray();
+		}
+
+		$data['version'] = $this->version;
+
+		return $data;
+	}
+
+	/**
+	 * @param mixed[] $data
+	 */
+	public static function fromArray(array $data): Info
+	{
+		$info = new Info($data['title'], $data['version']);
+		$info->setDescription($data['description'] ?? null);
+		$info->setTermsOfService($data['termsOfService'] ?? null);
+		$info->setLicense(isset($data['license']) ? License::fromArray($data['license']) : null);
+		$info->setContact(isset($data['contact']) ? Contact::fromArray($data['contact']) : null);
+		return $info;
+	}
+
+	public function setDescription(?string $description): void
+	{
+		$this->description = $description;
+	}
+
+	public function setTermsOfService(?string $termsOfService): void
+	{
+		$this->termsOfService = $termsOfService;
+	}
+
+	public function setContact(?Contact $contact): void
+	{
+		$this->contact = $contact;
+	}
+
+	public function setLicense(?License $license): void
+	{
+		$this->license = $license;
+	}
+
+	public function getTitle(): string
+	{
+		return $this->title;
+	}
+
+	public function getDescription(): ?string
+	{
+		return $this->description;
+	}
+
+	public function getTermsOfService(): ?string
+	{
+		return $this->termsOfService;
+	}
+
+	public function getContact(): ?Contact
+	{
+		return $this->contact;
+	}
+
+	public function getLicense(): ?License
+	{
+		return $this->license;
+	}
+
+	public function getVersion(): string
+	{
+		return $this->version;
 	}
 
 }

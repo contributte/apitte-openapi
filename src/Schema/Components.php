@@ -2,7 +2,7 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class Components implements IOpenApiObject
+class Components
 {
 
 	/** @var Schema[]|Reference[] */
@@ -33,6 +33,20 @@ class Components implements IOpenApiObject
 	private $callbacks = [];
 
 	/**
+	 * @param mixed[] $data
+	 */
+	public static function fromArray(array $data): Components
+	{
+		$components = new Components();
+		if (isset($data['schemas'])) {
+			foreach ($data['schemas'] as $schemaKey => $schemaData) {
+				$components->setSchema($schemaKey, Schema::fromArray($schemaData));
+			}
+		}
+		return $components;
+	}
+
+	/**
 	 * @param Schema|Reference $schema
 	 */
 	public function setSchema(string $name, $schema): void
@@ -45,17 +59,11 @@ class Components implements IOpenApiObject
 	 */
 	public function toArray(): array
 	{
-		return Utils::create([
-			'schemas' => Utils::fromArray($this->schemas),
-			'responses' => Utils::fromArray($this->responses),
-			'parameters' => Utils::fromArray($this->parameters),
-			'examples' => Utils::fromArray($this->examples),
-			'requestBodies' => Utils::fromArray($this->requestBodies),
-			'headers' => Utils::fromArray($this->headers),
-			'securitySchemes' => Utils::fromArray($this->securitySchemes),
-			'links' => Utils::fromArray($this->links),
-			'callbacks' => Utils::fromArray($this->callbacks),
-		]);
+		$data = [];
+		foreach ($this->schemas as $schemaKey => $schema) {
+			$data['schemas'][$schemaKey] = $schema->toArray();
+		}
+		return $data;
 	}
 
 }

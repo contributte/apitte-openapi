@@ -2,7 +2,7 @@
 
 namespace Apitte\OpenApi\Schema;
 
-class Tag implements IOpenApiObject
+class Tag
 {
 
 	/** @var string */
@@ -19,6 +19,36 @@ class Tag implements IOpenApiObject
 		$this->name = $name;
 	}
 
+	/**
+	 * @return mixed[]
+	 */
+	public function toArray(): array
+	{
+		$data = [];
+		$data['name'] = $this->name;
+
+		// Optional
+		if ($this->description !== null) {
+			$data['description'] = $this->description;
+		}
+		if ($this->externalDocs !== null) {
+			$data['description'] = $this->externalDocs->toArray();
+		}
+
+		return $data;
+	}
+
+	/**
+	 * @param mixed[] $data
+	 */
+	public static function fromArray(array $data): Tag
+	{
+		$tag = new Tag($data['name']);
+		$tag->setDescription($data['description'] ?? null);
+		$tag->setExternalDocs($data['externalDocs'] ?? null);
+		return $tag;
+	}
+
 	public function setDescription(?string $description): void
 	{
 		$this->description = $description;
@@ -29,16 +59,19 @@ class Tag implements IOpenApiObject
 		$this->externalDocs = $externalDocs;
 	}
 
-	/**
-	 * @return mixed[]
-	 */
-	public function toArray(): array
+	public function getName(): string
 	{
-		return Utils::create([
-			'name' => $this->name,
-			'description' => $this->description,
-			'externalDocs' => Utils::fromNullable($this->externalDocs),
-		]);
+		return $this->name;
+	}
+
+	public function getDescription(): ?string
+	{
+		return $this->description;
+	}
+
+	public function getExternalDocs(): ?ExternalDocumentation
+	{
+		return $this->externalDocs;
 	}
 
 }
