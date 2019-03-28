@@ -6,7 +6,6 @@ use Apitte\Core\DI\Plugin\AbstractPlugin;
 use Apitte\Core\DI\Plugin\PluginCompiler;
 use Apitte\Core\Exception\Logical\InvalidArgumentException;
 use Apitte\OpenApi\SchemaBuilder;
-use Apitte\OpenApi\SchemaDefinition\AnnotationDefinition;
 use Apitte\OpenApi\SchemaDefinition\ArrayDefinition;
 use Apitte\OpenApi\SchemaDefinition\BaseDefinition;
 use Apitte\OpenApi\SchemaDefinition\CoreDefinition;
@@ -59,9 +58,6 @@ class OpenApiPlugin extends AbstractPlugin
 		$entityDefinition = $builder->addDefinition($this->prefix('entityDefinition'))
 			->setFactory(EntityDefinition::class);
 
-		$annotationDefinition = $builder->addDefinition($this->prefix('annotationDefinition'))
-			->setFactory(AnnotationDefinition::class);
-
 		$coreDefinition = $builder->addDefinition($this->prefix('coreDefinition'))
 			->setFactory(CoreDefinition::class);
 
@@ -72,8 +68,7 @@ class OpenApiPlugin extends AbstractPlugin
 			$schemaBuilder
 				->addSetup('addDefinition', [new BaseDefinition()])
 				->addSetup('addDefinition', [$entityDefinition])
-				->addSetup('addDefinition', [$coreDefinition])
-				->addSetup('addDefinition', [$annotationDefinition]);
+				->addSetup('addDefinition', [$coreDefinition]);
 			foreach ($config['files'] as $file) {
 				if (Strings::endsWith($file, '.neon')) {
 					$schemaBuilder->addSetup('addDefinition', [new NeonDefinition($file)]);

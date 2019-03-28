@@ -7,6 +7,7 @@ use Apitte\Core\Schema\EndpointParameter;
 use Apitte\Core\Schema\EndpointRequest;
 use Apitte\Core\Schema\EndpointResponse;
 use Apitte\Core\Schema\Schema as ApiSchema;
+use Apitte\OpenApi\Utils\Helpers;
 
 class CoreDefinition implements IDefinition
 {
@@ -24,21 +25,14 @@ class CoreDefinition implements IDefinition
 	 */
 	public function load(): array
 	{
-		return ['paths' => $this->createPaths()];
-	}
-
-	/**
-	 * @return mixed[]
-	 */
-	protected function createPaths(): array
-	{
-		$paths = [];
+		$data = ['paths' => []];
 		foreach ($this->getEndpoints() as $endpoint) {
 			foreach ($endpoint->getMethods() as $method) {
-				$paths[(string) $endpoint->getMask()][strtolower($method)] = $this->createOperation($endpoint);
+				$data['paths'][(string) $endpoint->getMask()][strtolower($method)] = $this->createOperation($endpoint);
 			}
+			$data = Helpers::merge($data, $endpoint->getOpenApi()['controller'] ?? []);
 		}
-		return $paths;
+		return $data;
 	}
 
 	/**
@@ -80,6 +74,8 @@ class CoreDefinition implements IDefinition
 
 		// TODO deprecated
 		// $operation->setDeprecated(false);
+
+		$operation = Helpers::merge($operation, $endpoint->getOpenApi()['method'] ?? []);
 
 		return $operation;
 	}
