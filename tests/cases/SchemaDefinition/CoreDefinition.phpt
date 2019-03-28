@@ -36,6 +36,18 @@ final class CoreDefinitionTest extends TestCase
 		$endpoint->addTag('tag2');
 		$endpoint->addTag('tag3', 'value3');
 
+		$endpoint->setOpenApi([
+			'controller' => [
+				'info' => [
+					'title' => 'Title',
+					'version' => '1.0.0',
+				],
+			],
+			'method' => [
+				'description' => 'Not overridden description',
+			],
+		]);
+
 		$response = new EndpointResponse('200', 'description');
 		$response->setEntity('class');
 		$endpoint->addResponse($response);
@@ -58,12 +70,13 @@ final class CoreDefinitionTest extends TestCase
 
 		Assert::same(
 			[
+				'info' => ['title' => 'Title', 'version' => '1.0.0'],
 				'paths' => [
 					'/foo/bar' => [
 						'get' => ['responses' => [], 'tags' => ['tag1']],
 						'post' => [
-							'responses' => [200 => ['description' => 'description']],
 							'description' => 'description',
+							'responses' => [200 => ['description' => 'description']],
 							'tags' => ['tag2', 'tag3'],
 							'parameters' => [
 								[
@@ -83,8 +96,8 @@ final class CoreDefinitionTest extends TestCase
 							],
 						],
 						'put' => [
-							'responses' => [200 => ['description' => 'description']],
 							'description' => 'description',
+							'responses' => [200 => ['description' => 'description']],
 							'tags' => ['tag2', 'tag3'],
 							'parameters' => [
 								[
