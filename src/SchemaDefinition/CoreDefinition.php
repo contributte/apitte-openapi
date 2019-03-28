@@ -30,7 +30,7 @@ class CoreDefinition implements IDefinition
 			foreach ($endpoint->getMethods() as $method) {
 				$data['paths'][(string) $endpoint->getMask()][strtolower($method)] = $this->createOperation($endpoint);
 			}
-			$data = Helpers::merge($data, $endpoint->getOpenApi()['controller'] ?? []);
+			$data = Helpers::merge($endpoint->getOpenApi()['controller'] ?? [], $data);
 		}
 		return $data;
 	}
@@ -75,7 +75,7 @@ class CoreDefinition implements IDefinition
 		// TODO deprecated
 		// $operation->setDeprecated(false);
 
-		$operation = Helpers::merge($operation, $endpoint->getOpenApi()['method'] ?? []);
+		$operation = Helpers::merge($endpoint->getOpenApi()['method'] ?? [], $operation);
 
 		return $operation;
 	}
