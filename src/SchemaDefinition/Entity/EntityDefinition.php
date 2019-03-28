@@ -38,11 +38,9 @@ class EntityDefinition implements IDefinition
 	{
 		$paths = [];
 		foreach ($this->getEndpoints() as $endpoint) {
-			$operations = [];
 			foreach ($endpoint->getMethods() as $method) {
-				$operations[strtolower($method)] = $this->createOperation($endpoint);
+				$paths[(string) $endpoint->getMask()][strtolower($method)] = $this->createOperation($endpoint);
 			}
-			$paths[$endpoint->getMask() ?? ''] = $operations;
 		}
 		return $paths;
 	}

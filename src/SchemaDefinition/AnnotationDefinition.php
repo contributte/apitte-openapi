@@ -24,11 +24,9 @@ class AnnotationDefinition implements IDefinition
 	{
 		$data = ['paths' => []];
 		foreach ($this->getEndpoints() as $endpoint) {
-			$operations = [];
 			foreach ($endpoint->getMethods() as $method) {
-				$operations[strtolower($method)] = $this->createOperation($endpoint);
+				$data['paths'][(string) $endpoint->getMask()][strtolower($method)] = $this->createOperation($endpoint);
 			}
-			$data['paths'][(string) $endpoint->getMask()] = $operations;
 			$data = Helpers::merge($data, $endpoint->getOpenApi()['controller']);
 		}
 		return $data;
