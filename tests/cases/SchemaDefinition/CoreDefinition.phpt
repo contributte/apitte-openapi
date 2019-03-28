@@ -44,7 +44,7 @@ final class CoreDefinitionTest extends TestCase
 				],
 			],
 			'method' => [
-				'description' => 'Not overridden description',
+				'description' => 'Overridden description',
 			],
 		]);
 
@@ -70,13 +70,12 @@ final class CoreDefinitionTest extends TestCase
 
 		Assert::same(
 			[
-				'info' => ['title' => 'Title', 'version' => '1.0.0'],
 				'paths' => [
 					'/foo/bar' => [
 						'get' => ['responses' => [], 'tags' => ['tag1']],
 						'post' => [
-							'description' => 'description',
 							'responses' => [200 => ['description' => 'description']],
+							'description' => 'Overridden description',
 							'tags' => ['tag2', 'tag3'],
 							'parameters' => [
 								[
@@ -96,8 +95,8 @@ final class CoreDefinitionTest extends TestCase
 							],
 						],
 						'put' => [
-							'description' => 'description',
 							'responses' => [200 => ['description' => 'description']],
+							'description' => 'Overridden description',
 							'tags' => ['tag2', 'tag3'],
 							'parameters' => [
 								[
@@ -118,6 +117,7 @@ final class CoreDefinitionTest extends TestCase
 						],
 					],
 				],
+				'info' => ['title' => 'Title', 'version' => '1.0.0'],
 			],
 			$definition->load()
 		);
