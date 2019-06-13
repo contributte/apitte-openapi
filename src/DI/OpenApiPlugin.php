@@ -2,8 +2,7 @@
 
 namespace Apitte\OpenApi\DI;
 
-use Apitte\Core\DI\Plugin\AbstractPlugin;
-use Apitte\Core\DI\Plugin\PluginCompiler;
+use Apitte\Core\DI\Plugin\Plugin;
 use Apitte\Core\Exception\Logical\InvalidArgumentException;
 use Apitte\OpenApi\SchemaBuilder;
 use Apitte\OpenApi\SchemaDefinition\ArrayDefinition;
@@ -15,32 +14,40 @@ use Apitte\OpenApi\SchemaDefinition\JsonDefinition;
 use Apitte\OpenApi\SchemaDefinition\NeonDefinition;
 use Apitte\OpenApi\SchemaDefinition\YamlDefinition;
 use Apitte\OpenApi\Tracy\SwaggerUIPanel;
+use Contributte\DI\Helper\ExtensionDefinitionsHelper;
+use Nette\DI\Definitions\Definition;
+use Nette\DI\Definitions\Statement;
 use Nette\PhpGenerator\ClassType;
+use Nette\Schema\Expect;
+use Nette\Schema\Schema;
 use Nette\Utils\Strings;
+use stdClass;
 
-class OpenApiPlugin extends AbstractPlugin
+/**
+ * @property-read stdClass $config
+ */
+class OpenApiPlugin extends Plugin
 {
 
-	public const PLUGIN_NAME = 'openapi';
-
-	/** @var mixed[] */
-	protected $defaults = [
-		'definitions' => null,
-		'definition' => [],
-		'files' => [],
-		'swaggerUi' => [
-			'url' => null,
-			'expansion' => SwaggerUIPanel::EXPANSION_LIST,
-			'filter' => true,
-			'title' => 'SwaggerUi',
-			'panel' => true,
-		],
-	];
-
-	public function __construct(PluginCompiler $compiler)
+	public static function getName(): string
 	{
-		parent::__construct($compiler);
-		$this->name = self::PLUGIN_NAME;
+		return 'openapi';
+	}
+
+	protected function getConfigSchema(): Schema
+	{
+		return Expect::structure([
+			'definitions' => Expect::arrayOf(Expect::type('string|array|' . Statement::class)),
+			'definition' => Expect::array(),
+			'files' => Expect::arrayOf('string'),
+			'swaggerUi' => Expect::structure([
+				'url' => Expect::string()->nullable(),
+				'expansion' => Expect::anyOf(...SwaggerUIPanel::EXPANSIONS)->default(SwaggerUIPanel::EXPANSION_LIST),
+				'filter' => Expect::bool(true),
+				'title' => Expect::string('SwaggerUi'),
+				'panel' => Expect::bool(true),
+			]),
+		]);
 	}
 
 	/**
@@ -50,7 +57,8 @@ class OpenApiPlugin extends AbstractPlugin
 	{
 		$builder = $this->getContainerBuilder();
 		$global = $this->compiler->getExtension()->getConfig();
-		$config = $this->getConfig();
+		$config = $this->config;
+		$definitionHelper = new ExtensionDefinitionsHelper($this->compiler->getExtension()->getCompiler());
 
 		$builder->addDefinition($this->prefix('entityAdapter'))
 			->setFactory(EntityAdapter::class);
@@ -64,12 +72,12 @@ class OpenApiPlugin extends AbstractPlugin
 		$schemaBuilder = $builder->addDefinition($this->prefix('schemaBuilder'))
 			->setFactory(SchemaBuilder::class);
 
-		if ($config['definitions'] === null) {
+		if ($config->definitions === []) {
 			$schemaBuilder
 				->addSetup('addDefinition', [new BaseDefinition()])
 				->addSetup('addDefinition', [$entityDefinition])
 				->addSetup('addDefinition', [$coreDefinition]);
-			foreach ($config['files'] as $file) {
+			foreach ($config->files as $file) {
 				if (Strings::endsWith($file, '.neon')) {
 					$schemaBuilder->addSetup('addDefinition', [new NeonDefinition($file)]);
 				} elseif (Strings::endsWith($file, '.yaml') || Strings::endsWith($file, '.yml')) {
@@ -84,24 +92,31 @@ class OpenApiPlugin extends AbstractPlugin
 				}
 			}
 
-			$schemaBuilder->addSetup('addDefinition', [new ArrayDefinition($config['definition'])]);
+			$schemaBuilder->addSetup('addDefinition', [new ArrayDefinition($config->definition)]);
 		} else {
-			foreach ($config['definitions'] as $customDefinition) {
-				$schemaBuilder->addSetup('addDefinition', [$customDefinition]);
+			foreach ($config->definitions as $definitionName => $definitionConfig) {
+				$definitionPrefix = $this->prefix('definition.' . $definitionName);
+				$definition = $definitionHelper->getDefinitionFromConfig($definitionConfig, $definitionPrefix);
+
+				if ($definition instanceof Definition) {
+					$definition->setAutowired(false);
+				}
+
+				$schemaBuilder->addSetup('addDefinition', [$definition]);
 			}
 		}
 
-		if ($global['debug'] !== true) {
+		if (!$global->debug) {
 			return;
 		}
 
-		if ($config['swaggerUi']['panel']) {
+		if ($config->swaggerUi->panel) {
 			$builder->addDefinition($this->prefix('swaggerUi.panel'))
 				->setFactory(SwaggerUIPanel::class)
-				->addSetup('setUrl', [$config['swaggerUi']['url']])
-				->addSetup('setExpansion', [$config['swaggerUi']['expansion']])
-				->addSetup('setFilter', [$config['swaggerUi']['filter']])
-				->addSetup('setTitle', [$config['swaggerUi']['title']])
+				->addSetup('setUrl', [$config->swaggerUi->url])
+				->addSetup('setExpansion', [$config->swaggerUi->expansion])
+				->addSetup('setFilter', [$config->swaggerUi->filter])
+				->addSetup('setTitle', [$config->swaggerUi->title])
 				->setAutowired(false);
 		}
 	}
@@ -109,13 +124,13 @@ class OpenApiPlugin extends AbstractPlugin
 	public function afterPluginCompile(ClassType $class): void
 	{
 		$global = $this->compiler->getExtension()->getConfig();
-		if ($global['debug'] !== true) {
+		if (!$global->debug) {
 			return;
 		}
-		$config = $this->getConfig();
+		$config = $this->config;
 
 		$initialize = $class->getMethod('initialize');
-		if ($config['swaggerUi']['panel']) {
+		if ($config->swaggerUi->panel) {
 			$initialize->addBody('$this->getService(?)->addPanel($this->getService(?));', [
 				'tracy.bar',
 				$this->prefix('swaggerUi.panel'),

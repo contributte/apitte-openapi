@@ -25,7 +25,7 @@ class JsonDefinition implements IDefinition
 		if ($content === false) {
 			throw new InvalidStateException('Cant read file ' . $this->file);
 		}
-		$decode = Json::decode($content, true);
+		$decode = Json::decode($content, Json::FORCE_ARRAY);
 		if ($decode === false || $decode === null) {
 			return [];
 		}
