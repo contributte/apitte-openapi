@@ -15,6 +15,11 @@ and add [Swagger UI](https://petstore.swagger.io) as [Tracy](https://github.com/
 
 [![Join the chat](https://img.shields.io/gitter/room/apitte/apitte.svg?style=flat-square)](https://gitter.im/apitte/apitte)
 
+## Documentation
+
+- [Setup](.docs/README.md#setup)
+- [Usage](.docs/README.md#usage)
+
 ## Version
 
 | State       | Version      | Branch   | PHP      | Composer                                        |
@@ -22,11 +27,6 @@ and add [Swagger UI](https://petstore.swagger.io) as [Tracy](https://github.com/
 | development | `^0.6.0`     | `master` | `>= 7.1` | `minimum-stability: dev`, `prefer-stable: true` |
 | stable      | `^0.5.0`     | `master` | `>= 7.1` |                                                 |
 | stable      | `^0.3.0`     | `master` | `>= 5.6` |                                                 |
-
-## Documentation
-
-- [Setup](.docs/README.md#setup)
-- [Usage](.docs/README.md#usage)
 
 ![](https://github.com/apitte/openapi/blob/master/.docs/assets/panel.png "Tracy Panel")
 
