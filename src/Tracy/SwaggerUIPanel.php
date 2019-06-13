@@ -13,6 +13,12 @@ class SwaggerUIPanel implements IBarPanel
 		EXPANSION_LIST = 'list',
 		EXPANSION_NONE = 'none';
 
+	public const EXPANSIONS = [
+		self::EXPANSION_FULL,
+		self::EXPANSION_LIST,
+		self::EXPANSION_NONE,
+	];
+
 	/** @var string|null */
 	private $url;
 

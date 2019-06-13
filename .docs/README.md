@@ -11,7 +11,7 @@ and add [Swagger UI](https://petstore.swagger.io) as [Tracy](https://github.com/
   - [Definitions - define schema](#definitions)
     - [Config](#config)
     - [External Files](#external-files)
-    - [OpenApi Annotations](#openapi-annotations-experimental)
+    - [OpenApi Annotations](#openapi-annotations)
     - [Core Annotations](#core-annotations)
     - [Entity Annotations](#entity-annotations)
     - [Custom - write custom definition](#custom-definition)
@@ -98,7 +98,7 @@ api:
 
 Supported types are `neon`, `yaml` and `json`.
 
-#### OpenApi-Annotations **(Experimental)**
+#### OpenApi-Annotations
 
 This definition comes from core, but use only `OpenApi` annotation. 
 
