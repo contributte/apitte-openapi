@@ -23,7 +23,7 @@ class Reference
 	 */
 	public function toArray(): array
 	{
-		return [];
+		return ['$ref' => $this->ref];
 	}
 
 }
