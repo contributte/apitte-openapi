@@ -65,11 +65,20 @@ class Operation
 		}
 		if (isset($data['parameters'])) {
 			foreach ($data['parameters'] as $parameterData) {
+				if (isset($parameterData['$ref'])) {
+					$operation->setParameter(new Reference($parameterData['$ref']));
+					continue;
+				}
 				$operation->setParameter(Parameter::fromArray($parameterData));
 			}
 		}
 		if (isset($data['requestBody'])) {
 			$operation->requestBody = RequestBody::fromArray($data['requestBody']);
+		}
+		if (isset($data['security'])) {
+			foreach ($data['security'] as $securityRequirmentData) {
+				$operation->setSecurityRequirement(SecurityRequirement::fromArray($securityRequirmentData));
+			}
 		}
 		return $operation;
 	}
@@ -120,6 +129,11 @@ class Operation
 		$this->deprecated = $deprecated;
 	}
 
+	public function setSecurityRequirement(SecurityRequirement $securityRequirement): void
+	{
+		$this->security[] = $securityRequirement;
+	}
+
 	/**
 	 * @return mixed[]
 	 */
@@ -147,9 +161,11 @@ class Operation
 		if ($this->requestBody !== null) {
 			$data['requestBody'] = $this->requestBody->toArray();
 		}
+		foreach ($this->security as $securityRequirement) {
+			$data['security'][] = $securityRequirement->toArray();
+		}
 		$data['responses'] = $this->responses->toArray();
 		//			'deprecated' => $this->deprecated,
-		//			'security' => Utils::fromArray($this->security),
 		//			'servers' => Utils::fromArray($this->servers),
 
 		return $data;

@@ -32,7 +32,7 @@ class Tag
 			$data['description'] = $this->description;
 		}
 		if ($this->externalDocs !== null) {
-			$data['description'] = $this->externalDocs->toArray();
+			$data['externalDocs'] = $this->externalDocs->toArray();
 		}
 
 		return $data;
@@ -45,7 +45,7 @@ class Tag
 	{
 		$tag = new Tag($data['name']);
 		$tag->setDescription($data['description'] ?? null);
-		$tag->setExternalDocs($data['externalDocs'] ?? null);
+		$tag->setExternalDocs(isset($data['externalDocs']) ? ExternalDocumentation::fromArray($data['externalDocs']) : null);
 		return $tag;
 	}
 
