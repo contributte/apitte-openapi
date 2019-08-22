@@ -45,6 +45,11 @@
       "Apitte\\OpenApi\\": "src"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\Apitte\\OpenApi\\": "tests"
+    }
+  },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "config": {

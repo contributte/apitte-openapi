@@ -12,8 +12,10 @@ use Apitte\Core\Schema\EndpointParameter;
 use Apitte\Core\Schema\EndpointResponse;
 use Apitte\Core\Schema\Schema;
 use Apitte\OpenApi\SchemaDefinition\CoreDefinition;
+use Apitte\OpenApi\SchemaDefinition\Entity\EntityAdapter;
 use Tester\Assert;
 use Tester\TestCase;
+use Tests\Apitte\OpenApi\Fixtures\ResponseEntity\EmptyResponseEntity;
 
 final class CoreDefinitionTest extends TestCase
 {
@@ -49,7 +51,7 @@ final class CoreDefinitionTest extends TestCase
 		]);
 
 		$response = new EndpointResponse('200', 'description');
-		$response->setEntity('class');
+		$response->setEntity(EmptyResponseEntity::class);
 		$endpoint->addResponse($response);
 
 		$parameter = new EndpointParameter('parameter1');
@@ -66,15 +68,14 @@ final class CoreDefinitionTest extends TestCase
 
 		$schema->addEndpoint($endpoint);
 
-		$definition = new CoreDefinition($schema);
+		$definition = new CoreDefinition($schema, new EntityAdapter());
 
 		Assert::same(
 			[
 				'paths' => [
 					'/foo/bar' => [
-						'get' => ['responses' => [], 'tags' => ['tag1']],
+						'get' => ['tags' => ['tag1'], 'responses' => []],
 						'post' => [
-							'responses' => [200 => ['description' => 'description']],
 							'description' => 'Overridden description',
 							'tags' => ['tag2', 'tag3'],
 							'parameters' => [
@@ -93,9 +94,16 @@ final class CoreDefinitionTest extends TestCase
 									'schema' => ['type' => 'string'],
 								],
 							],
+							'responses' => [
+								200 => [
+									'description' => 'description',
+									'content' => [
+										'application/json' => ['schema' => ['type' => 'object', 'properties' => []]],
+									],
+								],
+							],
 						],
 						'put' => [
-							'responses' => [200 => ['description' => 'description']],
 							'description' => 'Overridden description',
 							'tags' => ['tag2', 'tag3'],
 							'parameters' => [
@@ -112,6 +120,14 @@ final class CoreDefinitionTest extends TestCase
 									'description' => 'description',
 									'required' => false,
 									'schema' => ['type' => 'string'],
+								],
+							],
+							'responses' => [
+								200 => [
+									'description' => 'description',
+									'content' => [
+										'application/json' => ['schema' => ['type' => 'object', 'properties' => []]],
+									],
 								],
 							],
 						],

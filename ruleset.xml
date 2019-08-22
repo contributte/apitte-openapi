@@ -10,7 +10,8 @@
 	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
 		<properties>
 			<property name="rootNamespaces" type="array" value="
-                src=>Apitte\OpenApi
+                src=>Apitte\OpenApi,
+                tests=>Tests\Apitte\OpenApi,
             "/>
 		</properties>
 	</rule>

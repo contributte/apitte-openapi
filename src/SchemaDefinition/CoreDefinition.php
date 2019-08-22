@@ -7,6 +7,7 @@ use Apitte\Core\Schema\EndpointParameter;
 use Apitte\Core\Schema\EndpointRequest;
 use Apitte\Core\Schema\EndpointResponse;
 use Apitte\Core\Schema\Schema as ApiSchema;
+use Apitte\OpenApi\SchemaDefinition\Entity\IEntityAdapter;
 use Apitte\OpenApi\Utils\Helpers;
 
 class CoreDefinition implements IDefinition
@@ -15,9 +16,13 @@ class CoreDefinition implements IDefinition
 	/** @var ApiSchema */
 	protected $schema;
 
-	public function __construct(ApiSchema $schema)
+	/** @var IEntityAdapter */
+	private $entityAdapter;
+
+	public function __construct(ApiSchema $schema, IEntityAdapter $entityAdapter)
 	{
 		$this->schema = $schema;
+		$this->entityAdapter = $entityAdapter;
 	}
 
 	/**
@@ -40,9 +45,7 @@ class CoreDefinition implements IDefinition
 	 */
 	protected function createOperation(Endpoint $endpoint): array
 	{
-		$operation = [
-			'responses' => $this->createResponses($endpoint),
-		];
+		$operation = [];
 
 		// Description
 		$description = $endpoint->getDescription();
@@ -63,8 +66,10 @@ class CoreDefinition implements IDefinition
 
 		$request = $endpoint->getRequest();
 		if ($request !== null) {
-			$operation['requestBody'] = $this->createRequestData($request);
+			$operation['requestBody'] = $this->createRequestBody($request);
 		}
+
+		$operation['responses'] = $this->createResponses($endpoint);
 
 		// TODO summary + description
 		// $lines = explode("\n", $description);
@@ -83,15 +88,30 @@ class CoreDefinition implements IDefinition
 	/**
 	 * @return mixed[]
 	 */
-	protected function createRequestData(EndpointRequest $request): array
+	protected function createRequestBody(EndpointRequest $request): array
 	{
 		$requestData = ['content' => []];
-		if ($request->isRequired() === true) {
+
+		if ($request->isRequired()) {
 			$requestData['required'] = true;
 		}
-		if ($request->getDescription() !== null) {
-			$requestData['description'] = $request->getDescription();
+
+		$description = $request->getDescription();
+		if ($description !== null) {
+			$requestData['description'] = $description;
 		}
+
+		$entity = $request->getEntity();
+		if ($entity !== null) {
+			$requestData['content'] = [
+				'application/json' =>
+					[
+						// TODO resolve types
+						'schema' => $this->entityAdapter->getMetadata($entity),
+					],
+			];
+		}
+
 		return $requestData;
 	}
 
@@ -112,9 +132,22 @@ class CoreDefinition implements IDefinition
 	 */
 	protected function createResponse(EndpointResponse $response): array
 	{
-		return [
+		$responseData = [
 			'description' => $response->getDescription(),
 		];
+
+		$entity = $response->getEntity();
+		if ($entity !== null) {
+			$responseData['content'] = [
+				'application/json' =>
+					[
+						// TODO resolve types
+						'schema' => $this->entityAdapter->getMetadata($entity),
+					],
+			];
+		}
+
+		return $responseData;
 	}
 
 	/**

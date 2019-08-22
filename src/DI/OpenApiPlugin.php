@@ -9,7 +9,6 @@ use Apitte\OpenApi\SchemaDefinition\ArrayDefinition;
 use Apitte\OpenApi\SchemaDefinition\BaseDefinition;
 use Apitte\OpenApi\SchemaDefinition\CoreDefinition;
 use Apitte\OpenApi\SchemaDefinition\Entity\EntityAdapter;
-use Apitte\OpenApi\SchemaDefinition\Entity\EntityDefinition;
 use Apitte\OpenApi\SchemaDefinition\JsonDefinition;
 use Apitte\OpenApi\SchemaDefinition\NeonDefinition;
 use Apitte\OpenApi\SchemaDefinition\YamlDefinition;
@@ -63,9 +62,6 @@ class OpenApiPlugin extends Plugin
 		$builder->addDefinition($this->prefix('entityAdapter'))
 			->setFactory(EntityAdapter::class);
 
-		$entityDefinition = $builder->addDefinition($this->prefix('entityDefinition'))
-			->setFactory(EntityDefinition::class);
-
 		$coreDefinition = $builder->addDefinition($this->prefix('coreDefinition'))
 			->setFactory(CoreDefinition::class);
 
@@ -75,7 +71,6 @@ class OpenApiPlugin extends Plugin
 		if ($config->definitions === []) {
 			$schemaBuilder
 				->addSetup('addDefinition', [new BaseDefinition()])
-				->addSetup('addDefinition', [$entityDefinition])
 				->addSetup('addDefinition', [$coreDefinition]);
 			foreach ($config->files as $file) {
 				if (Strings::endsWith($file, '.neon')) {
