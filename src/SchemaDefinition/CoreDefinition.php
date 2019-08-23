@@ -4,7 +4,7 @@ namespace Apitte\OpenApi\SchemaDefinition;
 
 use Apitte\Core\Schema\Endpoint;
 use Apitte\Core\Schema\EndpointParameter;
-use Apitte\Core\Schema\EndpointRequest;
+use Apitte\Core\Schema\EndpointRequestBody;
 use Apitte\Core\Schema\EndpointResponse;
 use Apitte\Core\Schema\Schema as ApiSchema;
 use Apitte\OpenApi\SchemaDefinition\Entity\IEntityAdapter;
@@ -64,9 +64,9 @@ class CoreDefinition implements IDefinition
 			$operation['parameters'][] = $this->createParameter($endpointParam);
 		}
 
-		$request = $endpoint->getRequest();
-		if ($request !== null) {
-			$operation['requestBody'] = $this->createRequestBody($request);
+		$requestBody = $endpoint->getRequestBody();
+		if ($requestBody !== null) {
+			$operation['requestBody'] = $this->createRequestBody($requestBody);
 		}
 
 		$operation['responses'] = $this->createResponses($endpoint);
@@ -88,22 +88,22 @@ class CoreDefinition implements IDefinition
 	/**
 	 * @return mixed[]
 	 */
-	protected function createRequestBody(EndpointRequest $request): array
+	protected function createRequestBody(EndpointRequestBody $requestBody): array
 	{
-		$requestData = ['content' => []];
+		$requestBodyData = ['content' => []];
 
-		if ($request->isRequired()) {
-			$requestData['required'] = true;
+		if ($requestBody->isRequired()) {
+			$requestBodyData['required'] = true;
 		}
 
-		$description = $request->getDescription();
+		$description = $requestBody->getDescription();
 		if ($description !== null) {
-			$requestData['description'] = $description;
+			$requestBodyData['description'] = $description;
 		}
 
-		$entity = $request->getEntity();
+		$entity = $requestBody->getEntity();
 		if ($entity !== null) {
-			$requestData['content'] = [
+			$requestBodyData['content'] = [
 				'application/json' =>
 					[
 						// TODO resolve types
@@ -112,7 +112,7 @@ class CoreDefinition implements IDefinition
 			];
 		}
 
-		return $requestData;
+		return $requestBodyData;
 	}
 
 	/**
