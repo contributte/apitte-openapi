@@ -6,9 +6,8 @@ interface IEntityAdapter
 {
 
 	/**
-	 * @param mixed $object
-	 * @return mixed
+	 * @return mixed[]
 	 */
-	public function getMetadata($object);
+	public function getMetadata(string $type): array;
 
 }
