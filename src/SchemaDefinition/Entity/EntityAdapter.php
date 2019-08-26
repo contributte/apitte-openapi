@@ -10,34 +10,32 @@ class EntityAdapter implements IEntityAdapter
 {
 
 	/**
-	 * @param mixed $object
-	 * @return mixed
+	 * @return mixed[]
 	 */
-	public function getMetadata($object)
+	public function getMetadata(string $type): array
 	{
-		if (Strings::endsWith($object, '[]')) {
-			$object = Strings::replace($object, '#\\[\\]#');
+		if (Strings::endsWith($type, '[]')) {
+			$type = Strings::replace($type, '#\\[\\]#');
 			return [
 				'type' => 'array',
 				'items' => [
 					'type' => 'object',
-					'properties' => $this->getProperties($object),
+					'properties' => $this->getProperties($type),
 				],
 			];
 		}
 		return [
 			'type' => 'object',
-			'properties' => $this->getProperties($object),
+			'properties' => $this->getProperties($type),
 		];
 	}
 
 	/**
-	 * @param mixed $object
-	 * @return mixed
+	 * @return mixed[]
 	 */
-	protected function getProperties($object)
+	protected function getProperties(string $type): array
 	{
-		$ref = new ReflectionClass($object);
+		$ref = new ReflectionClass($type);
 		$properties = $ref->getProperties(ReflectionProperty::IS_PUBLIC);
 		$data = [];
 		foreach ($properties as $property) {

@@ -104,9 +104,9 @@ class CoreDefinition implements IDefinition
 		$entity = $requestBody->getEntity();
 		if ($entity !== null) {
 			$requestBodyData['content'] = [
+				// TODO resolve content types
 				'application/json' =>
 					[
-						// TODO resolve types
 						'schema' => $this->entityAdapter->getMetadata($entity),
 					],
 			];
@@ -139,9 +139,9 @@ class CoreDefinition implements IDefinition
 		$entity = $response->getEntity();
 		if ($entity !== null) {
 			$responseData['content'] = [
+				// TODO resolve content types
 				'application/json' =>
 					[
-						// TODO resolve types
 						'schema' => $this->entityAdapter->getMetadata($entity),
 					],
 			];
