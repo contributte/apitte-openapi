@@ -47,12 +47,6 @@ class CoreDefinition implements IDefinition
 	{
 		$operation = [];
 
-		// Description
-		$description = $endpoint->getDescription();
-		if ($description !== null) {
-			$operation['description'] = $description;
-		}
-
 		// Tags
 		$tags = $this->getOperationTags($endpoint);
 		if (count($tags) > 0) {
@@ -70,12 +64,6 @@ class CoreDefinition implements IDefinition
 		}
 
 		$operation['responses'] = $this->createResponses($endpoint);
-
-		// TODO summary + description
-		// $lines = explode("\n", $description);
-		// $operation->setSummary(array_shift($lines));
-		// if (count($lines) > 0) {
-		// $operation->setDescription(implode('<br>', $lines));
 
 		// TODO deprecated
 		// $operation->setDeprecated(false);
