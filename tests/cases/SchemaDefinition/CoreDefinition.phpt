@@ -34,7 +34,6 @@ final class CoreDefinitionTest extends TestCase
 
 		$endpoint->setMask('/foo/bar');
 		$endpoint->setMethods(['POST', 'PUT']);
-		$endpoint->setDescription('description');
 		$endpoint->addTag('tag2');
 		$endpoint->addTag('tag3', 'value3');
 
@@ -46,7 +45,7 @@ final class CoreDefinitionTest extends TestCase
 				],
 			],
 			'method' => [
-				'description' => 'Overridden description',
+				'description' => 'OpenApi description',
 			],
 		]);
 
@@ -76,7 +75,6 @@ final class CoreDefinitionTest extends TestCase
 					'/foo/bar' => [
 						'get' => ['tags' => ['tag1'], 'responses' => []],
 						'post' => [
-							'description' => 'Overridden description',
 							'tags' => ['tag2', 'tag3'],
 							'parameters' => [
 								[
@@ -102,9 +100,9 @@ final class CoreDefinitionTest extends TestCase
 									],
 								],
 							],
+							'description' => 'OpenApi description',
 						],
 						'put' => [
-							'description' => 'Overridden description',
 							'tags' => ['tag2', 'tag3'],
 							'parameters' => [
 								[
@@ -130,6 +128,7 @@ final class CoreDefinitionTest extends TestCase
 									],
 								],
 							],
+							'description' => 'OpenApi description',
 						],
 					],
 				],
