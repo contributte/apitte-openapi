@@ -1,4 +1,6 @@
 <?php
+use Nette\Utils\Json;
+
 /** @var string|null $url */
 /** @var string $expansion */
 /** @var string|bool $filter */
@@ -75,12 +77,12 @@
 		</script>
 		<script>
 			window.ui = SwaggerUIBundle({
-				url: <?= json_encode($url) ?>,
+				url: <?= Json::encode($url) ?>,
 				dom_id: "#swagger-ui-tracy",
 				deepLinking: true,
-				docExpansion: <?= json_encode($expansion) ?>,
-				filter: <?= json_encode($filter) ?>,
-				<?= !$url ? 'spec: ' . json_encode($spec) . ',' : '' ?>
+				docExpansion: <?= Json::encode($expansion) ?>,
+				filter: <?= Json::encode($filter) ?>,
+				<?= !$url ? 'spec: ' . Json::encode($spec) . ',' : '' ?>
 				presets: [
 					SwaggerUIBundle.presets.apis,
 					SwaggerUIStandalonePreset
