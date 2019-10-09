@@ -23,8 +23,7 @@
   "require": {
     "php": "^7.2",
     "apitte/core": "^0.7.0",
-    "nette/utils": "~3.0.1",
-    "tracy/tracy": "~2.6.0|~2.7.0"
+    "nette/utils": "~3.0.1"
   },
   "suggest": {
     "symfony/yaml": "Allows yaml definition"
@@ -38,7 +37,8 @@
     "phpstan/phpstan-nette": "^0.11",
     "phpstan/phpstan-shim": "^0.11",
     "phpstan/phpstan-strict-rules": "^0.11",
-    "symfony/yaml": "^4.2"
+    "symfony/yaml": "^4.2",
+    "tracy/tracy": "~2.6.0|~2.7.0"
   },
   "autoload": {
     "psr-4": {
