@@ -69,10 +69,10 @@ class Operation
 		if (isset($data['parameters'])) {
 			foreach ($data['parameters'] as $parameterData) {
 				if (isset($parameterData['$ref'])) {
-					$operation->setParameter(new Reference($parameterData['$ref']));
+					$operation->addParameter(new Reference($parameterData['$ref']));
 					continue;
 				}
-				$operation->setParameter(Parameter::fromArray($parameterData));
+				$operation->addParameter(Parameter::fromArray($parameterData));
 			}
 		}
 		if (isset($data['requestBody'])) {
@@ -117,7 +117,7 @@ class Operation
 	/**
 	 * @param Parameter|Reference $parameter
 	 */
-	public function setParameter($parameter): void
+	public function addParameter($parameter): void
 	{
 		$this->parameters[] = $parameter;
 	}
