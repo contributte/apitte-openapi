@@ -53,6 +53,9 @@ class Operation
 	{
 		$responses = Responses::fromArray($data['responses']);
 		$operation = new Operation($responses);
+		if (isset($data['deprecated'])) {
+			$operation->setDeprecated($data['deprecated']);
+		}
 		if (isset($data['requestBody'])) {
 			$operation->requestBody = RequestBody::fromArray($data['requestBody']);
 		}
@@ -140,6 +143,9 @@ class Operation
 	public function toArray(): array
 	{
 		$data = [];
+		if ($this->deprecated) {
+			$data['deprecated'] = $this->deprecated;
+		}
 		if (count($this->tags) > 0) {
 			$data['tags'] = $this->tags;
 		}
@@ -165,7 +171,6 @@ class Operation
 			$data['security'][] = $securityRequirement->toArray();
 		}
 		$data['responses'] = $this->responses->toArray();
-		//			'deprecated' => $this->deprecated,
 		//			'servers' => Utils::fromArray($this->servers),
 
 		return $data;
