@@ -86,6 +86,7 @@ final class OpenApiTest extends TestCase
 				self::recursiveSort($value);
 			}
 		}
+		unset($value);
 		ksort($data);
 	}
 
