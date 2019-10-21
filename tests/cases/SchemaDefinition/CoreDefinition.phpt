@@ -9,12 +9,14 @@ require_once __DIR__ . '/../../bootstrap.php';
 use Apitte\Core\Schema\Endpoint;
 use Apitte\Core\Schema\EndpointHandler;
 use Apitte\Core\Schema\EndpointParameter;
+use Apitte\Core\Schema\EndpointRequestBody;
 use Apitte\Core\Schema\EndpointResponse;
 use Apitte\Core\Schema\Schema;
 use Apitte\OpenApi\SchemaDefinition\CoreDefinition;
 use Apitte\OpenApi\SchemaDefinition\Entity\EntityAdapter;
 use Tester\Assert;
 use Tester\TestCase;
+use Tests\Apitte\OpenApi\Fixtures\RequestBody\SimpleRequestBody;
 use Tests\Apitte\OpenApi\Fixtures\ResponseEntity\EmptyResponseEntity;
 
 final class CoreDefinitionTest extends TestCase
@@ -28,6 +30,10 @@ final class CoreDefinitionTest extends TestCase
 		$endpoint->setMask('/foo/bar');
 		$endpoint->setMethods(['GET']);
 		$endpoint->addTag('tag1');
+
+		$requestBody = new EndpointRequestBody();
+		$endpoint->setRequestBody($requestBody);
+
 		$schema->addEndpoint($endpoint);
 
 		$endpoint = new Endpoint(new EndpointHandler('class', 'method'));
@@ -36,6 +42,12 @@ final class CoreDefinitionTest extends TestCase
 		$endpoint->setMethods(['POST', 'PUT']);
 		$endpoint->addTag('tag2');
 		$endpoint->addTag('tag3', 'value3');
+
+		$requestBody = new EndpointRequestBody();
+		$requestBody->setDescription('Description');
+		$requestBody->setRequired(true);
+		$requestBody->setEntity(SimpleRequestBody::class);
+		$endpoint->setRequestBody($requestBody);
 
 		$endpoint->setOpenApi([
 			'controller' => [
@@ -73,7 +85,11 @@ final class CoreDefinitionTest extends TestCase
 			[
 				'paths' => [
 					'/foo/bar' => [
-						'get' => ['tags' => ['tag1'], 'responses' => []],
+						'get' => [
+							'tags' => ['tag1'],
+							'requestBody' => ['content' => []],
+							'responses' => [],
+						],
 						'post' => [
 							'tags' => ['tag2', 'tag3'],
 							'parameters' => [
@@ -91,6 +107,15 @@ final class CoreDefinitionTest extends TestCase
 									'required' => false,
 									'schema' => ['type' => 'string'],
 								],
+							],
+							'requestBody' => [
+								'content' => [
+									'application/json' => [
+										'schema' => ['type' => 'object', 'properties' => ['int' => ['type' => 'integer']]],
+									],
+								],
+								'required' => true,
+								'description' => 'Description',
 							],
 							'responses' => [
 								200 => [
@@ -119,6 +144,15 @@ final class CoreDefinitionTest extends TestCase
 									'required' => false,
 									'schema' => ['type' => 'string'],
 								],
+							],
+							'requestBody' => [
+								'content' => [
+									'application/json' => [
+										'schema' => ['type' => 'object', 'properties' => ['int' => ['type' => 'integer']]],
+									],
+								],
+								'required' => true,
+								'description' => 'Description',
 							],
 							'responses' => [
 								200 => [
