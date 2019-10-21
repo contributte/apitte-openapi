@@ -35,7 +35,7 @@ class Contact
 	/**
 	 * @param mixed[] $data
 	 */
-	public static function fromArray(array $data): ?Contact
+	public static function fromArray(array $data): Contact
 	{
 		$contact = new Contact();
 		$contact->setName($data['name'] ?? null);
