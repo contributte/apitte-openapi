@@ -146,7 +146,7 @@ class Operation
 		if ($this->deprecated) {
 			$data['deprecated'] = $this->deprecated;
 		}
-		if (count($this->tags) > 0) {
+		if ($this->tags !== []) {
 			$data['tags'] = $this->tags;
 		}
 		if ($this->summary !== null) {
