@@ -46,7 +46,7 @@ class Server
 		$server->setDescription($data['description'] ?? null);
 		if (isset($data['variables'])) {
 			foreach ($data['variables'] as $key => $variable) {
-				$server->setVariable($key, ServerVariable::fromArray($variable));
+				$server->addVariable($key, ServerVariable::fromArray($variable));
 			}
 		}
 		return $server;
@@ -57,7 +57,7 @@ class Server
 		$this->description = $description;
 	}
 
-	public function setVariable(string $key, ServerVariable $variable): void
+	public function addVariable(string $key, ServerVariable $variable): void
 	{
 		$this->variables[$key] = $variable;
 	}
