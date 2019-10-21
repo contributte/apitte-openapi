@@ -62,11 +62,6 @@ class Server
 		$this->variables[$key] = $variable;
 	}
 
-	public function unsetVariable(string $key): void
-	{
-		unset($this->variables[$key]);
-	}
-
 	public function getUrl(): string
 	{
 		return $this->url;
@@ -83,11 +78,6 @@ class Server
 	public function getVariables(): array
 	{
 		return $this->variables;
-	}
-
-	public function getServerVariable(string $key): ?ServerVariable
-	{
-		return $this->variables[$key] ?? null;
 	}
 
 }
