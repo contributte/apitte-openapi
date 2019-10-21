@@ -76,8 +76,8 @@ class Operation
 			$operation->requestBody = RequestBody::fromArray($data['requestBody']);
 		}
 		if (isset($data['security'])) {
-			foreach ($data['security'] as $securityRequirmentData) {
-				$operation->setSecurityRequirement(SecurityRequirement::fromArray($securityRequirmentData));
+			foreach ($data['security'] as $securityRequirementData) {
+				$operation->setSecurityRequirement(SecurityRequirement::fromArray($securityRequirementData));
 			}
 		}
 		return $operation;
