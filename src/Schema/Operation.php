@@ -88,6 +88,11 @@ class Operation
 				$operation->addServer(Server::fromArray($server));
 			}
 		}
+		if (isset($data['callbacks'])) {
+			foreach ($data['callbacks'] as $callback) {
+				$operation->addCallback(Callback::fromArray($callback));
+			}
+		}
 
 		return $operation;
 	}
@@ -131,6 +136,14 @@ class Operation
 	public function setRequestBody(?RequestBody $requestBody): void
 	{
 		$this->requestBody = $requestBody;
+	}
+
+	/**
+	 * @param Callback|Reference $callback
+	 */
+	public function addCallback($callback): void
+	{
+		$this->callbacks[] = $callback;
 	}
 
 	public function setDeprecated(bool $deprecated): void
@@ -184,6 +197,9 @@ class Operation
 		$data['responses'] = $this->responses->toArray();
 		foreach ($this->servers as $server) {
 			$data['servers'][] = $server->toArray();
+		}
+		foreach ($this->callbacks as $callback) {
+			$data['callbacks'][] = $callback->toArray();
 		}
 
 		return $data;
