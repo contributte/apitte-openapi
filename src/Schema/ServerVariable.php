@@ -5,8 +5,8 @@ namespace Apitte\OpenApi\Schema;
 class ServerVariable
 {
 
-	/** @var string[]|null */
-	private $enum;
+	/** @var string[] */
+	private $enum = [];
 
 	/** @var string */
 	private $default;
@@ -33,9 +33,9 @@ class ServerVariable
 	}
 
 	/**
-	 * @return string[]|null
+	 * @return string[]
 	 */
-	public function getEnum(): ?array
+	public function getEnum(): array
 	{
 		return $this->enum;
 	}
@@ -57,7 +57,7 @@ class ServerVariable
 	{
 		$data = [];
 
-		if ($this->enum !== null) {
+		if ($this->enum !== []) {
 			$data['enum'] = $this->enum;
 		}
 
@@ -77,7 +77,7 @@ class ServerVariable
 	{
 		$variable = new ServerVariable($data['default']);
 		$variable->setDescription($data['description'] ?? null);
-		$variable->setEnum($data['enum'] ?? null);
+		$variable->setEnum($data['enum'] ?? []);
 		return $variable;
 	}
 
