@@ -91,7 +91,11 @@ class Operation
 		}
 		if (isset($data['callbacks'])) {
 			foreach ($data['callbacks'] as $callback) {
-				$operation->addCallback(Callback::fromArray($callback));
+				if (isset($callback['$ref'])) {
+					$operation->addCallback(new Reference($callback['$ref']));
+				} else {
+					$operation->addCallback(Callback::fromArray($callback));
+				}
 			}
 		}
 
