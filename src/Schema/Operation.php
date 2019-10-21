@@ -56,9 +56,6 @@ class Operation
 		if (isset($data['deprecated'])) {
 			$operation->setDeprecated($data['deprecated']);
 		}
-		if (isset($data['requestBody'])) {
-			$operation->requestBody = RequestBody::fromArray($data['requestBody']);
-		}
 		$operation->setOperationId($data['operationId'] ?? null);
 		$operation->setTags($data['tags'] ?? []);
 		$operation->setSummary($data['summary'] ?? null);
@@ -76,7 +73,11 @@ class Operation
 			}
 		}
 		if (isset($data['requestBody'])) {
-			$operation->requestBody = RequestBody::fromArray($data['requestBody']);
+			if (isset($data['requestBody']['$ref'])) {
+				$operation->setRequestBody(new Reference($data['requestBody']['$ref']));
+			} else {
+				$operation->setRequestBody(RequestBody::fromArray($data['requestBody']));
+			}
 		}
 		if (isset($data['security'])) {
 			foreach ($data['security'] as $securityRequirementData) {
@@ -133,7 +134,10 @@ class Operation
 		$this->parameters[] = $parameter;
 	}
 
-	public function setRequestBody(?RequestBody $requestBody): void
+	/**
+	 * @param RequestBody|Reference|null $requestBody
+	 */
+	public function setRequestBody($requestBody): void
 	{
 		$this->requestBody = $requestBody;
 	}
@@ -242,7 +246,7 @@ class Operation
 	}
 
 	/**
-	 * @return Reference|RequestBody|null
+	 * @return RequestBody|Reference|null
 	 */
 	public function getRequestBody()
 	{
