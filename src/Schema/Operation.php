@@ -63,14 +63,12 @@ class Operation
 		if (isset($data['externalDocs'])) {
 			$operation->setExternalDocs(ExternalDocumentation::fromArray($data['externalDocs']));
 		}
-		if (isset($data['parameters'])) {
-			foreach ($data['parameters'] as $parameterData) {
-				if (isset($parameterData['$ref'])) {
-					$operation->addParameter(new Reference($parameterData['$ref']));
-					continue;
-				}
-				$operation->addParameter(Parameter::fromArray($parameterData));
+		foreach ($data['parameters'] ?? [] as $parameterData) {
+			if (isset($parameterData['$ref'])) {
+				$operation->addParameter(new Reference($parameterData['$ref']));
+				continue;
 			}
+			$operation->addParameter(Parameter::fromArray($parameterData));
 		}
 		if (isset($data['requestBody'])) {
 			if (isset($data['requestBody']['$ref'])) {
@@ -79,23 +77,17 @@ class Operation
 				$operation->setRequestBody(RequestBody::fromArray($data['requestBody']));
 			}
 		}
-		if (isset($data['security'])) {
-			foreach ($data['security'] as $securityRequirementData) {
-				$operation->addSecurityRequirement(SecurityRequirement::fromArray($securityRequirementData));
-			}
+		foreach ($data['security'] ?? [] as $securityRequirementData) {
+			$operation->addSecurityRequirement(SecurityRequirement::fromArray($securityRequirementData));
 		}
-		if (isset($data['servers'])) {
-			foreach ($data['servers'] as $server) {
-				$operation->addServer(Server::fromArray($server));
-			}
+		foreach ($data['servers'] ?? [] as $server) {
+			$operation->addServer(Server::fromArray($server));
 		}
-		if (isset($data['callbacks'])) {
-			foreach ($data['callbacks'] as $callback) {
-				if (isset($callback['$ref'])) {
-					$operation->addCallback(new Reference($callback['$ref']));
-				} else {
-					$operation->addCallback(Callback::fromArray($callback));
-				}
+		foreach ($data['callbacks'] ?? [] as $callback) {
+			if (isset($callback['$ref'])) {
+				$operation->addCallback(new Reference($callback['$ref']));
+			} else {
+				$operation->addCallback(Callback::fromArray($callback));
 			}
 		}
 
