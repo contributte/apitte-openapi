@@ -15,21 +15,16 @@ class RequestBody
 	private $required = false;
 
 	/**
-	 * @param MediaType[] $content
-	 */
-	public function __construct(array $content)
-	{
-		$this->content = $content;
-	}
-
-	/**
 	 * @param mixed[] $data
 	 */
 	public static function fromArray(array $data): RequestBody
 	{
-		$requestBody = new RequestBody($data['content']);
+		$requestBody = new RequestBody();
 		$requestBody->setRequired($data['required'] ?? false);
 		$requestBody->setDescription($data['description'] ?? null);
+		foreach ($data['content'] ?? [] as $key => $mediaType) {
+			$requestBody->addMediaType($key, MediaType::fromArray($mediaType));
+		}
 		return $requestBody;
 	}
 
@@ -42,7 +37,10 @@ class RequestBody
 		if ($this->description !== null) {
 			$data['description'] = $this->description;
 		}
-		$data['content'] = $this->content;
+		$data['content'] = [];
+		foreach ($this->content as $key => $mediaType) {
+			$data['content'][$key] = $mediaType->toArray();
+		}
 		if ($this->required === true) {
 			$data['required'] = true;
 		}
@@ -57,6 +55,11 @@ class RequestBody
 	public function setRequired(bool $required): void
 	{
 		$this->required = $required;
+	}
+
+	public function addMediaType(string $key, MediaType $mediaType): void
+	{
+		$this->content[$key] = $mediaType;
 	}
 
 	public function getDescription(): ?string

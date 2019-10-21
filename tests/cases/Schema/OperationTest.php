@@ -28,7 +28,7 @@ class OperationTest extends TestCase
 		$operation->setDescription('description');
 		$operation->setOperationId('id');
 
-		$requestBody = new RequestBody([]);
+		$requestBody = new RequestBody();
 		$operation->setRequestBody($requestBody);
 
 		$externalDocs = new ExternalDocumentation('https://external-docs.example.com');
