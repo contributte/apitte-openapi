@@ -30,7 +30,7 @@ class Operation
 	private $responses;
 
 	/** @var Callback[]|Reference[] */
-	private $callbacks;
+	private $callbacks = [];
 
 	/** @var bool */
 	private $deprecated = false;
@@ -223,7 +223,7 @@ class Operation
 	/**
 	 * @return Reference[]|Callback[]
 	 */
-	public function getCallbacks()
+	public function getCallbacks(): array
 	{
 		return $this->callbacks;
 	}
