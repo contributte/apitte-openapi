@@ -80,7 +80,7 @@ class Operation
 		}
 		if (isset($data['security'])) {
 			foreach ($data['security'] as $securityRequirementData) {
-				$operation->setSecurityRequirement(SecurityRequirement::fromArray($securityRequirementData));
+				$operation->addSecurityRequirement(SecurityRequirement::fromArray($securityRequirementData));
 			}
 		}
 		return $operation;
@@ -132,7 +132,7 @@ class Operation
 		$this->deprecated = $deprecated;
 	}
 
-	public function setSecurityRequirement(SecurityRequirement $securityRequirement): void
+	public function addSecurityRequirement(SecurityRequirement $securityRequirement): void
 	{
 		$this->security[] = $securityRequirement;
 	}
