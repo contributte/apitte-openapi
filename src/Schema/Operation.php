@@ -83,6 +83,12 @@ class Operation
 				$operation->addSecurityRequirement(SecurityRequirement::fromArray($securityRequirementData));
 			}
 		}
+		if (isset($data['servers'])) {
+			foreach ($data['servers'] as $server) {
+				$operation->addServer(Server::fromArray($server));
+			}
+		}
+
 		return $operation;
 	}
 
@@ -137,6 +143,11 @@ class Operation
 		$this->security[] = $securityRequirement;
 	}
 
+	public function addServer(Server $server): void
+	{
+		$this->servers[] = $server;
+	}
+
 	/**
 	 * @return mixed[]
 	 */
@@ -171,7 +182,9 @@ class Operation
 			$data['security'][] = $securityRequirement->toArray();
 		}
 		$data['responses'] = $this->responses->toArray();
-		//			'servers' => Utils::fromArray($this->servers),
+		foreach ($this->servers as $server) {
+			$data['servers'][] = $server->toArray();
+		}
 
 		return $data;
 	}
