@@ -41,7 +41,7 @@ class Parameter
 	/** @var Schema|Reference|null */
 	private $schema;
 
-	/** @var mixed|null */
+	/** @var mixed */
 	private $example;
 
 	/** @var string|null */
@@ -110,7 +110,7 @@ class Parameter
 	}
 
 	/**
-	 * @param mixed|null $example
+	 * @param mixed $example
 	 */
 	public function setExample($example): void
 	{
@@ -182,7 +182,7 @@ class Parameter
 	}
 
 	/**
-	 * @return mixed|null
+	 * @return mixed
 	 */
 	public function getExample()
 	{
