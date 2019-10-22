@@ -11,52 +11,34 @@ class LicenseTest extends TestCase
 
 	public function testOptional(): void
 	{
-		$name = 'Apache 2.0';
-		$url = 'https://www.apache.org/licenses/LICENSE-2.0.html';
+		$license = new License('Apache 2.0');
+		$license->setUrl('https://www.apache.org/licenses/LICENSE-2.0.html');
 
-		$license = new License($name);
-		$license->setUrl($url);
+		Assert::same('Apache 2.0', $license->getName());
+		Assert::same('https://www.apache.org/licenses/LICENSE-2.0.html', $license->getUrl());
 
-		Assert::same($name, $license->getName());
-		Assert::same($url, $license->getUrl());
+		$realData = $license->toArray();
+		$expectedData = [
+			'name' => 'Apache 2.0',
+			'url' => 'https://www.apache.org/licenses/LICENSE-2.0.html',
+		];
 
-		// fromArray
-		$license = License::fromArray([
-			'name' => $name,
-			'url' => $url,
-		]);
-
-		Assert::same($name, $license->getName());
-		Assert::same($url, $license->getUrl());
-
-		// toArray
-		Assert::same([
-			'name' => $name,
-			'url' => $url,
-		], $license->toArray());
+		Assert::same($expectedData, $realData);
+		Assert::same($expectedData, License::fromArray($realData)->toArray());
 	}
 
 	public function testRequired(): void
 	{
-		$name = 'Apache 2.0';
+		$license = new License('Apache 2.0');
 
-		$license = new License($name);
-
-		Assert::same($name, $license->getName());
+		Assert::same('Apache 2.0', $license->getName());
 		Assert::null($license->getUrl());
 
-		// fromArray
-		$license = License::fromArray([
-			'name' => $name,
-		]);
+		$realData = $license->toArray();
+		$expectedData = ['name' => 'Apache 2.0'];
 
-		Assert::same($name, $license->getName());
-		Assert::null($license->getUrl());
-
-		// toArray
-		Assert::same([
-			'name' => $name,
-		], $license->toArray());
+		Assert::same($expectedData, $realData);
+		Assert::same($expectedData, License::fromArray($realData)->toArray());
 	}
 
 }
