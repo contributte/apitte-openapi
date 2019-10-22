@@ -23,6 +23,14 @@ class MediaType
 	}
 
 	/**
+	 * @return Schema|Reference|null
+	 */
+	public function getSchema()
+	{
+		return $this->schema;
+	}
+
+	/**
 	 * @param Schema|Reference|null $schema
 	 */
 	public function setSchema($schema): void
