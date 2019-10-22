@@ -122,7 +122,9 @@ class Parameter
 		if ($this->description !== null) {
 			$data['description'] = $this->description;
 		}
-		$data['required'] = $this->required;
+		if ($this->required) {
+			$data['required'] = $this->required;
+		}
 		if ($this->schema !== null) {
 			$data['schema'] = $this->schema->toArray();
 		}

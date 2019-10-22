@@ -26,7 +26,6 @@ paths:
         - name: tags
           in: query
           description: tags to filter by
-          required: false
           style: form
           schema:
             type: array
@@ -35,7 +34,6 @@ paths:
         - name: limit
           in: query
           description: maximum number of results to return
-          required: false
           schema:
             type: integer
             format: int32
@@ -136,12 +134,12 @@ components:
 
     NewPet:
       required:
-        - name  
+        - name
       properties:
         name:
           type: string
         tag:
-          type: string    
+          type: string
 
     Error:
       required:
