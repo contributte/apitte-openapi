@@ -87,8 +87,8 @@ class OperationTest extends TestCase
 			'externalDocs' => ['url' => 'https://external-docs.example.com'],
 			'operationId' => 'id',
 			'parameters' => [
-				['name' => 'p1', 'in' => 'path', 'required' => false],
-				['name' => 'p2', 'in' => 'cookie', 'required' => false],
+				['name' => 'p1', 'in' => 'path'],
+				['name' => 'p2', 'in' => 'cookie'],
 				['$ref' => 'r1'],
 			],
 			'requestBody' => ['content' => []],
