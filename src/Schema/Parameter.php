@@ -69,7 +69,13 @@ class Parameter
 		$parameter = new Parameter($data['name'], $data['in']);
 		$parameter->setDescription($data['description'] ?? null);
 		$parameter->setRequired($data['required'] ?? false);
-		$parameter->setSchema(isset($data['schema']) ? Schema::fromArray($data['schema']) : null);
+		if (isset($data['schema'])) {
+			if (isset($data['schema']['$ref'])) {
+				$parameter->setSchema(new Reference($data['schema']['$ref']));
+			} else {
+				$parameter->setSchema(Schema::fromArray($data['schema']));
+			}
+		}
 		$parameter->setExample($data['example'] ?? null);
 		$parameter->setStyle($data['style'] ?? null);
 		return $parameter;
