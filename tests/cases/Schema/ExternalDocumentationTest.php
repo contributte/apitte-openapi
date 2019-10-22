@@ -11,52 +11,34 @@ class ExternalDocumentationTest extends TestCase
 
 	public function testOptional(): void
 	{
-		$description = 'Find more info here';
-		$url = 'https://example.com';
+		$documentation = new ExternalDocumentation('https://example.com');
+		$documentation->setDescription('Find more info here');
 
-		$documentation = new ExternalDocumentation($url);
-		$documentation->setDescription($description);
+		Assert::same('https://example.com', $documentation->getUrl());
+		Assert::same('Find more info here', $documentation->getDescription());
 
-		Assert::same($url, $documentation->getUrl());
-		Assert::same($description, $documentation->getDescription());
+		$realData = $documentation->toArray();
+		$expectedData = [
+			'url' => 'https://example.com',
+			'description' => 'Find more info here',
+		];
 
-		// fromArray
-		$documentation = ExternalDocumentation::fromArray([
-			'url' => $url,
-			'description' => $description,
-		]);
-
-		Assert::same($url, $documentation->getUrl());
-		Assert::same($description, $documentation->getDescription());
-
-		// toArray
-		Assert::same([
-			'url' => $url,
-			'description' => $description,
-		], $documentation->toArray());
+		Assert::same($expectedData, $realData);
+		Assert::same($expectedData, ExternalDocumentation::fromArray($realData)->toArray());
 	}
 
 	public function testRequired(): void
 	{
-		$url = 'https://example.com';
+		$documentation = new ExternalDocumentation('https://example.com');
 
-		$documentation = new ExternalDocumentation($url);
-
-		Assert::same($url, $documentation->getUrl());
+		Assert::same('https://example.com', $documentation->getUrl());
 		Assert::null($documentation->getDescription());
 
-		// fromArray
-		$documentation = ExternalDocumentation::fromArray([
-			'url' => $url,
-		]);
+		$realData = $documentation->toArray();
+		$expectedData = ['url' => 'https://example.com'];
 
-		Assert::same($url, $documentation->getUrl());
-		Assert::null($documentation->getDescription());
-
-		// toArray
-		Assert::same([
-			'url' => $url,
-		], $documentation->toArray());
+		Assert::same($expectedData, $realData);
+		Assert::same($expectedData, ExternalDocumentation::fromArray($realData)->toArray());
 	}
 
 }
