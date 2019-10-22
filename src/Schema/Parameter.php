@@ -44,7 +44,7 @@ class Parameter
 	/** @var mixed|null */
 	private $example;
 
-	/** @var mixed */
+	/** @var string|null */
 	private $style;
 
 	public function __construct(string $name, string $in)
@@ -183,18 +183,12 @@ class Parameter
 		return $this->example;
 	}
 
-	/**
-	 * @return mixed
-	 */
-	public function getStyle()
+	public function getStyle(): ?string
 	{
 		return $this->style;
 	}
 
-	/**
-	 * @param mixed $style
-	 */
-	public function setStyle($style): void
+	public function setStyle(?string $style): void
 	{
 		$this->style = $style;
 	}
