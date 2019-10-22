@@ -11,54 +11,32 @@ class TagTest extends TestCase
 
 	public function testOptional(): void
 	{
-		$name = 'pet';
-		$description = 'Pets operations';
+		$tag = new Tag('pet');
+		$tag->setDescription('Pets operations');
 
-		$tag = new Tag($name);
-		$tag->setDescription($description);
+		Assert::same('pet', $tag->getName());
+		Assert::same('Pets operations', $tag->getDescription());
 
-		Assert::same($name, $tag->getName());
-		Assert::same($description, $tag->getDescription());
+		$realData = $tag->toArray();
+		$expectedData = ['name' => 'pet', 'description' => 'Pets operations'];
 
-		// fromArray
-		$tag = Tag::fromArray([
-			'name' => $name,
-			'description' => $description,
-		]);
-
-		Assert::same($name, $tag->getName());
-		Assert::same($description, $tag->getDescription());
-
-		// toArray
-		Assert::same([
-			'name' => $name,
-			'description' => $description,
-		], $tag->toArray());
+		Assert::same($expectedData, $realData);
+		Assert::same($expectedData, Tag::fromArray($realData)->toArray());
 	}
 
 	public function testRequired(): void
 	{
-		$name = 'pet';
+		$tag = new Tag('pet');
 
-		$tag = new Tag($name);
-
-		Assert::same($name, $tag->getName());
+		Assert::same('pet', $tag->getName());
 		Assert::null($tag->getDescription());
 		Assert::null($tag->getExternalDocs());
 
-		// fromArray
-		$tag = Tag::fromArray([
-			'name' => $name,
-		]);
+		$realData = $tag->toArray();
+		$expectedData = ['name' => 'pet'];
 
-		Assert::same($name, $tag->getName());
-		Assert::null($tag->getDescription());
-		Assert::null($tag->getExternalDocs());
-
-		// toArray
-		Assert::same([
-			'name' => $name,
-		], $tag->toArray());
+		Assert::same($expectedData, $realData);
+		Assert::same($expectedData, Tag::fromArray($realData)->toArray());
 	}
 
 }
