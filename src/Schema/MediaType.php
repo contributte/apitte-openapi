@@ -17,7 +17,13 @@ class MediaType
 	public static function fromArray(array $data): MediaType
 	{
 		$mediaType = new MediaType();
-		$mediaType->setSchema(isset($data['schema']) ? Schema::fromArray($data['schema']) : null);
+		if (isset($data['schema'])) {
+			if (isset($data['schema']['$ref'])) {
+				$mediaType->setSchema(new Reference($data['schema']['$ref']));
+			} else {
+				$mediaType->setSchema(Schema::fromArray($data['schema']));
+			}
+		}
 		$mediaType->setExample($data['example'] ?? null);
 		return $mediaType;
 	}
