@@ -13,95 +13,56 @@ class InfoTest extends TestCase
 
 	public function testOptional(): void
 	{
-		$title = 'Sample Pet Store App';
-		$description = 'This is a sample server for a pet store.';
-		$termsOfService = 'http://example.com/terms/';
-		$contactData = [
-			'name' => 'API Support',
-			'url' => 'http://www.example.com/support',
-			'email' => 'support@example.com',
-		];
-		$contact = Contact::fromArray($contactData);
-		$licenseData = [
-			'name' => 'Apache 2.0',
-			'url' => 'https://www.apache.org/licenses/LICENSE-2.0.html',
-		];
-		$license = License::fromArray($licenseData);
-		$version = '1.0.1';
+		$info = new Info('Sample Pet Store App', '1.0.1');
+		$info->setDescription('This is a sample server for a pet store.');
+		$info->setTermsOfService('http://example.com/terms/');
 
-		$info = new Info($title, $version);
-		$info->setDescription($description);
-		$info->setTermsOfService($termsOfService);
+		$contact = new Contact();
 		$info->setContact($contact);
+
+		$license = new License('Apache 2.0');
 		$info->setLicense($license);
 
-		Assert::same($title, $info->getTitle());
-		Assert::same($description, $info->getDescription());
-		Assert::same($termsOfService, $info->getTermsOfService());
+		Assert::same('Sample Pet Store App', $info->getTitle());
+		Assert::same('This is a sample server for a pet store.', $info->getDescription());
+		Assert::same('http://example.com/terms/', $info->getTermsOfService());
 		Assert::same($contact, $info->getContact());
 		Assert::same($license, $info->getLicense());
-		Assert::same($version, $info->getVersion());
+		Assert::same('1.0.1', $info->getVersion());
 
-		// fromArray
-		$info = Info::fromArray([
-			'title' => $title,
-			'description' => $description,
-			'termsOfService' => $termsOfService,
-			'contact' => $contactData,
-			'license' => $licenseData,
-			'version' => $version,
-		]);
+		$realData = $info->toArray();
+		$expectedData = [
+			'title' => 'Sample Pet Store App',
+			'description' => 'This is a sample server for a pet store.',
+			'termsOfService' => 'http://example.com/terms/',
+			'contact' => [],
+			'license' => ['name' => 'Apache 2.0'],
+			'version' => '1.0.1',
+		];
 
-		Assert::same($title, $info->getTitle());
-		Assert::same($description, $info->getDescription());
-		Assert::same($termsOfService, $info->getTermsOfService());
-		Assert::equal($contact, $info->getContact());
-		Assert::equal($license, $info->getLicense());
-		Assert::same($version, $info->getVersion());
-
-		// toArray
-		Assert::same([
-			'title' => $title,
-			'description' => $description,
-			'termsOfService' => $termsOfService,
-			'contact' => $contactData,
-			'license' => $licenseData,
-			'version' => $version,
-		], $info->toArray());
+		Assert::same($expectedData, $realData);
+		Assert::same($expectedData, Info::fromArray($realData)->toArray());
 	}
 
 	public function testRequired(): void
 	{
-		$title = 'Sample Pet Store App';
-		$version = '1.0.1';
+		$info = new Info('Sample Pet Store App', '1.0.1');
 
-		$info = new Info($title, $version);
-
-		Assert::same($title, $info->getTitle());
+		Assert::same('Sample Pet Store App', $info->getTitle());
 		Assert::same(null, $info->getDescription());
 		Assert::same(null, $info->getTermsOfService());
 		Assert::same(null, $info->getContact());
 		Assert::same(null, $info->getLicense());
-		Assert::same($version, $info->getVersion());
+		Assert::same('1.0.1', $info->getVersion());
 
-		// fromArray
-		$info = Info::fromArray([
-			'title' => $title,
-			'version' => $version,
-		]);
+		$realData = $info->toArray();
+		$expectedData = [
+			'title' => 'Sample Pet Store App',
+			'version' => '1.0.1',
+		];
 
-		Assert::same($title, $info->getTitle());
-		Assert::same(null, $info->getDescription());
-		Assert::same(null, $info->getTermsOfService());
-		Assert::same(null, $info->getContact());
-		Assert::same(null, $info->getLicense());
-		Assert::same($version, $info->getVersion());
-
-		// toArray
-		Assert::same([
-			'title' => $title,
-			'version' => $version,
-		], $info->toArray());
+		Assert::same($expectedData, $realData);
+		Assert::same($expectedData, Info::fromArray($realData)->toArray());
 	}
 
 }
