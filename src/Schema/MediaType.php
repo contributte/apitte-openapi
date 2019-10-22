@@ -8,7 +8,7 @@ class MediaType
 	/** @var Schema|Reference|null */
 	private $schema;
 
-	/** @var mixed[]|null */
+	/** @var mixed */
 	private $example;
 
 	/**
@@ -31,17 +31,17 @@ class MediaType
 	}
 
 	/**
-	 * @return mixed[]|null
+	 * @return mixed
 	 */
-	public function getExample(): ?array
+	public function getExample()
 	{
 		return $this->example;
 	}
 
 	/**
-	 * @param mixed[]|null $example
+	 * @param mixed $example
 	 */
-	public function setExample(?array $example): void
+	public function setExample($example): void
 	{
 		$this->example = $example;
 	}
