@@ -2,14 +2,23 @@
 
 namespace Apitte\OpenApi\Schema;
 
+use Apitte\Core\Exception\Logical\InvalidArgumentException;
+
 class Parameter
 {
 
 	public const
-		IN_QUERY = 'query',
 		IN_COOKIE = 'cookie',
 		IN_HEADER = 'header',
-		IN_PATH = 'path';
+		IN_PATH = 'path',
+		IN_QUERY = 'query';
+
+	public const INS = [
+		self::IN_COOKIE,
+		self::IN_HEADER,
+		self::IN_PATH,
+		self::IN_QUERY,
+	];
 
 	/** @var string */
 	private $name;
@@ -40,6 +49,14 @@ class Parameter
 
 	public function __construct(string $name, string $in)
 	{
+		if (!in_array($in, self::INS, true)) {
+			throw new InvalidArgumentException(sprintf(
+				'Invalid value "%s" for attribute "in" given. It must be one of "%s".',
+				$in,
+				implode(', ', self::INS)
+			));
+		}
+
 		$this->name = $name;
 		$this->in = $in;
 	}
