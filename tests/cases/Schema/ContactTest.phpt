@@ -11,36 +11,24 @@ class ContactTest extends TestCase
 
 	public function testOptional(): void
 	{
-		$name = 'API Support';
-		$url = 'http://www.example.com/support';
-		$email = 'support@example.com';
-
 		$contact = new Contact();
-		$contact->setName($name);
-		$contact->setEmail($email);
-		$contact->setUrl($url);
+		$contact->setName('API Support');
+		$contact->setEmail('support@example.com');
+		$contact->setUrl('http://www.example.com/support');
 
-		Assert::same($name, $contact->getName());
-		Assert::same($url, $contact->getUrl());
-		Assert::same($email, $contact->getEmail());
+		Assert::same('API Support', $contact->getName());
+		Assert::same('http://www.example.com/support', $contact->getUrl());
+		Assert::same('support@example.com', $contact->getEmail());
 
-		// fromArray
-		$contact = Contact::fromArray([
-			'name' => $name,
-			'url' => $url,
-			'email' => $email,
-		]);
+		$realData = $contact->toArray();
+		$expectedData = [
+			'name' => 'API Support',
+			'url' => 'http://www.example.com/support',
+			'email' => 'support@example.com',
+		];
 
-		Assert::same($name, $contact->getName());
-		Assert::same($url, $contact->getUrl());
-		Assert::same($email, $contact->getEmail());
-
-		// toArray
-		Assert::same([
-			'name' => $name,
-			'url' => $url,
-			'email' => $email,
-		], $contact->toArray());
+		Assert::same($expectedData, $realData);
+		Assert::same($expectedData, Contact::fromArray($realData)->toArray());
 	}
 
 	public function testRequired(): void
@@ -51,15 +39,11 @@ class ContactTest extends TestCase
 		Assert::null($contact->getUrl());
 		Assert::null($contact->getEmail());
 
-		// fromArray
-		$contact = Contact::fromArray([]);
+		$realData = $contact->toArray();
+		$expectedData = [];
 
-		Assert::null($contact->getName());
-		Assert::null($contact->getUrl());
-		Assert::null($contact->getEmail());
-
-		// toArray
-		Assert::same([], $contact->toArray());
+		Assert::same($expectedData, $realData);
+		Assert::same($expectedData, Contact::fromArray($realData)->toArray());
 	}
 
 }
