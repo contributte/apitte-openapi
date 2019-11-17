@@ -13,7 +13,7 @@ class BaseDefinition implements IDefinition
 		return [
 			'openapi' => '3.0.2',
 			'info' => [
-				'title' => 'OpenApi Sample Project',
+				'title' => 'OpenAPI',
 				'version' => '1.0.0',
 			],
 			'paths' => [],

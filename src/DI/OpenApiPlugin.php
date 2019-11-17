@@ -43,7 +43,7 @@ class OpenApiPlugin extends Plugin
 				'url' => Expect::string()->nullable(),
 				'expansion' => Expect::anyOf(...SwaggerUIPanel::EXPANSIONS)->default(SwaggerUIPanel::EXPANSION_LIST),
 				'filter' => Expect::bool(true),
-				'title' => Expect::string('SwaggerUi'),
+				'title' => Expect::string('OpenAPI'),
 				'panel' => Expect::bool(false),
 			]),
 		]);
