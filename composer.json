@@ -23,7 +23,7 @@
   "require": {
     "php": "^7.2",
     "apitte/core": "^0.7.0",
-    "nette/utils": "~3.0.1"
+    "nette/utils": "~3.0.1|~3.1.0"
   },
   "suggest": {
     "symfony/yaml": "Allows yaml definition"
