@@ -71,7 +71,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Pets"
+                $ref: "#/components/schemas/Pet"
         default:
           description: unexpected error
           content:
@@ -81,6 +81,7 @@ paths:
 components:
   schemas:
     Pet:
+      type: object
       required:
         - id
         - name
@@ -97,6 +98,7 @@ components:
       items:
         $ref: "#/components/schemas/Pet"
     Error:
+      type: object
       required:
         - code
         - message
