@@ -35,7 +35,7 @@ class EntityAdapter implements IEntityAdapter
 			$types = preg_split('#([&|])#', $type, -1, PREG_SPLIT_NO_EMPTY);
 
 			// Filter out duplicate definitions
-			$types = array_map(function (string $type) {
+			$types = array_map(function (string $type): string {
 				return $this->normalizeType($type);
 			}, $types);
 			$types = array_unique($types);
@@ -124,6 +124,9 @@ class EntityAdapter implements IEntityAdapter
 	 */
 	protected function getProperties(string $type): array
 	{
+		if (!class_exists($type)) {
+			return [];
+		}
 		$ref = new ReflectionClass($type);
 		$properties = $ref->getProperties(ReflectionProperty::IS_PUBLIC);
 		$data = [];
@@ -158,7 +161,7 @@ class EntityAdapter implements IEntityAdapter
 		if (($type = preg_replace('#\s.*#', '', $annotation)) !== null) {
 			$class = Reflection::getPropertyDeclaringClass($property);
 
-			return preg_replace_callback('#[\w\\\\]+#', function ($m) use ($class) {
+			return preg_replace_callback('#[\w\\\\]+#', function ($m) use ($class): string {
 				static $phpdocKnownTypes = [
 					// phpcs:disable
 					'bool', 'boolean', 'false', 'true',

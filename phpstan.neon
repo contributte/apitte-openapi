@@ -7,3 +7,6 @@ parameters:
 		# Ignore PHP soft-failing functions
 		- message: '#.+(int|string|string\>)\|false.+#'
 		  path: %currentWorkingDirectory%/src/SchemaDefinition/Entity/EntityAdapter.php
+
+		- message: '#Cannot call method allowsNull\(\) on ReflectionType\|null.#'
+		  path: %currentWorkingDirectory%/src/SchemaDefinition/Entity/EntityAdapter.php
