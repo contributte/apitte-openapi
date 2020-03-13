@@ -96,6 +96,11 @@ class OpenApi
 		if (isset($data['externalDocs'])) {
 			$openApi->externalDocs = ExternalDocumentation::fromArray($data['externalDocs']);
 		}
+		if (isset($data['security'])) {
+			foreach ($data['security'] as $security) {
+				$openApi->addSecurityRequirement(SecurityRequirement::fromArray($security));
+			}
+		}
 		return $openApi;
 	}
 
@@ -117,6 +122,11 @@ class OpenApi
 	public function setExternalDocs(?ExternalDocumentation $externalDocs): void
 	{
 		$this->externalDocs = $externalDocs;
+	}
+
+	public function addSecurityRequirement(SecurityRequirement $security): void
+	{
+		$this->security[] = $security;
 	}
 
 }

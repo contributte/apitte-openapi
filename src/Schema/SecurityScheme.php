@@ -20,6 +20,12 @@ class SecurityScheme
 	/** @var string|null */
 	private $template;
 
+	/** @var string|null */
+	private $scheme;
+
+	/** @var string|null */
+	private $bearerFormat;
+
 	public function __construct(string $type)
 	{
 		$this->type = $type;
@@ -44,6 +50,12 @@ class SecurityScheme
 		if ($this->template !== null) {
 			$data['template'] = $this->template;
 		}
+		if ($this->scheme !== null) {
+			$data['scheme'] = $this->scheme;
+		}
+		if ($this->bearerFormat !== null) {
+			$data['bearerFormat'] = $this->bearerFormat;
+		}
 		return $data;
 	}
 
@@ -57,6 +69,8 @@ class SecurityScheme
 		$securityScheme->setDescription($data['description'] ?? null);
 		$securityScheme->setIn($data['in'] ?? null);
 		$securityScheme->setTemplate($data['template'] ?? null);
+		$securityScheme->setScheme($data['scheme'] ?? null);
+		$securityScheme->setBearerFormat($data['bearerFormat'] ?? null);
 		return $securityScheme;
 	}
 
@@ -108,6 +122,26 @@ class SecurityScheme
 	public function setTemplate(?string $template): void
 	{
 		$this->template = $template;
+	}
+
+	public function getScheme(): ?string
+	{
+		return $this->scheme;
+	}
+
+	public function setScheme(?string $scheme): void
+	{
+		$this->scheme = $scheme;
+	}
+
+	public function getBearerFormat(): ?string
+	{
+		return $this->bearerFormat;
+	}
+
+	public function setBearerFormat(?string $bearerFormat): void
+	{
+		$this->bearerFormat = $bearerFormat;
 	}
 
 }
