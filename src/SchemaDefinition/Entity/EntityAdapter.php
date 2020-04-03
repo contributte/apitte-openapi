@@ -144,9 +144,10 @@ class EntityAdapter implements IEntityAdapter
 
 	private function getPropertyType(ReflectionProperty $property): ?string
 	{
-		if (PHP_VERSION_ID >= 70400 && ($type = Reflection::getPropertyType($property) !== null)) {
-			return ($property->getType()->allowsNull() ? '?' : '') . $type;
-		}
+		//TODO - fix typed properties support
+		//if (PHP_VERSION_ID >= 70400 && ($type = Reflection::getPropertyType($property) !== null)) {
+		//	return ($property->getType()->allowsNull() ? '?' : '') . $type;
+		//}
 
 		$annotation = $this->parseAnnotation($property, 'var');
 
