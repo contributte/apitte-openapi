@@ -22,9 +22,11 @@ class Helpers
 					if (isset($right[$key])) {
 						$val = static::merge($val, $right[$key]);
 					}
+
 					$right[$key] = $val;
 				}
 			}
+
 			return $right;
 		} elseif ($left === null && is_array($right)) {
 			return $right;

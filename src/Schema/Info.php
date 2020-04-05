@@ -40,12 +40,15 @@ class Info
 		if ($this->description !== null) {
 			$data['description'] = $this->description;
 		}
+
 		if ($this->termsOfService !== null) {
 			$data['termsOfService'] = $this->termsOfService;
 		}
+
 		if ($this->contact !== null) {
 			$data['contact'] = $this->contact->toArray();
 		}
+
 		if ($this->license !== null) {
 			$data['license'] = $this->license->toArray();
 		}

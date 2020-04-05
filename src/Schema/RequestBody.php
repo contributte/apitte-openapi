@@ -25,6 +25,7 @@ class RequestBody
 		foreach ($data['content'] ?? [] as $key => $mediaType) {
 			$requestBody->addMediaType($key, MediaType::fromArray($mediaType));
 		}
+
 		return $requestBody;
 	}
 
@@ -37,13 +38,16 @@ class RequestBody
 		if ($this->description !== null) {
 			$data['description'] = $this->description;
 		}
+
 		$data['content'] = [];
 		foreach ($this->content as $key => $mediaType) {
 			$data['content'][$key] = $mediaType->toArray();
 		}
+
 		if ($this->required === true) {
 			$data['required'] = true;
 		}
+
 		return $data;
 	}
 

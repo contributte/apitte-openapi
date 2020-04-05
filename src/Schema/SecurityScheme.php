@@ -41,21 +41,27 @@ class SecurityScheme
 		if ($this->name !== null) {
 			$data['name'] = $this->name;
 		}
+
 		if ($this->description !== null) {
 			$data['description'] = $this->description;
 		}
+
 		if ($this->in !== null) {
 			$data['in'] = $this->in;
 		}
+
 		if ($this->template !== null) {
 			$data['template'] = $this->template;
 		}
+
 		if ($this->scheme !== null) {
 			$data['scheme'] = $this->scheme;
 		}
+
 		if ($this->bearerFormat !== null) {
 			$data['bearerFormat'] = $this->bearerFormat;
 		}
+
 		return $data;
 	}
 

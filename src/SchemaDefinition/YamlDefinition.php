@@ -24,6 +24,7 @@ class YamlDefinition implements IDefinition
 		if ($decode === false || $decode === null) {
 			return [];
 		}
+
 		return $decode;
 	}
 

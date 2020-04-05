@@ -85,22 +85,27 @@ class OpenApi
 				$openApi->addServer(Server::fromArray($serverData));
 			}
 		}
+
 		if (isset($data['components'])) {
 			$openApi->setComponents(Components::fromArray($data['components']));
 		}
+
 		if (isset($data['tags'])) {
 			foreach ($data['tags'] as $tagData) {
 				$openApi->addTag(Tag::fromArray($tagData));
 			}
 		}
+
 		if (isset($data['externalDocs'])) {
 			$openApi->externalDocs = ExternalDocumentation::fromArray($data['externalDocs']);
 		}
+
 		if (isset($data['security'])) {
 			foreach ($data['security'] as $security) {
 				$openApi->addSecurityRequirement(SecurityRequirement::fromArray($security));
 			}
 		}
+
 		return $openApi;
 	}
 
