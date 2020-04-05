@@ -1,4 +1,5 @@
 parameters:
+	checkGenericClassInNonGenericObjectType: false
 	ignoreErrors:
 		# PHP 7.4 method not recognized
 		- message: '#^Call to an undefined method ReflectionProperty\:\:getType\(\)\.$#'
@@ -7,6 +8,4 @@ parameters:
 		# Ignore PHP soft-failing functions
 		- message: '#.+(int|string|string\>)\|false.+#'
 		  path: %currentWorkingDirectory%/src/SchemaDefinition/Entity/EntityAdapter.php
-
-		- message: '#Cannot call method allowsNull\(\) on ReflectionType\|null.#'
-		  path: %currentWorkingDirectory%/src/SchemaDefinition/Entity/EntityAdapter.php
+	reportUnmatchedIgnoredErrors: false
