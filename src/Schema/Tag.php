@@ -31,6 +31,7 @@ class Tag
 		if ($this->description !== null) {
 			$data['description'] = $this->description;
 		}
+
 		if ($this->externalDocs !== null) {
 			$data['externalDocs'] = $this->externalDocs->toArray();
 		}

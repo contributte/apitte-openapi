@@ -35,8 +35,10 @@ class CoreDefinition implements IDefinition
 			foreach ($endpoint->getMethods() as $method) {
 				$data['paths'][(string) $endpoint->getMask()][strtolower($method)] = $this->createOperation($endpoint);
 			}
+
 			$data = Helpers::merge($endpoint->getOpenApi()['controller'] ?? [], $data);
 		}
+
 		return $data;
 	}
 
@@ -112,6 +114,7 @@ class CoreDefinition implements IDefinition
 		foreach ($endpoint->getResponses() as $response) {
 			$responses[$response->getCode()] = $this->createResponse($response);
 		}
+
 		return $responses;
 	}
 
@@ -152,6 +155,7 @@ class CoreDefinition implements IDefinition
 		if ($parameterDescription !== null) {
 			$parameter['description'] = $parameterDescription;
 		}
+
 		$parameter['required'] = $endpointParameter->isRequired();
 		$parameter['schema'] = ['type' => $endpointParameter->getType()];
 

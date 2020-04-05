@@ -56,6 +56,7 @@ class Operation
 		if (isset($data['deprecated'])) {
 			$operation->setDeprecated($data['deprecated']);
 		}
+
 		$operation->setOperationId($data['operationId'] ?? null);
 		$operation->setTags($data['tags'] ?? []);
 		$operation->setSummary($data['summary'] ?? null);
@@ -63,13 +64,16 @@ class Operation
 		if (isset($data['externalDocs'])) {
 			$operation->setExternalDocs(ExternalDocumentation::fromArray($data['externalDocs']));
 		}
+
 		foreach ($data['parameters'] ?? [] as $parameterData) {
 			if (isset($parameterData['$ref'])) {
 				$operation->addParameter(new Reference($parameterData['$ref']));
 				continue;
 			}
+
 			$operation->addParameter(Parameter::fromArray($parameterData));
 		}
+
 		if (isset($data['requestBody'])) {
 			if (isset($data['requestBody']['$ref'])) {
 				$operation->setRequestBody(new Reference($data['requestBody']['$ref']));
@@ -77,12 +81,15 @@ class Operation
 				$operation->setRequestBody(RequestBody::fromArray($data['requestBody']));
 			}
 		}
+
 		foreach ($data['security'] ?? [] as $securityRequirementData) {
 			$operation->addSecurityRequirement(SecurityRequirement::fromArray($securityRequirementData));
 		}
+
 		foreach ($data['servers'] ?? [] as $server) {
 			$operation->addServer(Server::fromArray($server));
 		}
+
 		foreach ($data['callbacks'] ?? [] as $callback) {
 			if (isset($callback['$ref'])) {
 				$operation->addCallback(new Reference($callback['$ref']));
@@ -170,34 +177,44 @@ class Operation
 		if ($this->deprecated) {
 			$data['deprecated'] = $this->deprecated;
 		}
+
 		if ($this->tags !== []) {
 			$data['tags'] = $this->tags;
 		}
+
 		if ($this->summary !== null) {
 			$data['summary'] = $this->summary;
 		}
+
 		if ($this->description !== null) {
 			$data['description'] = $this->description;
 		}
+
 		if ($this->externalDocs !== null) {
 			$data['externalDocs'] = $this->externalDocs->toArray();
 		}
+
 		if ($this->operationId !== null) {
 			$data['operationId'] = $this->operationId;
 		}
+
 		foreach ($this->parameters as $parameter) {
 			$data['parameters'][] = $parameter->toArray();
 		}
+
 		if ($this->requestBody !== null) {
 			$data['requestBody'] = $this->requestBody->toArray();
 		}
+
 		foreach ($this->security as $securityRequirement) {
 			$data['security'][] = $securityRequirement->toArray();
 		}
+
 		$data['responses'] = $this->responses->toArray();
 		foreach ($this->servers as $server) {
 			$data['servers'][] = $server->toArray();
 		}
+
 		foreach ($this->callbacks as $callback) {
 			$data['callbacks'][] = $callback->toArray();
 		}

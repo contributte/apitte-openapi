@@ -24,6 +24,7 @@ class MediaType
 				$mediaType->setSchema(Schema::fromArray($data['schema']));
 			}
 		}
+
 		$mediaType->setExample($data['example'] ?? null);
 		return $mediaType;
 	}
@@ -69,9 +70,11 @@ class MediaType
 		if ($this->schema !== null) {
 			$data['schema'] = $this->schema->toArray();
 		}
+
 		if ($this->example !== null) {
 			$data['example'] = $this->example;
 		}
+
 		return $data;
 	}
 

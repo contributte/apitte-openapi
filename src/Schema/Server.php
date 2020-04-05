@@ -30,6 +30,7 @@ class Server
 		if ($this->description !== null) {
 			$data['description'] = $this->description;
 		}
+
 		foreach ($this->variables as $variableKey => $variable) {
 			$data['variables'][$variableKey] = $variable->toArray();
 		}
@@ -49,6 +50,7 @@ class Server
 				$server->addVariable($key, ServerVariable::fromArray($variable));
 			}
 		}
+
 		return $server;
 	}
 

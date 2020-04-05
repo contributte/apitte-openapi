@@ -89,6 +89,7 @@ final class ExamplesTest extends TestCase
 				self::recursiveSort($value);
 			}
 		}
+
 		unset($value);
 		ksort($data);
 	}

@@ -127,6 +127,7 @@ class EntityAdapter implements IEntityAdapter
 		if (!class_exists($type)) {
 			return [];
 		}
+
 		$ref = new ReflectionClass($type);
 		$properties = $ref->getProperties(ReflectionProperty::IS_PUBLIC);
 		$data = [];
@@ -197,10 +198,12 @@ class EntityAdapter implements IEntityAdapter
 		if (!Reflection::areCommentsAvailable()) {
 			throw new InvalidStateException('You have to enable phpDoc comments in opcode cache.');
 		}
+
 		$re = '#[\s*]@' . preg_quote($name, '#') . '(?=\s|$)(?:[ \t]+([^@\s]\S*))?#';
 		if ($ref->getDocComment() && preg_match($re, trim($ref->getDocComment(), '/*'), $m)) {
 			return $m[1] ?? null;
 		}
+
 		return null;
 	}
 

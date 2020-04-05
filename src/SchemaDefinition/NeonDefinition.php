@@ -25,10 +25,12 @@ class NeonDefinition implements IDefinition
 		if ($input === false) {
 			throw new InvalidStateException('Cant read file ' . $this->file);
 		}
+
 		$decode = Neon::decode($input);
 		if ($decode === false || $decode === null) {
 			return [];
 		}
+
 		return $decode;
 	}
 

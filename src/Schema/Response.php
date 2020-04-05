@@ -33,6 +33,7 @@ class Response
 				$response->setHeader($key, Header::fromArray($headerData));
 			}
 		}
+
 		if (isset($data['content'])) {
 			foreach ($data['content'] as $key => $contentData) {
 				$response->setContent($key, MediaType::fromArray($contentData));
@@ -62,6 +63,7 @@ class Response
 		foreach ($this->headers as $key => $header) {
 			$data['headers'][$key] = $header->toArray();
 		}
+
 		foreach ($this->content as $key => $mediaType) {
 			$data['content'][$key] = $mediaType->toArray();
 		}

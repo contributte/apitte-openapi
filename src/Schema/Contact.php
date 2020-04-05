@@ -23,12 +23,15 @@ class Contact
 		if ($this->name !== null) {
 			$data['name'] = $this->name;
 		}
+
 		if ($this->url !== null) {
 			$data['url'] = $this->url;
 		}
+
 		if ($this->email !== null) {
 			$data['email'] = $this->email;
 		}
+
 		return $data;
 	}
 

@@ -79,6 +79,7 @@ class PathItem
 		foreach ($this->operations as $key => $operation) {
 			$data[$key] = $operation->toArray();
 		}
+
 		return $data;
 	}
 

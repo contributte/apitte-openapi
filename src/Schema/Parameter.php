@@ -76,6 +76,7 @@ class Parameter
 				$parameter->setSchema(Schema::fromArray($data['schema']));
 			}
 		}
+
 		$parameter->setExample($data['example'] ?? null);
 		$parameter->setStyle($data['style'] ?? null);
 		return $parameter;
@@ -128,18 +129,23 @@ class Parameter
 		if ($this->description !== null) {
 			$data['description'] = $this->description;
 		}
+
 		if ($this->required) {
 			$data['required'] = $this->required;
 		}
+
 		if ($this->schema !== null) {
 			$data['schema'] = $this->schema->toArray();
 		}
+
 		if ($this->example !== null) {
 			$data['example'] = $this->example;
 		}
+
 		if ($this->style !== null) {
 			$data['style'] = $this->style;
 		}
+
 		return $data;
 	}
 

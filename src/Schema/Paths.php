@@ -17,6 +17,7 @@ class Paths
 		foreach ($this->paths as $key => $pathItem) {
 			$data[$key] = $pathItem->toArray();
 		}
+
 		return $data;
 	}
 
@@ -29,6 +30,7 @@ class Paths
 		foreach ($data as $path => $pathItemData) {
 			$paths->setPathItem($path, PathItem::fromArray($pathItemData));
 		}
+
 		return $paths;
 	}
 

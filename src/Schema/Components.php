@@ -43,16 +43,19 @@ class Components
 				$components->setSchema($schemaKey, Schema::fromArray($schemaData));
 			}
 		}
+
 		if (isset($data['parameters'])) {
 			foreach ($data['parameters'] as $parameterKey => $parameterData) {
 				$components->setParameter($parameterKey, Parameter::fromArray($parameterData));
 			}
 		}
+
 		if (isset($data['securitySchemes'])) {
 			foreach ($data['securitySchemes'] as $securitySchemeKey => $securitySchemeData) {
 				$components->setSecurityScheme($securitySchemeKey, SecurityScheme::fromArray($securitySchemeData));
 			}
 		}
+
 		return $components;
 	}
 
@@ -89,12 +92,15 @@ class Components
 		foreach ($this->schemas as $schemaKey => $schema) {
 			$data['schemas'][$schemaKey] = $schema->toArray();
 		}
+
 		foreach ($this->parameters as $parameterKey => $parameter) {
 			$data['parameters'][$parameterKey] = $parameter->toArray();
 		}
+
 		foreach ($this->securitySchemes as $securitySchemeKey => $securityScheme) {
 			$data['securitySchemes'][$securitySchemeKey] = $securityScheme->toArray();
 		}
+
 		return $data;
 	}
 

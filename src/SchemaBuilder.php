@@ -32,6 +32,7 @@ class SchemaBuilder implements ISchemaBuilder
 		foreach ($this->definitions as $definition) {
 			$data = Helpers::merge($definition->load(), $data);
 		}
+
 		return $data;
 	}
 

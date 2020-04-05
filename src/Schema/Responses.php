@@ -22,6 +22,7 @@ class Responses
 		foreach ($data as $key => $responseData) {
 			$responses->setResponse((string) $key, Response::fromArray($responseData));
 		}
+
 		return $responses;
 	}
 

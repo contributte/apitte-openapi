@@ -31,9 +31,11 @@ class Header
 		if ($this->description !== null) {
 			$data['description'] = $this->description;
 		}
+
 		if ($this->schema !== null) {
 			$data['schema'] = $this->schema->toArray();
 		}
+
 		return $data;
 	}
 

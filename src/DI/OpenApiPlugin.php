@@ -122,6 +122,7 @@ class OpenApiPlugin extends Plugin
 		if (!$global->debug) {
 			return;
 		}
+
 		$config = $this->config;
 
 		$initialize = $class->getMethod('initialize');
