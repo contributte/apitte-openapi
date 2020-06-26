@@ -19,7 +19,7 @@ class EntityAdapter implements IEntityAdapter
 	/**
 	 * @return mixed[]
 	 */
-	public function getMetadata(string $type): array
+	public function getMetadata(string $type, ?string $description = null): array
 	{
 		// Ignore brackets (not supported by schema)
 		$type = str_replace(['(', ')'], '', $type);
@@ -41,6 +41,9 @@ class EntityAdapter implements IEntityAdapter
 			$types = array_unique($types);
 
 			$metadata = [];
+			if (isset($description)) {
+				$metadata['description'] = $description;
+			}
 			$nullKey = array_search('null', $types, true);
 
 			// Remove null from other types
@@ -79,6 +82,7 @@ class EntityAdapter implements IEntityAdapter
 			return [
 				'type' => 'array',
 				'items' => $this->getMetadata($subType),
+				'description' => $description,
 			];
 		}
 
@@ -89,12 +93,14 @@ class EntityAdapter implements IEntityAdapter
 				return [
 					'type' => 'string',
 					'format' => 'date-time',
+					'description' => $description,
 				];
 			}
 
 			return [
 				'type' => 'object',
 				'properties' => $this->getProperties($type),
+				'description' => $description,
 			];
 		}
 
@@ -104,18 +110,21 @@ class EntityAdapter implements IEntityAdapter
 		if ($lower === 'mixed') {
 			return [
 				'nullable' => true,
+				'description' => $description,
 			];
 		}
 
 		if ($lower === 'object' || interface_exists($type)) {
 			return [
 				'type' => 'object',
+				'description' => $description,
 			];
 		}
 
 		// Get schema for scalar type
 		return [
 			'type' => $this->phpScalarTypeToOpenApiType($type),
+			'description' => $description,
 		];
 	}
 
@@ -130,16 +139,22 @@ class EntityAdapter implements IEntityAdapter
 
 		foreach ($properties as $property) {
 			$propertyType = $this->getPropertyType($property) ?? 'string';
+			$description = $this->getPropertyDescription($property);
 
 			// Self-reference not supported
 			if ($propertyType === $type) {
 				$propertyType = 'object';
 			}
 
-			$data[$property->getName()] = $this->getMetadata($propertyType);
+			$data[$property->getName()] = $this->getMetadata($propertyType, $description);
 		}
 
 		return $data;
+	}
+
+	private function getPropertyDescription(ReflectionProperty $property): ?string
+	{
+		return $this->parseAnnotationDescription($property);
 	}
 
 	private function getPropertyType(ReflectionProperty $property): ?string
@@ -195,6 +210,21 @@ class EntityAdapter implements IEntityAdapter
 			throw new InvalidStateException('You have to enable phpDoc comments in opcode cache.');
 		}
 		$re = '#[\s*]@' . preg_quote($name, '#') . '(?=\s|$)(?:[ \t]+([^@\s]\S*))?#';
+		if ($ref->getDocComment() && preg_match($re, trim($ref->getDocComment(), '/*'), $m)) {
+			return $m[1] ?? null;
+		}
+		return null;
+	}
+
+	/**
+	 * @param ReflectionClass|ReflectionClassConstant|ReflectionProperty|ReflectionFunctionAbstract $ref
+	 */
+	private function parseAnnotationDescription(Reflector $ref): ?string
+	{
+		if (!Reflection::areCommentsAvailable()) {
+			throw new InvalidStateException('You have to enable phpDoc comments in opcode cache.');
+		}
+		$re = '#[\s*]@description[ \t]+(.+)#';
 		if ($ref->getDocComment() && preg_match($re, trim($ref->getDocComment(), '/*'), $m)) {
 			return $m[1] ?? null;
 		}
