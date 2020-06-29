@@ -30,6 +30,8 @@ class EntityAdapter implements IEntityAdapter
 		$usesUnionType = Strings::contains($type, '|');
 		$usesIntersectionType = Strings::contains($type, '&');
 
+		$descriptionData = $description !== null ? ['description' => $description] : [];
+
 		// Get schema for all possible types
 		if ($usesUnionType || $usesIntersectionType) {
 			$types = preg_split('#([&|])#', $type, -1, PREG_SPLIT_NO_EMPTY);
@@ -40,10 +42,7 @@ class EntityAdapter implements IEntityAdapter
 			}, $types);
 			$types = array_unique($types);
 
-			$metadata = [];
-			if (isset($description)) {
-				$metadata['description'] = $description;
-			}
+			$metadata = [] + $descriptionData;
 			$nullKey = array_search('null', $types, true);
 
 			// Remove null from other types
@@ -82,8 +81,7 @@ class EntityAdapter implements IEntityAdapter
 			return [
 				'type' => 'array',
 				'items' => $this->getMetadata($subType),
-				'description' => $description,
-			];
+			] + $descriptionData;
 		}
 
 		// Get schema for class
@@ -93,15 +91,13 @@ class EntityAdapter implements IEntityAdapter
 				return [
 					'type' => 'string',
 					'format' => 'date-time',
-					'description' => $description,
-				];
+				] + $descriptionData;
 			}
 
 			return [
 				'type' => 'object',
 				'properties' => $this->getProperties($type),
-				'description' => $description,
-			];
+			] + $descriptionData;
 		}
 
 		$lower = strtolower($type);
@@ -110,22 +106,19 @@ class EntityAdapter implements IEntityAdapter
 		if ($lower === 'mixed') {
 			return [
 				'nullable' => true,
-				'description' => $description,
-			];
+			] + $descriptionData;
 		}
 
 		if ($lower === 'object' || interface_exists($type)) {
 			return [
 				'type' => 'object',
-				'description' => $description,
-			];
+			] + $descriptionData;
 		}
 
 		// Get schema for scalar type
 		return [
 			'type' => $this->phpScalarTypeToOpenApiType($type),
-			'description' => $description,
-		];
+		] + $descriptionData;
 	}
 
 	/**
