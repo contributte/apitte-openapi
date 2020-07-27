@@ -105,15 +105,17 @@ class OpenApiPlugin extends Plugin
 			return;
 		}
 
-		if ($config->swaggerUi->panel) {
-			$builder->addDefinition($this->prefix('swaggerUi.panel'))
-				->setFactory(SwaggerUIPanel::class)
-				->addSetup('setUrl', [$config->swaggerUi->url])
-				->addSetup('setExpansion', [$config->swaggerUi->expansion])
-				->addSetup('setFilter', [$config->swaggerUi->filter])
-				->addSetup('setTitle', [$config->swaggerUi->title])
-				->setAutowired(false);
+		if (!$config->swaggerUi->panel) {
+			return;
 		}
+
+		$builder->addDefinition($this->prefix('swaggerUi.panel'))
+			->setFactory(SwaggerUIPanel::class)
+			->addSetup('setUrl', [$config->swaggerUi->url])
+			->addSetup('setExpansion', [$config->swaggerUi->expansion])
+			->addSetup('setFilter', [$config->swaggerUi->filter])
+			->addSetup('setTitle', [$config->swaggerUi->title])
+			->setAutowired(false);
 	}
 
 	public function afterPluginCompile(ClassType $class): void
@@ -126,12 +128,14 @@ class OpenApiPlugin extends Plugin
 		$config = $this->config;
 
 		$initialize = $class->getMethod('initialize');
-		if ($config->swaggerUi->panel) {
-			$initialize->addBody('$this->getService(?)->addPanel($this->getService(?));', [
-				'tracy.bar',
-				$this->prefix('swaggerUi.panel'),
-			]);
+		if (!$config->swaggerUi->panel) {
+			return;
 		}
+
+		$initialize->addBody('$this->getService(?)->addPanel($this->getService(?));', [
+			'tracy.bar',
+			$this->prefix('swaggerUi.panel'),
+		]);
 	}
 
 }

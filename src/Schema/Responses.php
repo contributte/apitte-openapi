@@ -33,9 +33,11 @@ class Responses
 	{
 		$data = [];
 		foreach ($this->responses as $key => $response) {
-			if ($key !== 'default') {
-				$data[$key] = $response->toArray();
+			if ($key === 'default') {
+				continue;
 			}
+
+			$data[$key] = $response->toArray();
 		}
 
 		// Default response last
