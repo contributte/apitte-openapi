@@ -28,11 +28,13 @@ class Helpers
 			}
 
 			return $right;
-		} elseif ($left === null && is_array($right)) {
-			return $right;
-		} else {
-			return $left;
 		}
+
+		if ($left === null && is_array($right)) {
+			return $right;
+		}
+
+		return $left;
 	}
 
 }

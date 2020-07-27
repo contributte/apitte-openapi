@@ -85,9 +85,11 @@ final class ExamplesTest extends TestCase
 	private static function recursiveSort(array &$data): void
 	{
 		foreach ($data as &$value) {
-			if (is_array($value)) {
-				self::recursiveSort($value);
+			if (!is_array($value)) {
+				continue;
 			}
+
+			self::recursiveSort($value);
 		}
 
 		unset($value);

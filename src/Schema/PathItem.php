@@ -53,9 +53,11 @@ class PathItem
 		$pathItem = new PathItem();
 
 		foreach (self::$allowedOperations as $allowedOperation) {
-			if (isset($pathItemData[$allowedOperation])) {
-				$pathItem->setOperation($allowedOperation, Operation::fromArray($pathItemData[$allowedOperation]));
+			if (!isset($pathItemData[$allowedOperation])) {
+				continue;
 			}
+
+			$pathItem->setOperation($allowedOperation, Operation::fromArray($pathItemData[$allowedOperation]));
 		}
 
 		return $pathItem;
