@@ -1,11 +1,6 @@
 parameters:
 	checkGenericClassInNonGenericObjectType: false
 	ignoreErrors:
-		# PHP 7.4 method not recognized
-		- message: '#^Call to an undefined method ReflectionProperty\:\:getType\(\)\.$#'
-		  path: %currentWorkingDirectory%/src/SchemaDefinition/Entity/EntityAdapter.php
-
 		# Ignore PHP soft-failing functions
 		- message: '#.+(int|string|string\>)\|false.+#'
 		  path: %currentWorkingDirectory%/src/SchemaDefinition/Entity/EntityAdapter.php
-	reportUnmatchedIgnoredErrors: false
