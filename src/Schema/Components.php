@@ -44,9 +44,27 @@ class Components
 			}
 		}
 
+		if (isset($data['responses'])) {
+			foreach ($data['responses'] as $responseKey => $responseData) {
+				$components->setResponse($responseKey, Response::fromArray($responseData));
+			}
+		}
+
 		if (isset($data['parameters'])) {
 			foreach ($data['parameters'] as $parameterKey => $parameterData) {
 				$components->setParameter($parameterKey, Parameter::fromArray($parameterData));
+			}
+		}
+
+		if (isset($data['requestBodies'])) {
+			foreach ($data['requestBodies'] as $requestBodyKey => $requestBodyData) {
+				$components->setRequestBody($requestBodyKey, RequestBody::fromArray($requestBodyData));
+			}
+		}
+
+		if (isset($data['headers'])) {
+			foreach ($data['headers'] as $headerKey => $headerData) {
+				$components->setHeader($headerKey, Header::fromArray($headerData));
 			}
 		}
 
@@ -68,11 +86,35 @@ class Components
 	}
 
 	/**
+	 * @param Response|Reference $response
+	 */
+	public function setResponse(string $name, $response): void
+	{
+		$this->responses[$name] = $response;
+	}
+
+	/**
 	 * @param Parameter|Reference $parameter
 	 */
 	public function setParameter(string $name, $parameter): void
 	{
 		$this->parameters[$name] = $parameter;
+	}
+
+	/**
+	 * @param RequestBody|Reference $requestBody
+	 */
+	public function setRequestBody(string $name, $requestBody): void
+	{
+		$this->requestBodies[$name] = $requestBody;
+	}
+
+	/**
+	 * @param Header|Reference $header
+	 */
+	public function setHeader(string $name, $header): void
+	{
+		$this->headers[$name] = $header;
 	}
 
 	/**
@@ -93,8 +135,20 @@ class Components
 			$data['schemas'][$schemaKey] = $schema->toArray();
 		}
 
+		foreach ($this->responses as $responseKey => $response) {
+			$data['responses'][$responseKey] = $response->toArray();
+		}
+
 		foreach ($this->parameters as $parameterKey => $parameter) {
 			$data['parameters'][$parameterKey] = $parameter->toArray();
+		}
+
+		foreach ($this->requestBodies as $requestBodyKey => $requestBody) {
+			$data['requestBodies'][$requestBodyKey] = $requestBody->toArray();
+		}
+
+		foreach ($this->headers as $headerKey => $header) {
+			$data['headers'][$headerKey] = $header->toArray();
 		}
 
 		foreach ($this->securitySchemes as $securitySchemeKey => $securityScheme) {
