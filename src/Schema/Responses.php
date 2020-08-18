@@ -24,11 +24,10 @@ class Responses
 		$responses = new Responses();
 		foreach ($data as $key => $responseData) {
 			if (isset($responseData['$ref'])) {
-				$response = new Reference($responseData['$ref']);
+				$responses->setResponse((string) $key, new Reference($responseData['$ref']));
 			} else {
-				$response = Response::fromArray($responseData);
+				$responses->setResponse((string) $key, Response::fromArray($responseData));
 			}
-			$responses->setResponse((string) $key, $response);
 		}
 
 		return $responses;

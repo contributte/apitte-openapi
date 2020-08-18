@@ -31,11 +31,10 @@ class Response
 		if (isset($data['headers'])) {
 			foreach ($data['headers'] as $key => $headerData) {
 				if (isset($headerData['$ref'])) {
-					$header = new Reference($headerData['$ref']);
+					$response->setHeader($key, new Reference($headerData['$ref']));
 				} else {
-					$header = Header::fromArray($headerData);
+					$response->setHeader($key, Header::fromArray($headerData));
 				}
-				$response->setHeader($key, $header);
 			}
 		}
 
