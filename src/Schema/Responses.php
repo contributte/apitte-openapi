@@ -8,7 +8,10 @@ class Responses
 	/** @var Response[]|Reference[] */
 	private $responses = [];
 
-	public function setResponse(string $key, Response $response): void
+	/**
+	 * @param Response|Reference $response
+	 */
+	public function setResponse(string $key, $response): void
 	{
 		$this->responses[$key] = $response;
 	}
@@ -20,7 +23,12 @@ class Responses
 	{
 		$responses = new Responses();
 		foreach ($data as $key => $responseData) {
-			$responses->setResponse((string) $key, Response::fromArray($responseData));
+			if (isset($responseData['$ref'])) {
+				$response = new Reference($responseData['$ref']);
+			} else {
+				$response = Response::fromArray($responseData);
+			}
+			$responses->setResponse((string) $key, $response);
 		}
 
 		return $responses;
