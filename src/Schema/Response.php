@@ -30,7 +30,12 @@ class Response
 		$response = new Response($data['description']);
 		if (isset($data['headers'])) {
 			foreach ($data['headers'] as $key => $headerData) {
-				$response->setHeader($key, Header::fromArray($headerData));
+				if (isset($headerData['$ref'])) {
+					$header = new Reference($headerData['$ref']);
+				} else {
+					$header = Header::fromArray($headerData);
+				}
+				$response->setHeader($key, $header);
 			}
 		}
 
@@ -48,7 +53,10 @@ class Response
 		$this->content[$type] = $mediaType;
 	}
 
-	public function setHeader(string $key, Header $header): void
+	/**
+	 * @param Header|Reference $header
+	 */
+	public function setHeader(string $key, $header): void
 	{
 		$this->headers[$key] = $header;
 	}
