@@ -33,7 +33,6 @@ class ResponseTest extends TestCase
 		$response->setHeader('WWW-Authenticate', $header);
 		Assert::same($array, $response->toArray());
 		Assert::equal($response, Response::fromArray($array));
-
 	}
 
 	public function testRequired(): void
@@ -44,7 +43,8 @@ class ResponseTest extends TestCase
 		Assert::equal($response, Response::fromArray($array));
 	}
 
-	public function testHeaderReference(): void {
+	public function testHeaderReference(): void
+	{
 		$array = [
 			'description' => 'API key or user token is missing or invalid',
 			'headers' => [
