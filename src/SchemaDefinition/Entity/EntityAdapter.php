@@ -12,9 +12,23 @@ use ReflectionClassConstant;
 use ReflectionFunctionAbstract;
 use ReflectionProperty;
 use Reflector;
+use Apitte\OpenApi\SchemaDefinition\Entity\IEntityAdapter;
+use Doctrine\Common\Annotations\Reader;
+use Symfony\Component\Validator\Validation;
+use Nette\SmartObject;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class EntityAdapter implements IEntityAdapter
 {
+	use SmartObject;
+
+	/** @var Reader */
+	private $reader;
+
+	public function __construct(Reader $reader)
+	{
+		$this->reader = $reader;
+	}
 
 	/**
 	 * @return mixed[]
@@ -92,10 +106,21 @@ class EntityAdapter implements IEntityAdapter
 				];
 			}
 
+			$properties = $this->getProperties($type);
+			$required = [];
+			foreach ($properties as $propertyName => &$values){
+				if (array_key_exists('required', $values)){
+					unset($values['required']);
+					$required[] =  $propertyName;
+				}
+			}
+
 			return [
 				'type' => 'object',
-				'properties' => $this->getProperties($type),
-			];
+				'properties' => $properties,
+			] + ($required ? [
+				'required' => $required
+			] : []);
 		}
 
 		$lower = strtolower($type);
@@ -140,7 +165,7 @@ class EntityAdapter implements IEntityAdapter
 				$propertyType = 'object';
 			}
 
-			$data[$property->getName()] = $this->getMetadata($propertyType);
+			$data[$property->getName()] = $this->getMetadata($propertyType) + $this->getExtendedMetadata($property);
 		}
 
 		return $data;
@@ -162,7 +187,7 @@ class EntityAdapter implements IEntityAdapter
 		if (($type = preg_replace('#\s.*#', '', $annotation)) !== null) {
 			$class = Reflection::getPropertyDeclaringClass($property);
 
-			return preg_replace_callback('#[\w\\\\]+#', function ($m) use ($class): string {
+			return preg_replace_callback('#[\w\\\\]+#', function ($m) use ($class) {
 				static $phpdocKnownTypes = [
 					// phpcs:disable
 					'bool', 'boolean', 'false', 'true',
@@ -244,4 +269,75 @@ class EntityAdapter implements IEntityAdapter
 		return $map[strtolower($type)] ?? $type;
 	}
 
+	private $_validator;
+	protected function getValidator(){
+		if ($this->_validator === null){
+			$this->_validator = Validation::createValidatorBuilder()
+				->enableAnnotationMapping($this->reader)
+				->getValidator()
+			;
+		}
+		return $this->_validator;
+	}
+
+	/**
+	 * @param ReflectionClass|ReflectionClassConstant|ReflectionProperty|ReflectionFunctionAbstract $ref
+	 */
+	protected function getExtendedMetadata(Reflector $ref): array
+	{
+		try {
+			$convertableType = $this->phpScalarTypeToOpenApiType($this->getPropertyType($ref));
+		} catch (InvalidArgumentException $e){
+			$convertableType = null;
+		}
+		
+		$metadata = $this->validator->getMetadataFor($ref->getDeclaringClass()->getName());
+		$constraints = [];
+		if ($constraintsMetadata = $metadata->getPropertyMetadata($ref->getName())){
+			foreach($constraintsMetadata as $constraintMetadata){
+				foreach ($constraintMetadata->constraints as $constraint){
+					if ($constraint instanceof Assert\Length){
+						$constraints['minLength'] = $constraint->min;
+						$constraints['maxLength'] = $constraint->max;
+					} elseif ($constraint instanceof Assert\Choice){
+						$constraints['enum'] = $constraint->choices;
+					} elseif ($constraint instanceof Assert\Regex){
+						$constraints['pattern'] = $constraint->pattern;
+					} elseif ($constraint instanceof Assert\Email){
+						$constraints['format'] = 'email';
+					} elseif ($constraint instanceof Assert\NotNull){
+						$constraints['required'] = true;
+					} elseif ($constraint instanceof Assert\NotBlank){
+						$constraints['required'] = true;
+					}
+				}
+			}
+			
+		}
+		
+		$docBlock = $this->getDocBlockFactory()->create($ref->getDocComment());
+		return array_filter($constraints + [
+			'example' => $this->convertType(join("\n", $docBlock->getTagsByName('example')), $convertableType),
+			'title' => (string)$docBlock->getSummary(),
+			'description' => (string)$docBlock->getDescription(),
+		]);
+	}
+	
+	protected function convertType($value, $type){
+		switch ($type){
+			case 'integer' : return (int)$value;
+			case 'number' : return round((float)$value, 10);
+			case 'boolean' : return (bool)$value;
+		}
+		
+		return $value;
+	}
+	
+	private $_docBlockFactory;
+	protected function getDocBlockFactory(){
+		if ($this->_docBlockFactory === null){
+			$this->_docBlockFactory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
+		}
+		return $this->_docBlockFactory;
+	}
 }
