@@ -266,6 +266,7 @@ api:
     plugins:
         Apitte\OpenApi\DI\OpenApiPlugin:
             swaggerUi:
+                panel: %debugMode% #activate Tracy panel in debug mode
                 url: null # default url
                 expansion: list # list|full|none
                 filter: true # true|false|string
