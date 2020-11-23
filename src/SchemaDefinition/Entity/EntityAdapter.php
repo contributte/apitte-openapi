@@ -74,7 +74,7 @@ class EntityAdapter implements IEntityAdapter
 
 		// Get schema for array
 		if (Strings::endsWith($type, '[]')) {
-			$subType = Strings::replace($type, '#\\[\\]#');
+			$subType = Strings::replace($type, '#\\[\\]#', '');
 
 			return [
 				'type' => 'array',
