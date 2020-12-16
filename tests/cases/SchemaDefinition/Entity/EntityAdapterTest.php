@@ -1,6 +1,11 @@
 <?php declare(strict_types = 1);
 
+namespace Tests\Apitte\OpenApi\cases\SchemaDefinition\Entity;
+
 use Apitte\OpenApi\SchemaDefinition\Entity\EntityAdapter;
+use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Tester\Assert;
 use Tester\TestCase;
 use Tests\Apitte\OpenApi\Fixtures\ResponseEntity\CompoundResponseEntity;

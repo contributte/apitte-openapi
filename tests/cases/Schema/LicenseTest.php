@@ -1,5 +1,7 @@
 <?php declare(strict_types = 1);
 
+namespace Tests\Apitte\OpenApi\cases\Schema;
+
 require_once __DIR__ . '/../../bootstrap.php';
 
 use Apitte\OpenApi\Schema\License;
