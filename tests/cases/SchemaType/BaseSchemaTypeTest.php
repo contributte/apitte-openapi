@@ -1,5 +1,7 @@
 <?php declare(strict_types = 1);
 
+namespace Tests\Apitte\OpenApi\cases\SchemaType;
+
 /**
  * Test: SchemaType\BaseSchemaType
  */
@@ -13,7 +15,7 @@ use Apitte\OpenApi\SchemaType\ISchemaType;
 use Tester\Assert;
 use Tester\TestCase;
 
-final class TestBaseSchemaType extends TestCase
+final class BaseSchemaTypeTest extends TestCase
 {
 
 	/** @var ISchemaType */
@@ -104,4 +106,4 @@ final class TestBaseSchemaType extends TestCase
 
 }
 
-(new TestBaseSchemaType())->run();
+(new BaseSchemaTypeTest())->run();

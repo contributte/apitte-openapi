@@ -76,10 +76,12 @@ class SwaggerUIPanel implements IBarPanel
 	public function getPanel(): string
 	{
 		ob_start();
+		// @codingStandardsIgnoreStart
 		$spec = $this->schemaBuilder->build()->toArray();
 		$url = $this->url;
 		$expansion = $this->expansion;
 		$filter = $this->filter;
+		// @codingStandardsIgnoreEnd
 		require __DIR__ . '/templates/panel.phtml';
 
 		return (string) ob_get_clean();
