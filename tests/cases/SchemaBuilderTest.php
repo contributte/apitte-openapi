@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Tests\Apitte\OpenApi\cases;
+namespace Tests\Apitte\OpenApi\Cases;
 
 /**
  * Test: SchemaType\SchemaBuilderTest

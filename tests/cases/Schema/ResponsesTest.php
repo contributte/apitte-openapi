@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Tests\Apitte\OpenApi\cases\Schema;
+namespace Tests\Apitte\OpenApi\Cases\Schema;
 
 use Apitte\OpenApi\Schema\Reference;
 use Apitte\OpenApi\Schema\Response;

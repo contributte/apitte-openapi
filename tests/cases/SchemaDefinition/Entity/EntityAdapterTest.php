@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Tests\Apitte\OpenApi\cases\SchemaDefinition\Entity;
+namespace Tests\Apitte\OpenApi\Cases\SchemaDefinition\Entity;
 
 use Apitte\OpenApi\SchemaDefinition\Entity\EntityAdapter;
 use DateTime;
