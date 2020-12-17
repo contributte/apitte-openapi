@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Tests\Apitte\OpenApi\cases\SchemaDefinition;
+namespace Tests\Apitte\OpenApi\Cases\SchemaDefinition;
 
 /**
  * Test: SchemaDefinition\CoreSchemaDefinition
