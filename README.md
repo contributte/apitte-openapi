@@ -36,6 +36,10 @@
 Website 🚀 <a href="https://contributte.org">contributte.org</a> | Contact 👨🏻💻 <a href="https://f3l1x.io">f3l1x.io</a> | Twitter 🐦 <a href="https://twitter.com/contributte">@contributte</a>
 </p>
 
+<p align=center>
+  <img src="https://github.com/apitte/openapi/blob/master/.docs/assets/panel.png">
+</p>
+
 ## Usage
 
 To install the latest version of `apitte/openapi` use [Composer](https://getcomposer.com).
@@ -58,9 +62,6 @@ For details on how to use this package, check out our [documentation](.docs).
 | stable      | `^0.5`  | `master` | 2.4   | `>=7.1` |
 | stable      | `^0.3`  | `master` | 2.4   | `>=5.6` |
 
-![](https://github.com/apitte/openapi/blob/master/.docs/assets/panel.png "Tracy Panel")
-
-
 ## Development
 
 See [how to contribute](https://contributte.org/contributing.html) to this package.
@@ -77,4 +78,7 @@ This package is currently maintaining by these authors.
   <img width="80" height="80" src="https://avatars1.githubusercontent.com/u/22914186?s=80&v=4">
 </a>
 
-The development is sponsored by [Tlapnet](https://www.tlapnet.cz)
+-----
+
+Consider to [support](https://contributte.com/partners) **contributte** development team.
+Also thank you for using this package.
