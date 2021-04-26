@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace Tests\Apitte\OpenApi\Cases\SchemaDefinition\Entity;
 
@@ -42,6 +42,7 @@ final class EntityAdapterTest extends TestCase
 										'mixed' => ['nullable' => true],
 										'untypedProperty' => ['type' => 'string'],
 									],
+									'required' => [],
 								],
 							],
 							'unionProperties' => [
@@ -64,6 +65,7 @@ final class EntityAdapterTest extends TestCase
 								],
 							],
 						],
+						'required' => [],
 					],
 				],
 			],
@@ -159,6 +161,7 @@ final class EntityAdapterTest extends TestCase
 					'classNameReference' => ['type' => 'object'],
 					'normalProperty' => ['type' => 'string'],
 				],
+				'required' => [],
 			],
 			$adapter->getMetadata(SelfReferencingEntity::class)
 		);

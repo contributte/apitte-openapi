@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace Tests\Apitte\OpenApi\Cases\SchemaDefinition;
 
@@ -113,7 +113,7 @@ final class CoreDefinitionTest extends TestCase
 							'requestBody' => [
 								'content' => [
 									'application/json' => [
-										'schema' => ['type' => 'object', 'properties' => ['int' => ['type' => 'integer']]],
+										'schema' => ['type' => 'object', 'properties' => ['int' => ['type' => 'integer']], 'required' => []],
 									],
 								],
 								'required' => true,
@@ -123,7 +123,7 @@ final class CoreDefinitionTest extends TestCase
 								200 => [
 									'description' => 'description',
 									'content' => [
-										'application/json' => ['schema' => ['type' => 'object', 'properties' => []]],
+										'application/json' => ['schema' => ['type' => 'object', 'properties' => [], 'required' => []]],
 									],
 								],
 							],
@@ -150,7 +150,7 @@ final class CoreDefinitionTest extends TestCase
 							'requestBody' => [
 								'content' => [
 									'application/json' => [
-										'schema' => ['type' => 'object', 'properties' => ['int' => ['type' => 'integer']]],
+										'schema' => ['type' => 'object', 'properties' => ['int' => ['type' => 'integer']], 'required' => []],
 									],
 								],
 								'required' => true,
@@ -160,7 +160,7 @@ final class CoreDefinitionTest extends TestCase
 								200 => [
 									'description' => 'description',
 									'content' => [
-										'application/json' => ['schema' => ['type' => 'object', 'properties' => []]],
+										'application/json' => ['schema' => ['type' => 'object', 'properties' => [], 'required' => []]],
 									],
 								],
 							],

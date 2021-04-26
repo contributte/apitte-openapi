@@ -95,6 +95,7 @@ class EntityAdapter implements IEntityAdapter
 			return [
 				'type' => 'object',
 				'properties' => $this->getProperties($type),
+				'required' => $this->getRequiredPropertyNames($type),
 			];
 		}
 
@@ -146,6 +147,28 @@ class EntityAdapter implements IEntityAdapter
 		return $data;
 	}
 
+	/**
+	 * @return array<string>
+	 */
+	protected function getRequiredPropertyNames(string $type): array
+	{
+		if (!class_exists($type)) {
+			return [];
+		}
+
+		$ref = new ReflectionClass($type);
+		$properties = $ref->getProperties(ReflectionProperty::IS_PUBLIC);
+		$data = [];
+
+		foreach ($properties as $property) {
+			if ($this->getPropertyRequiredFlag($property)) {
+				$data[] = $property->getName();
+			}
+		}
+
+		return $data;
+	}
+
 	private function getPropertyType(ReflectionProperty $property): ?string
 	{
 		//TODO - fix typed properties support
@@ -190,6 +213,13 @@ class EntityAdapter implements IEntityAdapter
 		return null;
 	}
 
+	private function getPropertyRequiredFlag(ReflectionProperty $property): bool
+	{
+		$annotation = $this->parseRequiredAnnotation($property);
+
+		return filter_var($annotation, FILTER_VALIDATE_BOOLEAN);
+	}
+
 	/**
 	 * @param ReflectionClass|ReflectionClassConstant|ReflectionProperty|ReflectionFunctionAbstract $ref
 	 */
@@ -200,6 +230,23 @@ class EntityAdapter implements IEntityAdapter
 		}
 
 		$re = '#[\s*]@' . preg_quote($name, '#') . '(?=\s|$)(?:[ \t]+([^@\s]\S*))?#';
+		if ($ref->getDocComment() && preg_match($re, trim($ref->getDocComment(), '/*'), $m)) {
+			return $m[1] ?? null;
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param ReflectionClass|ReflectionClassConstant|ReflectionProperty|ReflectionFunctionAbstract $ref
+	 */
+	private function parseRequiredAnnotation(Reflector $ref): ?string
+	{
+		if (!Reflection::areCommentsAvailable()) {
+			throw new InvalidStateException('You have to enable phpDoc comments in opcode cache.');
+		}
+
+		$re = '#[\s*]@required\s*\(\s*(\S*)\s*\)#';
 		if ($ref->getDocComment() && preg_match($re, trim($ref->getDocComment(), '/*'), $m)) {
 			return $m[1] ?? null;
 		}
