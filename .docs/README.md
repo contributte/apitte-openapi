@@ -28,7 +28,7 @@ Install and register OpenApi plugin
 composer require apitte/openapi
 ```
 
-```yaml
+```neon
 api:
     plugins:
         Apitte\OpenApi\DI\OpenApiPlugin:
@@ -49,7 +49,7 @@ $openApi = $schemaBuilder->build();
 
 ### Definitions
 
-There are many ways how to define open api schema. 
+There are many ways how to define open api schema.
 
 You can write **raw** OpenApi.
 
@@ -70,7 +70,7 @@ Also you can write your **own** definition.
 
 You can easily define whole schema (or part) directly in extension config.
 
-```yaml
+```neon
 api:
     plugins:
         Apitte\OpenApi\DI\OpenApiPlugin:
@@ -86,7 +86,7 @@ api:
 
 Define whole OpenApi schema (or part) in external files.
 
-```yaml
+```neon
 api:
     plugins:
         Apitte\OpenApi\DI\OpenApiPlugin:
@@ -100,7 +100,7 @@ Supported types are `neon`, `yaml` and `json`.
 
 #### OpenApi-Annotations
 
-This definition comes from core, but use only `OpenApi` annotation. 
+This definition comes from core, but use only `OpenApi` annotation.
 
 ```php
 use Apitte\Core\Annotation\Controller\Controller;
@@ -255,7 +255,7 @@ You can redefine entity adapter by interface.
 
 #### Custom Definition
 
-If you need, you can add your definition using `IDefinition` interface. 
+If you need, you can add your definition using `IDefinition` interface.
 
 ### Tracy SwaggerUI Panel
 
@@ -273,7 +273,7 @@ api:
                 title: My API v2
 ```
 
-### OpenApi Controller Endpoint 
+### OpenApi Controller Endpoint
 
 You will probably need to provide your open api schema outside from your app.
 
