@@ -14,15 +14,11 @@
     {
       "name": "Milan Felix Šulc",
       "homepage": "https://f3l1x.io"
-    },
-    {
-      "name": "Josef Benjač",
-      "homepage": "https://josefbenjac.com"
     }
   ],
   "require": {
-    "php": ">=7.2",
-    "apitte/core": "~0.7",
+    "php": ">=7.3",
+    "apitte/core": "~0.7 || ~0.8",
     "nette/utils": "^3.0.1"
   },
   "suggest": {
