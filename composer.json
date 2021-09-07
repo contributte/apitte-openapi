@@ -49,10 +49,5 @@
   "prefer-stable": true,
   "config": {
     "sort-packages": true
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "0.8.x-dev"
-    }
   }
 }
