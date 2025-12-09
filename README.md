@@ -15,7 +15,7 @@
 | :warning: | This project is no longer being maintained. Please use [contributte/apitte](https://github.com/contributte/apitte).|
 |---|---|
 
-| Composer | [`apitte/openapi`](https://packagist.org/apitte/openapi) |
+| Composer | [`apitte/openapi`](https://packagist.org/packages/apitte/openapi) |
 |---| --- |
 | Version | ![](https://badgen.net/packagist/v/apitte/openapi) |
 | PHP | ![](https://badgen.net/packagist/php/apitte/openapi) |
